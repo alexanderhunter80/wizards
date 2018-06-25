@@ -25,7 +25,9 @@ module.exports = class Deck {
     };
 
     initializeAsSpellDeck(){
-    
+        for(let spell of AllSpells){
+            this.cards.push(new SpellCard(spell.name, spell.text, spell.elements, spell.effects, spell.targeted));
+        }
         // access all spell cards in db, create (copies_per_deck) copies of each card 
     };
 

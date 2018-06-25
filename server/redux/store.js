@@ -40,5 +40,8 @@ gameStore.dispatch(actions.attack(stan, kenny, 2));
 gameStore.dispatch(actions.cure(kyle, 5));
 gameStore.dispatch(actions.cure(kenny, 1));
 
+let endState = gameStore.getState();
+console.log(endState.gameboard.spellDeck);
+
 
 unsubscribe();
