@@ -13,7 +13,6 @@ typings/
 
 # Misc
 coverage/
-**/node_modules/
 /public/tmp/
 npm-debug.log*
 yarn-error.log*
