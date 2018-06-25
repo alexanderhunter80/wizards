@@ -1,6 +1,7 @@
 module.exports = class Gameboard {
-    constructor(elementDeck) {
+    constructor(elementDeck, spellDeck) {
         this.deck = elementDeck;
+        this.spellDeck = spellDeck;
         this.grid = [[],[],[],[]];
         // spell cards
         

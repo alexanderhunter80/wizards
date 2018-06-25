@@ -1,7 +1,7 @@
 let Player = require('../classes/player.js');
 
 const ATTACK = 'ATTACK';
-const HEAL = 'HEAL';
+const CURE = 'CURE';
 const SHIELD = 'SHIELD';
 const HP_PLUS = 'HP_PLUS';
 const HP_MINUS = 'HP_MINUS';
@@ -14,6 +14,9 @@ const OBSCURE = 'OBSCURE';
 const SCRY = 'SCRY';
 const REFRESH = 'REFRESH';
 const LEARN = 'LEARN';
+
+const START_TURN = 'START_TURN';
+const END_TURN = 'END_TURN';
 
 const ADD_PLAYER = 'ADD_PLAYER';
 const REMOVE_PLAYER = 'REMOVE_PLAYER';
@@ -30,7 +33,7 @@ function attack(actor, target, value){
     }
 }
 
-function heal(actor, value){
+function cure(actor, value){
     return {
         type: HEAL,
         actor: actor,
@@ -172,13 +175,13 @@ function gameStart(){};
 
 module.exports = {
     // card effects
-    ATTACK, HEAL, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
+    ATTACK, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
     DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN,
     // meta events
     ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START,
     // creator functions for effects
-    attack, heal, shield, hpPlus, hpMinus, apPlus, apMinus, 
+    attack, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
     divine, weave, scry, obscure, refresh, learn, 
     // creator functions for meta events

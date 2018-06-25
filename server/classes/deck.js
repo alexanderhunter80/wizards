@@ -1,5 +1,6 @@
 const ElementCard = require('./element.js');
 const SpellCard = require('./spell.js');
+const AllSpells = require('../allspells.js');
 
 module.exports = class Deck {
     constructor() {
@@ -24,7 +25,7 @@ module.exports = class Deck {
     };
 
     initializeAsSpellDeck(){
-        // a bunch of mongodb queries here
+    
         // access all spell cards in db, create (copies_per_deck) copies of each card 
     };
 

@@ -33,8 +33,8 @@ function reducer(state = initialState, action){
             return newState;
 
 
-        case actions.HEAL:
-            console.log('reducers.js heard HEAL');
+        case actions.CURE:
+            console.log('reducers.js heard CURE');
             newState = Object.assign({}, state);
             idx = newState.players.indexOf(action.actor);
             newState.players[idx].health += action.value;
@@ -54,26 +54,38 @@ function reducer(state = initialState, action){
 
         case actions.HP_PLUS:
             console.log('reducers.js heard HP_PLUS');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
-            return state;
+            newState = Object.assign({}, state);
+            idx = newState.players.indexOf(action.actor);
+            newState.players[idx].hptokens += action.value;
+            newState.history.push(action.message);
+            return newState;
 
 
         case actions.HP_MINUS:
             console.log('reducers.js heard HP_MINUS');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
-            return state;
+            newState = Object.assign({}, state);
+            idx = newState.players.indexOf(action.actor);
+            newState.players[idx].hptokens -= action.value;
+            newState.history.push(action.message);
+            return newState;
 
 
         case actions.AP_PLUS:
             console.log('reducers.js heard AP_PLUS');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
-            return state;
+            newState = Object.assign({}, state);
+            idx = newState.players.indexOf(action.actor);
+            newState.players[idx].aptokens += action.value;
+            newState.history.push(action.message);
+            return newState;
 
 
         case actions.AP_MINUS:
             console.log('reducers.js heard AP_MINUS');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
-            return state;
+            newState = Object.assign({}, state);
+            idx = newState.players.indexOf(action.actor);
+            newState.players[idx].aptokens -= action.value;
+            newState.history.push(action.message);
+            return newState;
 
 
         case actions.DIVINE:
@@ -140,21 +152,26 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard GAME_SETUP');
             let eDeck = new Deck();
             eDeck.initializeAsElementDeck();
-            let gb = new Gameboard(eDeck);
+            let sDeck = new Deck();
+            sDeck.initializeAsSpellDeck();
+            let gb = new Gameboard(eDeck, sDeck);
             console.log(gb);
             return Object.assign({}, state, {
                 gameboard: gb,
                 history: [... state.history, action.message]
             });
-            
+
 
         case actions.GAME_START:
             console.log('reducers.js heard GAME_START');
+            console.log('... but the future refused to change.  (Action not yet implemented.)')
             return state;
 
 
 
         default:
+            console.log('reducers.js is confused!')
+            console.log('It defaulted itself in its confusion.')
             return state;
     }
 }
