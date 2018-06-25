@@ -1,3 +1,13 @@
+// WIZARD CARD DUELS
+
+// Programmed at Coding Dojo Bellevue, June 2018, by Wizards 'Я' Us
+// (Jordan Hudson, Alex Hunter, and Jym Tuesday Paschall)
+
+// Angular front-end and SASS styling by Jordan Hudson
+// Socket and event handling by Jym Paschall
+// MEAN back-end and Redux implementation by Alex Hunter
+
+
 const express = require('express');
 const app = express();
 const server = app.listen(8000);

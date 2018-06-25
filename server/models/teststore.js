@@ -35,5 +35,10 @@ console.log('setting up gameboard');
 console.log(actions.gameSetup());
 gameStore.dispatch(actions.gameSetup());
 
+gameStore.dispatch(actions.attack(cartman, kyle, 3));
+gameStore.dispatch(actions.attack(stan, kenny, 2));
+gameStore.dispatch(actions.heal(kyle, 5));
+gameStore.dispatch(actions.heal(kenny, 1));
+
 
 unsubscribe();

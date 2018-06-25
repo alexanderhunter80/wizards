@@ -10,48 +10,139 @@ const AP_MINUS = 'AP_MINUS';
 
 const DIVINE = 'DIVINE';
 const WEAVE = 'WEAVE';
-const OBSCURE = 'OBSCURE'
-const SCRY = 'SCRY'
+const OBSCURE = 'OBSCURE';
+const SCRY = 'SCRY';
+const REFRESH = 'REFRESH';
+const LEARN = 'LEARN';
 
 const ADD_PLAYER = 'ADD_PLAYER';
 const REMOVE_PLAYER = 'REMOVE_PLAYER';
 const GAME_SETUP = 'GAME_SETUP';
 const GAME_START = 'GAME_START';
 
-function attack(target, value){
+function attack(actor, target, value){
     return {
         type: ATTACK,
+        actor: actor, 
         target: target,
         value: value,
-        message: 'Attacked '+target.name+' for '+value+' damage'
+        message: actor.name+' attacked '+target.name+' for '+value+' damage'
     }
 }
 
-function heal(value){
+function heal(actor, value){
     return {
         type: HEAL,
+        actor: actor,
         value: value,
-        message: 'Healed '+value+' points'
+        message: actor.name+' healed '+value+' points'
     }
 }
 
-function shield(){};
+function shield(actor, value){
+    return {
+        type: SHIELD,
+        actor: actor,
+        value: value,
+        message: actor.name+' gained '+value+' Shields'
+    }
+};
 
-function hpPlus(){};
+function hpPlus(actor, value){
+    return {
+        type: HP_PLUS,
+        actor: actor,
+        value: value,
+        message: actor.name+' gained '+value+' Regen tokens'
+    }
+};
 
-function hpMinus(){};
+function hpMinus(actor, target, value){
+    return {
+        type: HP_MINUS,
+        actor: actor,
+        target: target,
+        message: actor.name+' passed '+target.name+' '+value+' Burn tokens'
+    }
+};
 
-function apPlus(){};
+function apPlus(actor, value){
+    return {
+        type: AP_PLUS,
+        actor: actor,
+        value: value,
+        message: actor.name+' gained '+value+' Haste tokens'
+    }
+};
 
-function apMinus(){};
+function apMinus(actor, target, value){
+    return {
+        type: AP_MINUS,
+        actor: actor,
+        target: target,
+        value: value,
+        message: actor.name+' passed '+target.name+' '+value+' Slow tokens'
+    }
+};
 
-function divine(){};
+function divine(actor, value, xy){
+    return {
+        type: DIVINE,
+        actor: actor,
+        value: value,
+        xy: xy,
+        message: actor.name+' looked at '+value+' cards'
+    }
+};
 
-function weave(){};
+function weave(actor, xy1, xy2){
+    return {
+        type: WEAVE,
+        actor: actor,
+        xy1: xy1,
+        xy2: xy2,
+        message: actor.name+' wove cards'
+    }
+};
 
-function obscure(){};
+function obscure(actor, value, xy){
+    return {
+        type: OBSCURE,
+        actor: actor,
+        value: value,
+        xy: xy,
+        message: actor.name+' obscured '+value+' cards'
+    }
+};
 
-function scry(){};
+function scry(actor, value, xy){
+    return {
+        type: SCRY,
+        actor: actor,
+        value: value,
+        xy: xy,
+        message: actor.name+' scried '+value+' cards'
+    }
+};
+
+function refresh(actor, xy){
+    return {
+        type: REFRESH,
+        actor: actor,
+        xy: xy,
+        message: actor.name+' refreshed a card'
+    }
+};
+
+function learn(actor, draw, keep){
+    return {
+        type: LEARN,
+        actor: actor,
+        draw: draw,
+        keep: keep,
+        message: actor.name+' learned '+keep+' new spells'
+    }
+};
 
 function addPlayer(socketid, name){
     return {
@@ -83,13 +174,13 @@ module.exports = {
     // card effects
     ATTACK, HEAL, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
-    DIVINE, WEAVE, SCRY, OBSCURE,
+    DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN,
     // meta events
     ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START,
     // creator functions for effects
     attack, heal, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
-    divine, weave, scry, obscure,
+    divine, weave, scry, obscure, refresh, learn, 
     // creator functions for meta events
     addPlayer, removePlayer, gameSetup, gameStart,
 }
