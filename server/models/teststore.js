@@ -5,6 +5,11 @@ let gameApp = reducers.gameApp;
 
 const gameStore = redux.createStore(gameApp);
 
+
+
+
+// testing time
+
 console.log(gameStore.getState());
 
 const unsubscribe = gameStore.subscribe(() => {
@@ -12,23 +17,23 @@ const unsubscribe = gameStore.subscribe(() => {
 })
 
 let s;
-gameStore.dispatch(actions.addPlayer(1,1,'Cartman'));
+gameStore.dispatch(actions.addPlayer(123589,'Cartman'));
 s = gameStore.getState();
 let cartman = s.players[s.players.length-1];
-console.log(cartman);
-gameStore.dispatch(actions.addPlayer(2,2,'Kyle'));
+gameStore.dispatch(actions.addPlayer(872136,'Kyle'));
 s = gameStore.getState();
 let kyle = s.players[s.players.length-1];
-console.log(kyle);
-gameStore.dispatch(actions.addPlayer(3,3,'Stan'));
+gameStore.dispatch(actions.addPlayer(168683,'Stan'));
 s = gameStore.getState();
 let stan = s.players[s.players.length-1];
-console.log(stan);
-gameStore.dispatch(actions.addPlayer(4,4,'Kenny'));
+gameStore.dispatch(actions.addPlayer(712394,'Kenny'));
 s = gameStore.getState();
 let kenny = s.players[s.players.length-1];
-console.log(kenny);
-gameStore.dispatch(actions.removePlayer(stan));
+
+
+console.log('setting up gameboard');
+console.log(actions.gameSetup());
+gameStore.dispatch(actions.gameSetup());
 
 
 unsubscribe();
