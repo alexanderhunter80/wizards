@@ -5,12 +5,14 @@ let gameApp = reducers.gameApp;
 
 const gameStore = redux.createStore(gameApp);
 
+module.exports = gameStore;
+
 
 
 
 // testing time
 
-console.log(gameStore.getState());
+/* console.log(gameStore.getState());
 
 const unsubscribe = gameStore.subscribe(() => {
     console.log(gameStore.getState());
@@ -44,4 +46,4 @@ let endState = gameStore.getState();
 console.log(endState.gameboard.spellDeck);
 
 
-unsubscribe();
+unsubscribe(); */
