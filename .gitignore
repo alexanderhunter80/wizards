@@ -3,6 +3,9 @@ bazel-*
 test-project-host-*
 /public/dist/
 
+# Modules
+**/node_modules
+
 # IDEs
 .idea/
 jsconfig.json
