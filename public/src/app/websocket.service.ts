@@ -22,11 +22,15 @@ export class WebsocketService {
 
 	constructor(private _http: HttpClient) {
 		this.socket = io();
-		
-		this.socket.on('testevent', (event) => {
-			console.log('heard testevent');
-			this.playerid = this.socket.id;
-			this.state = event;
+
+		this.socket.on('UPDATE', (state)=>{
+			console.log('websocket.service says: state UPDATE')
+			this.state = state;
+		})
+
+		this.socket.on('HIGHLIGHT', (payload)=>{
+			// highlight cards given by coordinates in payload
+			// format of payload: {type: 'ACTIONNAME', coords: [yx, yx, yx]}
 		});
 	}
 
@@ -41,9 +45,52 @@ export class WebsocketService {
 		// }.bind(this));
 	}
 
-	doAttack(actor, target, value) {
-		console.log({'ATTACK': {actor, target, value}});
+	doAttack(actor, target, value){
 		this.socket.emit('ATTACK', {actor, target, value});
+	}
+
+	doAttackAll(actor, value){
+		this.socket.emit('ATTACK_ALL', {actor, value});
+	}
+
+	doCure(actor, value){
+		this.socket.emit('CURE', {actor, value});
+	}
+
+	doShield(actor, value){
+		this.socket.emit('SHIELD', {actor, value});
+	}
+
+	doHpPlus(actor, value){
+		this.socket.emit('HP_PLUS', {actor, value});
+	}
+
+	doHpMinus(actor, target, value){
+		this.socket.emit('HP_MINUS', {actor, target, value});
+	}
+
+	doApPlus(actor, value){
+		this.socket.emit('AP_PLUS', {actor, value});
+	}
+
+	doApMinus(actor, target, value){
+		this.socket.emit('AP_MINUS', {actor, target, value});
+	}
+
+	doDivine(actor, value, yx){
+		this.socket.emit('DIVINE', {actor, value, yx});
+	}
+
+	doWeave(actor, yx1, yx2){
+		this.socket.emit('WEAVE', {actor, yx1, yx2});
+	}
+
+	doObscure(actor, value, yx){
+		this.socket.emit('OBSCURE', {actor, value, yx});
+	}
+
+	doScry(actor, value, yx){
+		this.socket.emit('SCRY', {actor, value, yx});
 	}
 
   }

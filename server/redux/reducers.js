@@ -49,11 +49,11 @@ function reducer(state = initialState, action){
             console.log(action);
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
-            let plr = newState.players.find((player)=>{
+            currentPlayer = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
-            plr.health -= action.value;
-            checkDeath(plr);
+            currentPlayer.health -= action.value;
+            checkDeath(currentPlayer);
             newState.history.push(action.message);
             return newState;
 
@@ -76,9 +76,10 @@ function reducer(state = initialState, action){
         case actions.CURE:
             console.log('reducers.js heard CURE');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].health += action.value;
-            if(newState.players[idx].health > 5){newState.players[idx].health = 5;}
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            if(currentPlayer.health > 5){currentPlayer.health = 5;}
             newState.history.push(action.message);
             return newState;
 
@@ -86,8 +87,10 @@ function reducer(state = initialState, action){
         case actions.SHIELD:
             console.log('reducers.js heard SHIELD');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].shields += action.value;
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            currentPlayer.shields += action.value;
             newState.history.push(action.message);
             return newState;
 
@@ -95,8 +98,10 @@ function reducer(state = initialState, action){
         case actions.HP_PLUS:
             console.log('reducers.js heard HP_PLUS');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].hptokens += action.value;
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            currentPlayer.hptokens += action.value;
             newState.history.push(action.message);
             return newState;
 
@@ -104,8 +109,10 @@ function reducer(state = initialState, action){
         case actions.HP_MINUS:
             console.log('reducers.js heard HP_MINUS');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].hptokens -= action.value;
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            currentPlayer.hptokens -= action.value;
             newState.history.push(action.message);
             return newState;
 
@@ -113,8 +120,10 @@ function reducer(state = initialState, action){
         case actions.AP_PLUS:
             console.log('reducers.js heard AP_PLUS');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].aptokens += action.value;
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            currentPlayer.aptokens += action.value;
             newState.history.push(action.message);
             return newState;
 
@@ -122,8 +131,10 @@ function reducer(state = initialState, action){
         case actions.AP_MINUS:
             console.log('reducers.js heard AP_MINUS');
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.actor);
-            newState.players[idx].aptokens -= action.value;
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            currentPlayer.aptokens -= action.value;
             newState.history.push(action.message);
             return newState;
 

@@ -5,7 +5,7 @@
 
 // Angular front-end and SASS styling by Jordan Hudson
 // Socket and event handling by Jym Paschall
-// MEAN back-end, Redux implementation, and game design by Alex Hunter
+// Express/Redux back-end and game design by Alex Hunter
 
 
 const express = require('express');
@@ -24,6 +24,8 @@ app.use(bodyParser.json());
 app.use(express.static(path.join( __dirname, '../public/dist/public' )));
 
 // require('./mongoose/mongoose.js');
+
+gameStore.dispatch(actions.gameSetup());
 
 app.get('/test', (req,res,next) => {
     console.log(gameStore.getState());
