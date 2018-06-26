@@ -18,6 +18,7 @@ const actions = require('./redux/actions')
 const path = require('path');
 
 const bodyParser = require('body-parser');
+const io = require('socket.io').listen(server);
 app.use(bodyParser.json());
 
 app.use(express.static(path.join( __dirname, '../public/dist/public' )));
@@ -34,4 +35,27 @@ app.all("*", (req,res,next) => {
 });
 
 // socket whatevers
+io.on('connection', (socket) => {
+
+    console.log('new connection made');
+    gameStore.dispatch(actions.addPlayer(socket, 'dummy name'));
+    console.log(gameStore.getState());
+    console.log('emitting test event');
+    socket.emit('testevent');
+    
+
+	socket.on('disconnect', function(){
+		console.log('connection disconnected');
+	});
+
+	socket.on('join', function(data){ //mock write up for joining the game, setting up a template for most sockets
+		socket.join(/*data.game*/);
+		console.log('joined the game') // or name or do we want to just say player
+		socket.broadcast.emit('new user joined', {/*user: data.id, */ message: 'player has joined the game'})
+	});
+	
+});
+
+
+
 
