@@ -36,7 +36,13 @@ app.all("*", (req,res,next) => {
 
 // socket whatevers
 io.on('connection', (socket) => {
-	console.log('new connection made');
+
+    console.log('new connection made');
+    gameStore.dispatch(actions.addPlayer(socket, 'dummy name'));
+    console.log(gameStore.getState());
+    console.log('emitting test event');
+    socket.emit('testevent');
+    
 
 	socket.on('disconnect', function(){
 		console.log('connection disconnected');

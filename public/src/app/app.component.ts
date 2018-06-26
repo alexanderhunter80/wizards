@@ -9,15 +9,25 @@ import { WebsocketService } from './websocket.service';
   providers: [WebsocketService]
 })
 export class AppComponent {
-  
-  constructor(private _WsS: WebsocketService) {} //This all can be moved to other components to run more modular
 
-  // ngOnInit(){
-  	
-  // }
-  join(){
-  this._WsS.joinGame({/*user: this.user*/})
+  watcher: any;
+  
+  constructor(private _WsS: WebsocketService) {}; //This all can be moved to other components to run more modular
+
+  ngOnInit(){
+    this.watcher = this._WsS.getEvent()
+      .subscribe(event => {
+        console.log(event);
+      });
   }
+
+
+  // join(){
+  // this._WsS.joinGame({/*user: this.user*/})
+  // };
+
+  
+
   
   }
 
