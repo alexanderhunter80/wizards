@@ -23,6 +23,19 @@ module.exports = class Gameboard {
     }
 
     // shuffle spells back into spell deck
+    shuffleSpells() {
+        this.spellDeck.shuffle();
+    }
+
+    /*
+    *
+    * 
+    *   vvv - ALL STATE-CHANGING FUNCTIONS DEPRECATED - vvv
+    *
+    *  
+    */
+
+
 
     // weave - swap the positions of two cards
     weave(y1,x1,y2,x2) {

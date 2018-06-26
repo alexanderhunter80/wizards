@@ -5,7 +5,7 @@
 
 // Angular front-end and SASS styling by Jordan Hudson
 // Socket and event handling by Jym Paschall
-// MEAN back-end and Redux implementation by Alex Hunter
+// MEAN back-end, Redux implementation, and game design by Alex Hunter
 
 
 const express = require('express');
@@ -25,7 +25,7 @@ app.use(express.static(path.join( __dirname, '../public/dist/public' )));
 
 // require('./mongoose/mongoose.js');
 
-app.get('/test', (req,res,next)=>{
+app.get('/test', (req,res,next) => {
     gameStore.dispatch(actions.gameSetup());
     res.json(gameStore.getState());
 });
@@ -34,6 +34,7 @@ app.all("*", (req,res,next) => {
     res.sendFile(path.resolve("./public/dist/public/index.html"))
 });
 
+// socket whatevers
 io.on('connection', (socket) => {
 	console.log('new connection made');
 
@@ -48,3 +49,7 @@ io.on('connection', (socket) => {
 	});
 	
 });
+
+
+
+
