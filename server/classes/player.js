@@ -1,15 +1,16 @@
 module.exports = class Player {
-    constructor(id, socketid, name) {
+    constructor(id, socket, name) {
         this.id = id;
-        this.socketid = socketid;
+        this.socket = socket;
         this.name = name;
         this.spells = [];
         this.health = 5;
         this.shields = 0;
+        this.adjustActions = 0;
         this.aptokens = 0;
         this.hptokens = 0;
         this.isGhost = false;
-        this.passives = [];
+        this.passives = {overdrive: false, hypermetabolism: false, telepathy: false, brilliance: false}
     }
 
     // method(params) {}

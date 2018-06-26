@@ -1,6 +1,7 @@
 let Player = require('../classes/player.js');
 
 const ATTACK = 'ATTACK';
+const ATTACK_ALL = 'ATTACK_ALL';
 const CURE = 'CURE';
 const SHIELD = 'SHIELD';
 const HP_PLUS = 'HP_PLUS';
@@ -22,14 +23,31 @@ const ADD_PLAYER = 'ADD_PLAYER';
 const REMOVE_PLAYER = 'REMOVE_PLAYER';
 const GAME_SETUP = 'GAME_SETUP';
 const GAME_START = 'GAME_START';
+const GAME_END = 'GAME_END';
+const TURN_START = 'TURN_START';
+const TURN_END = 'TURN_END';
+const DIVINE_STEP_START = 'DIVINE_STEP_START';
+const DIVINE_STEP_END = 'DIVINE_STEP_END';
+const ACTION_STEP_START = 'ACTION_STEP_START';
+const ACTION_STEP_END = 'ACTION_STEP_END';
 
-function attack(actor, target, value){
+function attack(actor, target, value, chain = false){
     return {
         type: ATTACK,
         actor: actor, 
         target: target,
         value: value,
+        chain: chain,
         message: actor.name+' attacked '+target.name+' for '+value+' damage'
+    }
+}
+
+function attackAll(actor, value){
+    return {
+        type: ATTACK_ALL,
+        actor: actor,
+        value: value,
+        message: actor.name+' attacked everyone else for '+value+' damage'
     }
 }
 
@@ -88,51 +106,51 @@ function apMinus(actor, target, value){
     }
 };
 
-function divine(actor, value, xy){
+function divine(actor, value, yx){
     return {
         type: DIVINE,
         actor: actor,
         value: value,
-        xy: xy,
+        yx: yx,
         message: actor.name+' looked at '+value+' cards'
     }
 };
 
-function weave(actor, xy1, xy2){
+function weave(actor, yx1, yx2){
     return {
         type: WEAVE,
         actor: actor,
-        xy1: xy1,
-        xy2: xy2,
+        yx1: yx1,
+        yx2: yx2,
         message: actor.name+' wove cards'
     }
 };
 
-function obscure(actor, value, xy){
+function obscure(actor, value, yx){
     return {
         type: OBSCURE,
         actor: actor,
         value: value,
-        xy: xy,
+        yx: yx,
         message: actor.name+' obscured '+value+' cards'
     }
 };
 
-function scry(actor, value, xy){
+function scry(actor, value, yx){
     return {
         type: SCRY,
         actor: actor,
         value: value,
-        xy: xy,
+        yx: yx,
         message: actor.name+' scried '+value+' cards'
     }
 };
 
-function refresh(actor, xy){
+function refresh(actor, yx){
     return {
         type: REFRESH,
         actor: actor,
-        xy: xy,
+        yx: yx,
         message: actor.name+' refreshed a card'
     }
 };
@@ -147,10 +165,10 @@ function learn(actor, draw, keep){
     }
 };
 
-function addPlayer(socketid, name){
+function addPlayer(socket, name){
     return {
         type: ADD_PLAYER,
-        socketid: socketid,
+        socket: socket,
         name: name,
         message: 'Created player '+name
     }
@@ -173,17 +191,31 @@ function gameSetup(){
 
 function gameStart(){};
 
+function gameEnd(){};
+
+function turnStart(){};
+
+function turnEnd(){};
+
+function divineStepStart(){};
+
+function divineStepEnd(){};
+
+function actionStepStart(){};
+
+function actionStepEnd(){};
+
 module.exports = {
     // card effects
-    ATTACK, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
+    ATTACK, ATTACK_ALL, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
     DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START,
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_START, TURN_END, DIVINE_STEP_START, DIVINE_STEP_END, ACTION_STEP_START, ACTION_STEP_END,
     // creator functions for effects
-    attack, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
+    attack, attackAll, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
     divine, weave, scry, obscure, refresh, learn, 
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepStart, divineStepEnd, actionStepStart, actionStepEnd,
 }

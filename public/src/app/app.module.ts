@@ -1,7 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+
 import { HttpClientModule } from '@angular/common/http';
 import { GameService } from './game.service';
+
+import { ActionService } from './action.service';
+import { WebsocketService } from './websocket.service';
+
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameboardComponent } from './gameboard/gameboard.component';
@@ -22,7 +28,11 @@ import { PlayerComponent } from './player/player.component';
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [GameService],
+
+  providers: [
+    GameService,
+  	ActionService,
+  	WebsocketService
   bootstrap: [AppComponent]
 })
 export class AppModule { }
