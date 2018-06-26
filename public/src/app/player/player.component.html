@@ -1,0 +1,15 @@
+<div class="wrapper">
+  <!-- Health & Shields -->
+  <div *ngIf="player.shields > 0"class="shield">{{player.shields}}
+    <div class="health">{{player.health}}</div>
+  </div>
+  <!-- Health -->
+  <div *ngIf="player.shields === 0"class="onlyHealth">{{player.health}}</div>
+  <!-- Ap tokens -->
+  <div class="ap" *ngIf="player.aptokens.length > 0">
+    <div class="apToken" *ngFor="let aptoken of player.aptokens">AP</div>
+  </div>
+  <div class="hp" *ngIf="player.hptokens.length > 0">
+    <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
+  </div>
+</div>
