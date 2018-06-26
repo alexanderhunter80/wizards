@@ -26,7 +26,6 @@ app.use(express.static(path.join( __dirname, '../public/dist/public' )));
 // require('./mongoose/mongoose.js');
 
 app.get('/test', (req,res,next) => {
-    gameStore.dispatch(actions.gameSetup());
     console.log(gameStore.getState());
     res.json(gameStore.getState());
 });
