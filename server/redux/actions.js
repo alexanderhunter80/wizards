@@ -165,10 +165,10 @@ function learn(actor, draw, keep){
     }
 };
 
-function addPlayer(socketid, name){
+function addPlayer(socket, name){
     return {
         type: ADD_PLAYER,
-        socketid: socketid,
+        socket: socket,
         name: name,
         message: 'Created player '+name
     }

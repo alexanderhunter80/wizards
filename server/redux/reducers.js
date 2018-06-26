@@ -186,7 +186,7 @@ function reducer(state = initialState, action){
 
         case actions.ADD_PLAYER:
             console.log('reducers.js heard ADD_PLAYER');
-            let np = new Player(state.nextPlayer, action.socketid, action.name);
+            let np = new Player(state.nextPlayer, action.socket, action.name);
             return Object.assign({}, state, {
                 players: [
                     ... state.players,
