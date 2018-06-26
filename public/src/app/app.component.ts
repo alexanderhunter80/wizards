@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActionService } from './action.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+  
+  constructor(private actServ: ActionService) {} //This all can be moved to other components to run more modular
+
+  ngOnInit(){
+  	this.actServ.messages.subscribe(msg => { //change "message" to refelct action
+  		console.log(msg);
+  	})
+  }
+  sendMessage(){
+  	this.chat.sendMsg('test message');
+  }
 }
