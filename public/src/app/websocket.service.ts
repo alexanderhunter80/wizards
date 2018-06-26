@@ -13,6 +13,7 @@ import { Observable, Subject } from 'rxjs'; //rxjs/observable doesn't work with 
 export class WebsocketService {
 
 	state: any;
+	playerid: string;
 
 	private allPlayersSource = new Subject<any>();
 	allPlayers$ = this.allPlayersSource.asObservable();
@@ -21,9 +22,10 @@ export class WebsocketService {
 
 	constructor(private _http: HttpClient) {
 		this.socket = io();
-
-		this.socket.on('testevent', (event)=>{
+		
+		this.socket.on('testevent', (event) => {
 			console.log('heard testevent');
+			this.playerid = this.socket.id;
 			this.state = event;
 		});
 	}
@@ -39,10 +41,9 @@ export class WebsocketService {
 		// }.bind(this));
 	}
 
-	doAttack(actor, target, value){
-		console.log({'ATTACK':{actor,target,value}});
+	doAttack(actor, target, value) {
+		console.log({'ATTACK': {actor, target, value}});
 		this.socket.emit('ATTACK', {actor, target, value});
 	}
-
 
   }

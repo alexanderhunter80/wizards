@@ -7,25 +7,25 @@ import { WebsocketService } from '../websocket.service';
   styleUrls: ['./player.component.scss']
 })
 export class PlayerComponent implements OnInit {
-  player = {
-    'id' : 98,
-    'socketid' : 45,
-    'name' : 'Enemy 1',
-    'spells' : [],
-    'health' : 5,
-    'shields' : 0,
-    'aptokens' : [0, 0, 0, 0],
-    'hptokens' : [1, 1, 1, 1],
-    'isGhost' : false,
-    'passives' : []
-  };
+  player: any;
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
+    this.getPlayer();
   }
 
-  testAttack(){
-    this._wss.doAttack(this._wss.state.players[0], this._wss.state.players[0], 1)
-  };
+  testAttack() {
+    this._wss.doAttack(this._wss.state.players[0], this._wss.state.players[0], 1);
+  }
+
+  getPlayer() {
+    for (const person of this._wss.state['players']) {
+      if (this._wss.playerid === person.socketid) {
+        console.log('Player being set' + person);
+        this.player = person;
+        break;
+      }
+    }
+  }
 
 }

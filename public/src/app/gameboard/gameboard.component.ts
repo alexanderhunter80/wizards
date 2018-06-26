@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition} from '@angular/animations';
-import { GameService } from '../game.service';
+import { WebsocketService } from '../websocket.service';
 
 @Component({
   selector: 'app-gameboard',
@@ -20,19 +20,18 @@ import { GameService } from '../game.service';
 })
 export class GameboardComponent implements OnInit {
   board = [];
-  constructor(private game: GameService) { }
+  constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    this.getGameboard(); 
+    this.getGameboard();
   }
- 
+
   toggleState(card) {
     card.faceUp = (card.faceUp === false ) ? true : false;
   }
 
   getGameboard() {
-    const observable = this.game.getGame();
-    observable.subscribe(data => this.board = data['gameboard']['grid']);
+    this.board = this._wss.state['gameboard']['grid'];
   }
 
 
