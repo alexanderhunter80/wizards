@@ -32,7 +32,8 @@ import { PlayerComponent } from './player/player.component';
   providers: [
     GameService,
   	ActionService,
-  	WebsocketService
+    WebsocketService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

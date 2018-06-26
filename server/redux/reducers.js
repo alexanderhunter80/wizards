@@ -46,11 +46,14 @@ function reducer(state = initialState, action){
 
         case actions.ATTACK: 
             console.log('reducers.js heard ATTACK');
+            console.log(action);
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
-            idx = newState.players.indexOf(action.target);
-            newState.players[idx].health -= action.value;
-            checkDeath(newState.players[idx]);
+            let plr = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            plr.health -= action.value;
+            checkDeath(plr);
             newState.history.push(action.message);
             return newState;
 

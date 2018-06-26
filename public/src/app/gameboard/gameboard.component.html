@@ -1,3 +1,5 @@
+
+
 <div *ngFor="let row of board">
   <div class="card-wrapper" *ngFor="let card of row"> 
     <div class="card" (click)="toggleState(card)" [@cardState]="card.faceUp"> 

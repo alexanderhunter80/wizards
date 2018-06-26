@@ -12,4 +12,7 @@
   <div class="hp" *ngIf="player.hptokens.length > 0">
     <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
   </div>
+  <div>
+    <button (click)="testAttack()">Test Attack</button>
+  </div>
 </div>

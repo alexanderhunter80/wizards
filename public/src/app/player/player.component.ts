@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WebsocketService } from '../websocket.service';
 
 @Component({
   selector: 'app-player',
@@ -18,9 +19,13 @@ export class PlayerComponent implements OnInit {
     'isGhost' : false,
     'passives' : []
   };
-  constructor() { }
+  constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
   }
+
+  testAttack(){
+    this._wss.doAttack(this._wss.state.players[0], this._wss.state.players[0], 1)
+  };
 
 }
