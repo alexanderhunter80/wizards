@@ -9,18 +9,19 @@ import { WebsocketService } from '../websocket.service';
 export class PlayerComponent implements OnInit {
   player: any;
   state: any;
+
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
     this.player = null;
-    let obs = this._wss.getObservable();
-    obs.subscribe((state)=>{
+    const obs = this._wss.getObservable();
+    obs.subscribe((state) => {
       console.log('state observable was updated');
       this.state = state;
-      console.log(this.state);
-      if(this.state){
+      if (this.state) {
         this.getPlayer();
       }
+
     });
   }
 
@@ -29,7 +30,7 @@ export class PlayerComponent implements OnInit {
   }
 
   getPlayer() {
-    for (let person of this.state.players) {
+    for (const person of this.state.players) {
       if (this._wss.playerid === person.socketid) {
         console.log('Player being set' + person);
         this.player = person;

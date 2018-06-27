@@ -18,17 +18,24 @@ import { WebsocketService } from '../websocket.service';
     ])
   ]
 })
+
 export class GameboardComponent implements OnInit {
+  readyCheck = false;
   state: any = null;
+
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    let obs = this._wss.getObservable();
-    obs.subscribe((state)=>{
+    const obs = this._wss.getObservable();
+    obs.subscribe((state) => {
       this.state = state;
+      // Checking to see if need to ready check for game start
+      console.log(this.state);
+      if (state && this.state.gameOn === false) {
+        this.readyCheck = true;
+      }// End of ready Check
     });
   }
-
   toggleState(card) {
     card.faceUp = (card.faceUp === false ) ? true : false;
   }
@@ -37,6 +44,10 @@ export class GameboardComponent implements OnInit {
 
   }
 
+  ready() {
+    this.readyCheck = false;
+    this._wss.ready();
+  }
 
 
 

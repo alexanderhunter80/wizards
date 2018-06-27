@@ -7,10 +7,9 @@ import { WebsocketService } from './websocket.service';
 })
 export class ActionService {
 
-	
+
   constructor(private wss: WebsocketService) {
 
-
-}
+  }
 
 }
