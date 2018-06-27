@@ -4,8 +4,7 @@ const actions = require('./redux/actions')
 module.exports = function(io){
 
     function update(){
-        console.log('sending update');
-        console.log(gameStore.getState());
+        console.log('emitting UPDATE');
         io.emit('UPDATE', gameStore.getState());
     }
 
@@ -14,8 +13,9 @@ module.exports = function(io){
         console.log('new connection made');
         gameStore.dispatch(actions.addPlayer(socket.id, 'dummy name'));
         console.log(gameStore.getState());
-        console.log('emitting update');
-        update();
+        console.log('emitting INIT / UPDATE');
+        socket.emit('INIT', gameStore.getState());
+        socket.broadcast.emit('UPDATE', gameStore.getState());
 
         socket.on(actions.ATTACK, (payload)=>{
             console.log('sockets.js says: heard ATTACK');

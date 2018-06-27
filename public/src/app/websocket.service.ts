@@ -33,11 +33,23 @@ export class WebsocketService {
 		this.player = {id: null, socketid: null, name: null, health: null, shields: null, aptokens: null, hptokens: null};
 		this.enemies = [];
 
-		this.socket.on('UPDATE', (state)=>{
-			console.log('websocket.service says: state UPDATE')
-			
+		this.socket.on('INIT', (state)=>{
+			console.log('websocket.service says: state INIT');
 			this.state = state;
 			console.log(this.state);
+			this.player = this.state.players.find((player)=>{
+				return player.socketid == this.playerid;
+			});
+			console.log(this.player);
+			this.enemies.push(this.state.players.find((player)=>{
+				return player.socketid !== this.playerid;
+			}));
+			console.log(this.enemies);
+		});
+
+		this.socket.on('UPDATE', (state)=>{
+			console.log('websocket.service says: state UPDATE');
+			this.state = state;
 			this.player = this.state.players.find((player)=>{
 				return player.socketid == this.playerid;
 			});
