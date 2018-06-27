@@ -2,6 +2,7 @@ let Player = require('../classes/player.js');
 
 const ATTACK = 'ATTACK';
 const ATTACK_ALL = 'ATTACK_ALL';
+const DRAIN = 'DRAIN';
 const CURE = 'CURE';
 const SHIELD = 'SHIELD';
 const HP_PLUS = 'HP_PLUS';
@@ -15,20 +16,19 @@ const OBSCURE = 'OBSCURE';
 const SCRY = 'SCRY';
 const REFRESH = 'REFRESH';
 const LEARN = 'LEARN';
-
-const START_TURN = 'START_TURN';
-const END_TURN = 'END_TURN';
+const LEARN_DISCARD = 'LEARN_DISCARD';
 
 const ADD_PLAYER = 'ADD_PLAYER';
 const REMOVE_PLAYER = 'REMOVE_PLAYER';
 const GAME_SETUP = 'GAME_SETUP';
 const GAME_START = 'GAME_START';
 const GAME_END = 'GAME_END';
-const TURN_START = 'TURN_START';
+// const TURN_START = 'TURN_START';
+const TURN_ACK = 'TURN_ACK';
 const TURN_END = 'TURN_END';
-const DIVINE_STEP_START = 'DIVINE_STEP_START';
+// const DIVINE_STEP_START = 'DIVINE_STEP_START';
 const DIVINE_STEP_END = 'DIVINE_STEP_END';
-const ACTION_STEP_START = 'ACTION_STEP_START';
+// const ACTION_STEP_START = 'ACTION_STEP_START';
 const ACTION_STEP_END = 'ACTION_STEP_END';
 
 function attack(actor, target, value, chain = false){
@@ -48,6 +48,16 @@ function attackAll(actor, value){
         actor: actor,
         value: value,
         message: actor.name+' attacked everyone else for '+value+' damage'
+    }
+}
+
+function drain(actor, target, value){
+    return {
+        type: DRAIN,
+        actor: actor,
+        target: target,
+        value: value,
+        message: actor.name+' drained '+target.name+' for '+value+' damage'
     }
 }
 
@@ -165,6 +175,14 @@ function learn(actor, draw, keep){
     }
 };
 
+function learnDiscard(actor, cards){
+    return {
+        type: LEARN_DISCARD,
+        actor: actor,
+        cards: cards,
+    }
+}
+
 function addPlayer(socket, name){
     return {
         type: ADD_PLAYER,
@@ -207,15 +225,15 @@ function actionStepEnd(){};
 
 module.exports = {
     // card effects
-    ATTACK, ATTACK_ALL, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
+    ATTACK, ATTACK_ALL, DRAIN, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
-    DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN,
+    DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_START, TURN_END, DIVINE_STEP_START, DIVINE_STEP_END, ACTION_STEP_START, ACTION_STEP_END,
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP_END, ACTION_STEP_END,
     // creator functions for effects
-    attack, attackAll, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
+    attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
-    divine, weave, scry, obscure, refresh, learn, 
+    divine, weave, scry, obscure, refresh, learn, learnDiscard,
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepStart, divineStepEnd, actionStepStart, actionStepEnd,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd,/* turnAck, */turnEnd, divineStepEnd, actionStepEnd,
 }

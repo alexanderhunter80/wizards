@@ -13,11 +13,7 @@ const initialState = {
     history: [],
 }
 
-let newState;
-let idx;
-let temp;
-let yx;
-let currentPlayer;
+let newState, idx, temp, yx, currentPlayer, target, damage;
 
 function checkDeath(player){
     if(player.health <= 0){
@@ -46,14 +42,22 @@ function reducer(state = initialState, action){
 
         case actions.ATTACK: 
             console.log('reducers.js heard ATTACK');
-            console.log(action);
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
-            currentPlayer = newState.players.find((player)=>{
+            target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
-            currentPlayer.health -= action.value;
-            checkDeath(currentPlayer);
+            let damage = action.value;
+            // check for shields and cancel 1:1
+            if (target.shields > 0){
+                while(target.shields > 0 && damage > 0){
+                    target.shields--;
+                    damage--;
+                }
+            }
+            // deal damage and check for death
+            target.health -= damage;
+            checkDeath(target);
             newState.history.push(action.message);
             return newState;
 
@@ -65,10 +69,40 @@ function reducer(state = initialState, action){
                 if(target == actions.actor){
                     continue;
                 } else {
-                    target.health -= action.value;
+                    if (target.shields > 0){
+                        while(target.shields > 0 && damage > 0){
+                            target.shields--;
+                            damage--;
+                        }
+                    }
+                    target.health -= damage;
                     checkDeath(target);
                 }
             }
+            newState.history.push(action.message);
+            return newState;
+
+
+        case actions.DRAIN:
+            console.log('reducers.js heard DRAIN');
+            newState = Object.assign({}, state);
+            target = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            damage = action.value;
+            if (target.shields > 0){
+                while(target.shields > 0 && damage > 0){
+                    target.shields--;
+                    damage--;
+                }
+            }
+            // drainy nonsense
+            while(damage > 0 && target.health > 0){
+                target.health--;
+                damage--;
+                if(actor.health < 5){actor.health++};
+            }
+            checkDeath(target);
             newState.history.push(action.message);
             return newState;
 
@@ -193,6 +227,10 @@ function reducer(state = initialState, action){
             // drawn N SpellCards from deck, send through socket to actor along with KEEP value
             // to be implemented: a stage-2 action where the actor returns the non-kept cards to be discarded
             return state;
+
+
+        case actions.LEARN_DISCARD:
+            console.log('reducers.js heard LEARN_DISCARD');
 
 
         // case (post-LEARN action):
