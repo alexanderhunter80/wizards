@@ -20,15 +20,17 @@ module.exports = class Deck {
         for(let i = 0; i < 8; i++){
             this.cards.push(new ElementCard('aether'));
         };
-        this.shuffle([]);
+        this.shuffle();
         console.log('finished initializing');
     };
 
     initializeAsSpellDeck(){
         for(let spell of AllSpells){
-            this.cards.push(new SpellCard(spell.name, spell.text, spell.elements, spell.effects, spell.targeted));
+            for(let i=0; i < spell.copies; i++){
+                this.cards.push(new SpellCard(spell.name, spell.text, spell.elements, spell.effects, spell.targeted));
+            }
         }
-        // access all spell cards in db, create (copies_per_deck) copies of each card 
+        this.shuffle();
     };
 
     topCard(){

@@ -18,6 +18,7 @@ const REFRESH = 'REFRESH';
 const LEARN = 'LEARN';
 const LEARN_DISCARD = 'LEARN_DISCARD';
 
+const READY = 'READY';
 const ADD_PLAYER = 'ADD_PLAYER';
 const REMOVE_PLAYER = 'REMOVE_PLAYER';
 const GAME_SETUP = 'GAME_SETUP';
@@ -175,11 +176,18 @@ function learn(actor, draw, keep){
     }
 };
 
-function learnDiscard(actor, cards){
+function learnDiscard(actor, cardIndices){
     return {
         type: LEARN_DISCARD,
         actor: actor,
-        cards: cards,
+        cards: cardIndices
+    }
+}
+
+function ready(actor){
+    return {
+        type: READY,
+        actor: actor
     }
 }
 
@@ -207,7 +215,12 @@ function gameSetup(){
     }
 };
 
-function gameStart(){};
+function gameStart(){
+    return {
+        type: GAME_START,
+        message: 'Started game'
+    }
+};
 
 function gameEnd(){};
 
@@ -229,11 +242,11 @@ module.exports = {
     // card manipulators
     DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP_END, ACTION_STEP_END,
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP_END, ACTION_STEP_END, READY,
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
     divine, weave, scry, obscure, refresh, learn, learnDiscard,
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart, gameEnd,/* turnAck, */turnEnd, divineStepEnd, actionStepEnd,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd,/* turnAck, */turnEnd, divineStepEnd, actionStepEnd, ready,
 }

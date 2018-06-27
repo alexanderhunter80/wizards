@@ -11,6 +11,7 @@ const initialState = {
     nextPlayer: 1,
     gameboard: null,
     history: [],
+    learnHelper: {keep: null, cardsDrawn: []},
 }
 
 let newState, idx, temp, yx, currentPlayer, target, damage;
@@ -38,6 +39,85 @@ function shuffle(array) {  // Fisher-Yates shuffle
 
 function reducer(state = initialState, action){
     switch(action.type){
+
+
+
+        case actions.GAME_SETUP:
+            console.log('reducers.js heard GAME_SETUP');
+            newState = Object.assign({}, state);
+            let eDeck = new Deck();
+            eDeck.initializeAsElementDeck();
+            let sDeck = new Deck();
+            sDeck.initializeAsSpellDeck();
+            let gb = new Gameboard(eDeck, sDeck);
+            console.log(gb);
+            newState.gameboard = gb;
+            newState.history.push(action.message);
+            return newState;
+
+
+
+        case actions.READY:
+            console.log('reducers.js heard READY');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })
+            console.log('from '+currentPlayer.socketid);
+            currentPlayer.ready = true;
+            return newState;
+
+
+
+        case actions.GAME_START:
+            console.log('reducers.js heard GAME_START');
+            newState = Object.assign({}, state);
+            // randomize player order
+            shuffle(newState.players);
+            // set state.currentTurn to 0 (first player)
+            newState.currentTurn = 0;
+            // set state.gameOn to true
+            newState.gameOn = true;
+            for(let pl of newState.players){
+                for(let i=0; i<5; i++){
+                    pl.spells.push(newState.gameboard.spellDeck.topCard());
+                }
+            };
+            newState.history.push(action.message);
+            return newState;
+
+
+
+        case actions.TURN_START:
+            console.log('reducers.js heard TURN_START');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players[newState.currentTurn];
+            // ap +- tokens
+            if (currentPlayer.aptokens > 0){
+                currentPlayer.adjustActions++;
+                currentPlayer.aptokens--;
+                if (currentPlayer.aptokens > 0 && currentPlayer.passives.overdrive) {
+                    currentPlayer.adjustActions++;
+                    currentPlayer.apTokens--;
+                }
+            } else if (currentPlayer.apTokens < 0){
+                currentPlayer.adjustActions--;
+                currentPlayer.aptokens++;
+            }
+            newState.history = [... state.history, currentPlayer.name+' started their turn'];
+            return newState;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         case actions.ATTACK: 
@@ -223,17 +303,28 @@ function reducer(state = initialState, action){
 
         case actions.LEARN:
             console.log('reducers.js heard LEARN');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
-            // drawn N SpellCards from deck, send through socket to actor along with KEEP value
+            newState = Object.assign({}, state);
+            // draw N SpellCards from deck, send through socket to actor along with KEEP value
+            for(let c=0; c < action.draw; c++){
+                newState.learnHelper.cardsDrawn.push(newState.gameboard.spellDeck.topCard());
+            }
+            newState.learnHelper.keep = action.keep;
             // to be implemented: a stage-2 action where the actor returns the non-kept cards to be discarded
-            return state;
+            return newState;
 
 
         case actions.LEARN_DISCARD:
             console.log('reducers.js heard LEARN_DISCARD');
+            console.log('... but the future refused to change.  (Action not yet implemented.)')
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.target.id;
+            })
+            // take indices of kept cards and add to actor's spells
 
-
-        // case (post-LEARN action):
+            // take indices of kept cards and slice out of learnHelper.cardsDrawn
+            // push rest of learnHelper.cardsDrawn into gameboard.spellDeck.discard
+            return state;
 
 
         case actions.ADD_PLAYER:
@@ -258,55 +349,17 @@ function reducer(state = initialState, action){
             return newState;
 
 
-        case actions.GAME_SETUP:
-            console.log('reducers.js heard GAME_SETUP');
-            let eDeck = new Deck();
-            eDeck.initializeAsElementDeck();
-            let sDeck = new Deck();
-            sDeck.initializeAsSpellDeck();
-            let gb = new Gameboard(eDeck, sDeck);
-            console.log(gb);
-            return Object.assign({}, state, {
-                gameboard: gb,
-                history: [... state.history, action.message]
-            });
 
 
-        case actions.GAME_START:
-            console.log('reducers.js heard GAME_START');
-            newState = Object.assign({}, state);
-            // randomize player order
-            shuffle(newState.players);
-            // set state.currentTurn to 0 (first player)
-            newState.currentTurn = 0;
-            // set state.gameOn to true
-            newState.gameOn = true;
-            // figure out how to indicate the first player's turn - angular side?
-            return newState;
+
+
 
         
         case actions.GAME_END:
             return state;
 
 
-        case actions.TURN_START:
-            console.log('reducers.js heard TURN_START');
-            newState = Object.assign({}, state);
-            currentPlayer = newState.players[newState.currentTurn];
-            // ap +- tokens
-            if (currentPlayer.aptokens > 0){
-                currentPlayer.adjustActions++;
-                currentPlayer.aptokens--;
-                if (currentPlayer.aptokens > 0 && currentPlayer.passives.overdrive) {
-                    currentPlayer.adjustActions++;
-                    currentPlayer.apTokens--;
-                }
-            } else if (currentPlayer.apTokens < 0){
-                currentPlayer.adjustActions--;
-                currentPlayer.aptokens++;
-            }
-            // confirmation event?
-            return newState;
+
 
 
         case actions.TURN_END:

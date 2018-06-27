@@ -39,4 +39,8 @@ export class PlayerComponent implements OnInit {
     }
   }
 
+
+  ready(){
+    this._wss.doReady(this.player);
+  }
 }
