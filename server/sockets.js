@@ -10,12 +10,58 @@ module.exports = function(io){
 
     io.on('connection', (socket) => {
 
+        // connect and disconnect
+
         console.log('new connection made');
         gameStore.dispatch(actions.addPlayer(socket.id, 'dummy name'));
         console.log(gameStore.getState());
         console.log('emitting INIT / UPDATE');
         socket.emit('INIT', gameStore.getState());
         socket.broadcast.emit('UPDATE', gameStore.getState());
+
+        socket.on('disconnect', function(){
+            let theState = gameStore.getState();
+            let leaver = theState.players.find((player)=>{
+                return player.socketid == socket.id;
+            });
+            console.log('sockets.js says: '+leaver.name+' disconnected');
+            gameStore.dispatch(actions.removePlayer(leaver));
+            update();
+        });
+
+
+
+        // ready and game start
+
+        socket.on(actions.READY, (payload)=>{
+            console.log('sockets.js says: heard READY');
+            console.log(payload);
+            gameStore.dispatch(actions.ready(payload.actor));
+            let readyState = gameStore.getState();
+            let allReady = readyState.players.reduce((acc, flag)=>{
+                return (acc && flag);
+            }, true);
+            if (allReady){
+                io.emit('GAME_STARTED');
+                gameStore.dispatch(actions.gameStart());
+                update();
+                io.emit('TURN_START');
+            }
+        });
+
+
+
+        // hear TURN_ACK, dispatch TURN_START
+
+        socket.on(actions.TURN_ACK, (payload)=>{
+            console.log('sockets.js says: heard TURN_ACK');
+            gameStore.dispatch(actions.turnStart());
+        });
+
+
+
+
+
 
         socket.on(actions.ATTACK, (payload)=>{
             console.log('sockets.js says: heard ATTACK');
@@ -98,15 +144,7 @@ module.exports = function(io){
         // refresh, learn, etc 
 
     
-        socket.on('disconnect', function(){
-            let theState = gameStore.getState();
-            let leaver = theState.players.find((player)=>{
-                return player.socketid == socket.id;
-            });
-            console.log('sockets.js says: '+leaver.name+' disconnected');
-            gameStore.dispatch(actions.removePlayer(leaver));
-            update();
-        });
+
         
     });
 

@@ -2,6 +2,7 @@ module.exports = class Player {
     constructor(id, socketid, name) {
         this.id = id;
         this.socketid = socketid;
+        this.ready = false;
         this.name = name;
         this.spells = [];
         this.health = 5;
