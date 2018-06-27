@@ -99,13 +99,13 @@ module.exports = function(io){
 
     
         socket.on('disconnect', function(){
-            console.log('connection disconnected');
             let theState = gameStore.getState();
             let leaver = theState.players.find((player)=>{
                 return player.socketid == socket.id;
             });
+            console.log('sockets.js says: '+leaver.name+' disconnected');
             gameStore.dispatch(actions.removePlayer(leaver));
-            console.log(gameStore.getState());
+            update();
         });
         
     });
