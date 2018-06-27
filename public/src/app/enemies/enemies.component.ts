@@ -8,7 +8,7 @@ import { WebsocketService} from '../websocket.service';
 })
 export class EnemiesComponent implements OnInit {
 enemies = [];
-  constructor(private wes: WebsocketService) { }
+  constructor(private _wss: WebsocketService) { }
   
   ngOnInit() {
   }

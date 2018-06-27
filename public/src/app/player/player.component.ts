@@ -11,7 +11,7 @@ export class PlayerComponent implements OnInit {
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    this.getPlayer();
+    // this.getPlayer();
   }
 
   testAttack() {

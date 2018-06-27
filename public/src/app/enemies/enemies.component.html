@@ -1,4 +1,4 @@
-<div *ngFor="let enemy of enemies" class="enemy">
+<div *ngFor="let enemy of _wss.enemies" class="enemy">
   <h3>{{enemy.name}}</h3>
   <div *ngIf="enemy.shields > 0"class="shield">{{enemy.shields}}
     <div class="health">{{enemy.health}}</div>
@@ -11,4 +11,3 @@
     <div class="hpToken" *ngFor="let hptoken of enemy.hptokens">HP</div>
   </div>
 </div>
-{{wes.state | json}}
