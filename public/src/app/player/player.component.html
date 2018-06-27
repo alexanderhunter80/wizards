@@ -9,7 +9,9 @@
   <div class="hp" *ngIf="player.hptokens.length > 0">
     <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
   </div>
-  <div>
-    <button (click)="testAttack()">Test Attack</button><button (click)="ready()">Ready</button>
+  <div *ngIf="turn">
+    <h2>It is your Turn</h2>
+    <button (click)="turnAck()" >Confirm Turn</button>
+    <button (click)="testAttack()" >Test Attack</button>
   </div>
 </div>
