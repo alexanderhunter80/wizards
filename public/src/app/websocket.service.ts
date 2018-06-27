@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, Subject } from 'rxjs'; //rxjs/observable doesn't work with Angular 6
+import { Observable, Subject, BehaviorSubject } from 'rxjs'; //rxjs/observable doesn't work with Angular 6
 
 // import * as Rx from 'rxjs';
 // import { environement } from '../environments/environment';
@@ -17,12 +17,15 @@ export class WebsocketService {
 	player: any;
 	enemies: any;
 
+	_state: BehaviorSubject<any> = new BehaviorSubject(null);
+
 	private allPlayersSource = new Subject<any>();
 	allPlayers$ = this.allPlayersSource.asObservable();
 
 	private socket: SocketIOClient.Socket; // the client instance of socket.io
 
 	constructor(private _http: HttpClient) {
+		console.log('i built a websocket');
 		this.socket = io();
 		this.socket.on('connect', ()=>{
 			this.playerid = this.socket.id;
@@ -30,34 +33,36 @@ export class WebsocketService {
 			console.log(this.playerid);
 		});
 		// this.playerid = this.socket.id;
-		this.player = {id: null, socketid: null, name: null, health: null, shields: null, aptokens: null, hptokens: null};
-		this.enemies = [];
+		// this.player = {id: null, socketid: null, name: null, health: null, shields: null, aptokens: null, hptokens: null};
+		// this.enemies = [];
 
 		this.socket.on('INIT', (state)=>{
 			console.log('websocket.service says: state INIT');
-			this.state = state;
-			console.log(this.state);
-			this.player = this.state.players.find((player)=>{
-				return player.socketid == this.playerid;
-			});
-			console.log(this.player);
-			this.enemies.push(this.state.players.find((player)=>{
-				return player.socketid !== this.playerid;
-			}));
-			console.log(this.enemies);
+			this._state.next(state);
+			// this.state = state;
+			// console.log(this.state);
+			// this.player = this.state.players.find((player)=>{
+			// 	return player.socketid == this.playerid;
+			// });
+			// console.log(this.player);
+			// this.enemies.push(this.state.players.find((player)=>{
+			// 	return player.socketid !== this.playerid;
+			// }));
+			// console.log(this.enemies);
 		});
 
 		this.socket.on('UPDATE', (state)=>{
 			console.log('websocket.service says: state UPDATE');
-			this.state = state;
-			this.player = this.state.players.find((player)=>{
-				return player.socketid == this.playerid;
-			});
-			console.log(this.player);
-			this.enemies.push(this.state.players.find((player)=>{
-				return player.socketid !== this.playerid;
-			}));
-			console.log(this.enemies);
+			this._state.next(state);
+			// this.state = state;
+			// this.player = this.state.players.find((player)=>{
+			// 	return player.socketid == this.playerid;
+			// });
+			// console.log(this.player);
+			// this.enemies.push(this.state.players.find((player)=>{
+			// 	return player.socketid !== this.playerid;
+			// }));
+			// console.log(this.enemies);
 		})
 
 		this.socket.on('HIGHLIGHT', (payload)=>{
@@ -66,7 +71,9 @@ export class WebsocketService {
 		});
 	}
 
-
+	getObservable(){
+		return this._state.asObservable();
+	};
 
 	addPlayer(name) {
 		console.log('websocket.service says: addPlayer()');

@@ -19,13 +19,14 @@ import { WebsocketService } from '../websocket.service';
   ]
 })
 export class GameboardComponent implements OnInit {
-  board = [];
+  state: any = null;
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    this.getGameboard();
-    console.log('_wss');
-    console.log(this._wss);
+    let obs = this._wss.getObservable();
+    obs.subscribe((state)=>{
+      this.state = state;
+    });
   }
 
   toggleState(card) {
@@ -33,7 +34,7 @@ export class GameboardComponent implements OnInit {
   }
 
   getGameboard() {
-    this.board = this._wss.state.gameboard.grid;
+
   }
 
 
