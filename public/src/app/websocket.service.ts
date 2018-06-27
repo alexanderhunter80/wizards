@@ -13,6 +13,9 @@ import { Observable, Subject } from 'rxjs'; //rxjs/observable doesn't work with 
 export class WebsocketService {
 
 	state: any;
+	playerid: string;
+	player: any;
+	enemies: any;
 
 	private allPlayersSource = new Subject<any>();
 	allPlayers$ = this.allPlayersSource.asObservable();
@@ -21,10 +24,28 @@ export class WebsocketService {
 
 	constructor(private _http: HttpClient) {
 		this.socket = io();
+		this.socket.on('connect', ()=>{
+			this.playerid = this.socket.id;
+			console.log('playerid');
+			console.log(this.playerid);
+		});
+		// this.playerid = this.socket.id;
+		this.player = {id: null, socketid: null, name: null, health: null, shields: null, aptokens: null, hptokens: null};
+		this.enemies = [];
 
 		this.socket.on('UPDATE', (state)=>{
 			console.log('websocket.service says: state UPDATE')
+			
 			this.state = state;
+			console.log(this.state);
+			this.player = this.state.players.find((player)=>{
+				return player.socketid == this.playerid;
+			});
+			console.log(this.player);
+			this.enemies.push(this.state.players.find((player)=>{
+				return player.socketid !== this.playerid;
+			}));
+			console.log(this.enemies);
 		})
 
 		this.socket.on('HIGHLIGHT', (payload)=>{

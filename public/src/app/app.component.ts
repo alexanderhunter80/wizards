@@ -11,7 +11,7 @@ import { WebsocketService } from './websocket.service';
 
 export class AppComponent {
 
-  constructor(private _WsS: WebsocketService) {}; //This all can be moved to other components to run more modular
+  constructor(private _WsS: WebsocketService) {}; // This all can be moved to other components to run more modular
 
   ngOnInit(){};
   

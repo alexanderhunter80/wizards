@@ -1,16 +1,16 @@
 <div class="wrapper">
   <!-- Health & Shields -->
-  <div *ngIf="player.shields > 0"class="shield">{{player.shields}}
-    <div class="health">{{player.health}}</div>
+  <div *ngIf="_wss.player.shields > 0" class="shield">{{_wss.player.shields}}
+    <div class="health">{{_wss.player.health}}</div>
   </div>
   <!-- Health -->
-  <div *ngIf="player.shields === 0"class="onlyHealth">{{player.health}}</div>
+  <div *ngIf="_wss.player.shields === 0" class="onlyHealth">{{_wss.player.health}}</div>
   <!-- Ap tokens -->
-  <div class="ap" *ngIf="player.aptokens.length > 0">
-    <div class="apToken" *ngFor="let aptoken of player.aptokens">AP</div>
+  <div class="ap" *ngIf="_wss.player.aptokens.length > 0">
+    <div class="apToken" *ngFor="let aptoken of _wss.player.aptokens">AP</div>
   </div>
-  <div class="hp" *ngIf="player.hptokens.length > 0">
-    <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
+  <div class="hp" *ngIf="_wss.player.hptokens.length > 0">
+    <div class="hpToken" *ngFor="let hptoken of _wss.player.hptokens">HP</div>
   </div>
   <div>
     <button (click)="testAttack()">Test Attack</button>

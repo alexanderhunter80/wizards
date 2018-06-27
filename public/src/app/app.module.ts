@@ -31,7 +31,7 @@ import { PlayerComponent } from './player/player.component';
 
   providers: [
     GameService,
-  	ActionService,
+    ActionService,
     WebsocketService,
   ],
   bootstrap: [AppComponent]
