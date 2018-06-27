@@ -61,5 +61,5 @@ module.exports = [
     // { name: 'Overdrive', text: 'Passive: Limit 1 per player. At the start of each turn, you must use and discard a second +AP token, if such a token is available.', elements: 'AEF', effects: [{type: actions.}], targeted: false, copies: 3},
     // { name: 'Hypermetabolism', text: 'Passive: Limit 1 per player. At the end of each turn, you must use and discard a second +HP token, if such a token is available.', elements: 'AEW', effects: [{type: actions.}], targeted: false, copies: 3},
     // { name: 'Telepathy', text: 'Passive: Limit 1 per player. When you Divine, peek at 1 additional card.', elements: 'AFW', effects: [{type: actions.DIVINE, }], targeted: false, copies: 3},
-    { name: 'Brilliance', text: 'Passive: Limit 1 per player. At the start of each turn, draw the top spell card.', elements: 'EFW', effects: [{type: actions.}], targeted: false, copies: 3}
+    // { name: 'Brilliance', text: 'Passive: Limit 1 per player. At the start of each turn, draw the top spell card.', elements: 'EFW', effects: [{type: actions.}], targeted: false, copies: 3}
 ]
