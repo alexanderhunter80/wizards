@@ -1,6 +1,4 @@
-
-
-<div *ngFor="let row of board">
+<div *ngFor="let row of _wss.state.gameboard.grid">
   <div class="card-wrapper" *ngFor="let card of row"> 
     <div class="card" (click)="toggleState(card)" [@cardState]="card.faceUp"> 
       <!-- front of the card-->

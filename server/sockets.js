@@ -4,6 +4,8 @@ const actions = require('./redux/actions')
 module.exports = function(io){
 
     function update(){
+        console.log('sending update');
+        console.log(gameStore.getState());
         io.emit('UPDATE', gameStore.getState());
     }
 
