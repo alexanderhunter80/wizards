@@ -44,4 +44,18 @@ export class PlayerComponent implements OnInit {
   ready(){
     this._wss.doReady(this.player);
   }
+  getTurn() {
+    // this.turn = true;
+    if(this.state.players.indexOf(this.player) === this.state.currentTurn){
+      console.log('It is your TURN' +this.player+ 'as your turn says' +this.state.currentTurn);
+      this.turn = true;
+    }
+    else{
+      console.log('It is not your TURN');
+    }
+  }
+  turnAck() {
+    this._wss.doTurn();
+
+  }
 }

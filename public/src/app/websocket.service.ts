@@ -140,5 +140,8 @@ export class WebsocketService {
 		console.log('sending READY');
 		this.socket.emit('READY', {actor});
 	}
+    doTurn(actor){
+    this.socket.emit('TURN_ACK', {actor: this.player});
+  }
 
   }
