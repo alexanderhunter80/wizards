@@ -89,7 +89,7 @@ function reducer(state = initialState, action){
             target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
-            let damage = action.value;
+            damage = action.value;
             if (target.shields > 0){
                 while(target.shields > 0 && damage > 0){
                     target.shields--;

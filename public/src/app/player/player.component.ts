@@ -15,7 +15,7 @@ export class PlayerComponent implements OnInit {
   }
 
   testAttack() {
-    this._wss.doAttack(this._wss.state.players[0], this._wss.state.players[0], 1);
+    this._wss.doAttack(this._wss.state.players[0], this._wss.state.enemies[0], 1);
   }
 
   getPlayer() {

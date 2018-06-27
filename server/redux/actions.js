@@ -235,5 +235,5 @@ module.exports = {
     // creator functions for manipulators
     divine, weave, scry, obscure, refresh, learn, learnDiscard,
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnAck, turnEnd, divineStepEnd, actionStepEnd,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd,/* turnAck, */turnEnd, divineStepEnd, actionStepEnd,
 }
