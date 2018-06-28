@@ -136,9 +136,9 @@ export class WebsocketService {
         this.socket.emit('SCRY', {actor, value, yx});
     }
 
-	doReady(actor){
-		console.log('sending READY');
-		this.socket.emit('READY', {actor});
-	}
+    doReady(actor) {
+        console.log('sending READY');
+        this.socket.emit('READY', {actor});
+    }
 
   }

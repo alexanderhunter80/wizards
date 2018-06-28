@@ -10,6 +10,6 @@
     <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
   </div>
   <div>
-    <button (click)="testAttack()">Test Attack</button><button (click)="ready()">Ready</button>
+    <button (click)="testAttack()">Test Attack</button><button (click)="ready()" class="ready" *ngIf="!state.gameOn">Ready</button>
   </div>
 </div>

@@ -20,7 +20,7 @@ import { WebsocketService } from '../websocket.service';
 })
 
 export class GameboardComponent implements OnInit {
-  readyCheck = false;
+
   state: any = null;
 
   constructor(private _wss: WebsocketService) { }
@@ -31,22 +31,15 @@ export class GameboardComponent implements OnInit {
       this.state = state;
       // Checking to see if need to ready check for game start
       console.log(this.state);
-      if (state && this.state.gameOn === false) {
-        this.readyCheck = true;
-      }// End of ready Check
     });
   }
+
   toggleState(card) {
     card.faceUp = (card.faceUp === false ) ? true : false;
   }
 
   getGameboard() {
 
-  }
-
-  ready() {
-    this.readyCheck = false;
-    this._wss.ready();
   }
 
 
