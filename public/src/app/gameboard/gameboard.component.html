@@ -7,7 +7,7 @@
           <img src="../../assets/{{card.elem}}.png" alt="" width="100px" height="100px">
         </div>
         <!-- back of the card-->
-        <div class="back"></div>
+        <div [ngClass]="{'backReg': !card.highlight, 'backHighlight': card.highlight}"></div>
       </div>
     </div>
   </div>

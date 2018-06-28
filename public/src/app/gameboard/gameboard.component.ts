@@ -44,11 +44,22 @@ export class GameboardComponent implements OnInit {
       for (const row of this.state.gameboard.grid) {
         for (const card of row) {
           card.coord = [this.state.gameboard.grid.indexOf(row), row.indexOf(card)];
+          this.showHighlight(card);
         }
       }
     }
   }
-
-
-
+    showHighlight(card) {
+      console.log(card.coord);
+      console.log(this.state.highlight);
+      const bsCoord = JSON.stringify(card.coord);
+      const bsHighlight = JSON.stringify(this.state.highlight);
+      if (bsHighlight.indexOf(bsCoord) !== -1) {
+        console.log('found true');
+        card.highlight = true;
+      } else {
+        console.log('found false');
+        card.highlight = false;
+      }
+    }
 }
