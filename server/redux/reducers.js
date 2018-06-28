@@ -12,7 +12,7 @@ const initialState = {
     gameboard: null,
     history: [],
     learnHelper: {keep: null, cardsDrawn: []},
-    highlight: [[1,1], [2,3]],
+    highlight: [],
 }
 
 let newState, idx, temp, yx, currentPlayer, target, damage;
