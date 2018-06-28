@@ -18,8 +18,8 @@ module.exports = function(io){
             // nope, create Redux action for this
             socket.emit('ACTION_STEP_START');
         } else {
-            // sure why not
-            continue;
+            console.log('sockets.js says: moving on');
+            socket.emit('TURN_FINISHED');
         }
     }
 
@@ -117,6 +117,18 @@ module.exports = function(io){
         });
 
 
+
+
+        //
+        //
+        // action funtimes happen here!
+        //
+        //
+
+
+
+
+        // accept ACTION_STEP_END, loop back or move on
 
 
 
