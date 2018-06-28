@@ -17,4 +17,15 @@
     <button (click)="turnEnd()">End Turn</button>
     <button (click)="testAttack()" >Test Attack</button>
   </div>
+  <div class="hand">
+    <div class="card" *ngFor="let spell of player.spells">
+      <h3>{{spell.name}}</h3>
+      <hr>
+      <h5>Effect:</h5>
+      {{spell.text}}
+      <br>
+      <h5>Cost Elements:</h5>
+      {{spell.elements}}
+    </div>
+  </div>
 </div>

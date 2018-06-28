@@ -20,6 +20,7 @@ export class PlayerComponent implements OnInit {
       this.state = state;
       if (this.state) {
         this.getPlayer();
+        this.convertTokens();
         this.getTurn();
       }
 
@@ -61,5 +62,17 @@ export class PlayerComponent implements OnInit {
   turnEnd() {
     console.log('Ending');
     this._wss.endTurn(this.player);
+  }
+  convertTokens() {
+    let tokens = [];
+    for (let i = 0; i < this.player.aptokens; i++) {
+      tokens.push(i);
+    }
+    this.player.aptokens = tokens;
+    tokens = [];
+    for (let i = 0; i < this.player.hptokens; i++) {
+      tokens.push(i);
+    }
+    this.player.hptokens = tokens;
   }
 }

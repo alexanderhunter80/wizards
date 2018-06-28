@@ -30,6 +30,7 @@ export class GameboardComponent implements OnInit {
     obs.subscribe((state) => {
       this.state = state;
       // Checking to see if need to ready check for game start
+      this.assignCoord();
       console.log(this.state);
     });
   }
@@ -38,8 +39,14 @@ export class GameboardComponent implements OnInit {
     card.faceUp = (card.faceUp === false ) ? true : false;
   }
 
-  getGameboard() {
-
+  assignCoord() {
+    if (this.state) {
+      for (const row of this.state.gameboard.grid) {
+        for (const card of row) {
+          card.coord = [this.state.gameboard.grid.indexOf(row), row.indexOf(card)];
+        }
+      }
+    }
   }
 
 

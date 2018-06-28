@@ -73,3 +73,13 @@
     font-size: 1.3em;
     font-weight: bolder;
 }
+.card {
+    width:208px;
+    height:321px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border: 1px solid black;
+    display: inline-block;
+    background-color: rgb(32, 4, 4);
+    color: white;
+    margin: 5px;
+}
