@@ -84,10 +84,6 @@ export class WebsocketService {
         // }.bind(this));
    }
 
-   ready() {
-        this.socket.emit('READY', {actor: this.player});
-   }
-
    doAttack(actor, target, value) {
        this.socket.emit('ATTACK', {actor, target, value});
    }
@@ -136,12 +132,17 @@ export class WebsocketService {
         this.socket.emit('SCRY', {actor, value, yx});
     }
 
-	doReady(actor){
-		console.log('sending READY');
-		this.socket.emit('READY', {actor});
-	}
-    doTurn(actor){
-    this.socket.emit('TURN_ACK', {actor: this.player});
-  }
+    doReady(actor) {
+        console.log('sending READY');
+        this.socket.emit('READY', {actor});
+    }
+    doTurn(actor) {
+        console.log('starting TURN');
+        this.socket.emit('TURN_ACK', {actor});
+    }
+    endTurn(actor) {
+        console.log('ENDing TURN');
+        this.socket.emit('TURN_END', {actor});
+    }
 
   }
