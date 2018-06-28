@@ -28,6 +28,7 @@ const GAME_END = 'GAME_END';
 // const TURN_START = 'TURN_START';
 const TURN_ACK = 'TURN_ACK';
 const TURN_END = 'TURN_END';
+const DIVINE_STEP = 'DIVINE_STEP';
 // const DIVINE_STEP_START = 'DIVINE_STEP_START';
 const DIVINE_STEP_END = 'DIVINE_STEP_END';
 // const ACTION_STEP_START = 'ACTION_STEP_START';
@@ -231,9 +232,17 @@ function gameStart(){
 
 function gameEnd(){};
 
-function turnStart(){};
+function turnStart(){
+    return {
+        type: TURN_START
+    }
+};
 
-function turnEnd(){};
+function turnEnd(){
+    return {
+        type: TURN_END
+    }
+};
 
 function divineStepStart(){};
 
@@ -249,7 +258,7 @@ module.exports = {
     // card manipulators
     DIVINE, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP_END, ACTION_STEP_END, READY,
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY,
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
