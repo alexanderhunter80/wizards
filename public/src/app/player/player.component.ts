@@ -9,7 +9,7 @@ import { WebsocketService } from '../websocket.service';
 export class PlayerComponent implements OnInit {
   player: any;
   state: any;
-
+  turn = false;
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
@@ -20,6 +20,7 @@ export class PlayerComponent implements OnInit {
       this.state = state;
       if (this.state) {
         this.getPlayer();
+        this.getTurn();
       }
 
     });
@@ -46,16 +47,14 @@ export class PlayerComponent implements OnInit {
   }
   getTurn() {
     // this.turn = true;
-    if(this.state.players.indexOf(this.player) === this.state.currentTurn){
-      console.log('It is your TURN' +this.player+ 'as your turn says' +this.state.currentTurn);
+    if (this.state.players.indexOf(this.player) === this.state.currentTurn) {
+      console.log('It is your TURN' + this.player + 'as your turn says' + this.state.currentTurn);
       this.turn = true;
-    }
-    else{
+    } else {
       console.log('It is not your TURN');
     }
   }
   turnAck() {
-    this._wss.doTurn();
-
+    this._wss.doTurn(this.player);
   }
 }
