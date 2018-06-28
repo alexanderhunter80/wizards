@@ -16,6 +16,8 @@ export class WebsocketService {
     playerid: string;
     player: any;
     enemies: any;
+    divine = false;
+    divineCount: number;
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
 
@@ -65,9 +67,10 @@ export class WebsocketService {
             // console.log(this.enemies);
         });
 
-        this.socket.on('HIGHLIGHT', (payload) => {
-            // highlight cards given by coordinates in payload
-            // format of payload: {type: 'ACTIONNAME', coords: [yx, yx, yx]}
+        this.socket.on('DIVINE_STEP_START', payload => {
+            console.log('websocket.service says: state DIVINE STEP');
+            this.divineCount = payload.value;
+            this.divine = true;
         });
     }
 
@@ -117,6 +120,7 @@ export class WebsocketService {
     }
 
     doDivine(actor, value, yx) {
+		console.log('EMITTING DIVINE');
         this.socket.emit('DIVINE', {actor, value, yx});
     }
 
@@ -141,7 +145,8 @@ export class WebsocketService {
         this.socket.emit('TURN_ACK', {actor});
     }
     endTurn(actor) {
-        console.log('ENDing TURN');
+		console.log('ENDing TURN');
+		this.socket.emit('UNHIGHLIGHT');
         this.socket.emit('TURN_END', {actor});
     }
 

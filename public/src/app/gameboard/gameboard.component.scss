@@ -12,7 +12,7 @@
 .front img {
     vertical-align: middle;
 }
-.back {
+.backReg {
   position: absolute;
   height:100%;
   width:100%;
@@ -23,6 +23,17 @@
   line-height: 208px;
   font-family: Helvetica;
 }
+.backHighlight {
+    position: absolute;
+    height:100%;
+    width:100%;
+    background-color: black;
+    backface-visibility: hidden;
+    color: #fff;
+    text-align: center;
+    line-height: 208px;
+    font-family: Helvetica;
+  }
 .card {
     position:relative;
     width:321px;
