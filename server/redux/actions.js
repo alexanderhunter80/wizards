@@ -18,6 +18,7 @@ const SCRY = 'SCRY';
 const REFRESH = 'REFRESH';
 const LEARN = 'LEARN';
 const LEARN_DISCARD = 'LEARN_DISCARD';
+const EXHAUST = 'EXHAUST';
 
 const READY = 'READY';
 const ADD_PLAYER = 'ADD_PLAYER';
@@ -192,6 +193,15 @@ function learnDiscard(actor, cardIndices){
     }
 }
 
+function exhaust(actor, cardIndices){
+    return {
+        type: EXHAUST,
+        actor: actor,
+        cardIndices: cardIndices,
+        message: actor.name+' discarded '+cardIndices.length+' spells'
+    }
+}
+
 function ready(actor){
     return {
         type: READY,
@@ -256,13 +266,13 @@ module.exports = {
     // card effects
     ATTACK, ATTACK_ALL, DRAIN, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
-    DIVINE, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
+    DIVINE, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD, EXHAUST,
     // meta events
     ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_START, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY,
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
-    divine, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard,
+    divine, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard, exhaust,
     // creator functions for meta events
     addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepEnd, actionStepEnd, ready,
 }
