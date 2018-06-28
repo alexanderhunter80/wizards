@@ -39,7 +39,7 @@ module.exports = function(io){
             gameStore.dispatch(actions.ready(payload.actor));
             let readyState = gameStore.getState();
             let allReady = readyState.players.reduce((acc, flag)=>{
-                return (acc && flag);
+                return (acc && flag.ready);
             }, true);
             if (allReady){
                 io.emit('GAME_STARTED');
@@ -51,12 +51,20 @@ module.exports = function(io){
 
 
 
-        // hear TURN_ACK, dispatch TURN_START
+        // hear TURN_ACK, dispatch TURN_START, respond either DIVINE_STEP_START or 
 
         socket.on(actions.TURN_ACK, (payload)=>{
             console.log('sockets.js says: heard TURN_ACK');
             gameStore.dispatch(actions.turnStart());
+            update();
         });
+
+
+
+        // 
+
+
+
 
 
 
@@ -116,7 +124,20 @@ module.exports = function(io){
         socket.on(actions.DIVINE, (payload)=>{
             console.log('sockets.js says: heard DIVINE');
             gameStore.dispatch(actions.divine(payload.actor, payload.value, payload.yx));
-            socket.broadcast.emit('HIGHLIGHT', {type: 'DIVINE', coords: payload.yx});
+            // regular state with HIGHLIGHT data
+            socket.broadcast.emit('UPDATE', gameStore.getState());
+            // super secret state with divined cards faceUp = true
+            let ephemeral = gameStore.getState();
+            for(c of payload.yx){
+                ephemeral.gameboard.grid[c[0]][c[1]].faceUp = true;
+            }
+            socket.emit('UPDATE', ephemeral);
+        });
+
+        socket.on(actions.UNHIGHLIGHT, ()=>{
+            console.log('sockets.js says: heard UNHIGHLIGHT');
+            gameStore.dispatch(actions.unhighlight());
+            update();
         });
 
         socket.on(actions.WEAVE, (payload)=>{

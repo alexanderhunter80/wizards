@@ -136,9 +136,19 @@ export class WebsocketService {
         this.socket.emit('SCRY', {actor, value, yx});
     }
 
+<<<<<<< HEAD
     doReady(actor) {
         console.log('sending READY');
         this.socket.emit('READY', {actor});
     }
+=======
+	doReady(actor){
+		console.log('sending READY');
+		this.socket.emit('READY', {actor});
+	}
+    doTurn(actor){
+    this.socket.emit('TURN_ACK', {actor: this.player});
+  }
+>>>>>>> 34da876e169cd0a249a99bed958b06bdffc6f931
 
   }

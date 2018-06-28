@@ -1,4 +1,4 @@
-<div *ngIf="state.gameOn">
+<div *ngIf="state && state.gameOn">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="toggleState(card)" [@cardState]="card.faceUp"> 
