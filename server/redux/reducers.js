@@ -12,6 +12,7 @@ const initialState = {
     gameboard: null,
     history: [],
     learnHelper: {keep: null, cardsDrawn: []},
+    highlight: [],
 }
 
 let newState, idx, temp, yx, currentPlayer, target, damage;
@@ -253,14 +254,18 @@ function reducer(state = initialState, action){
             return newState;
 
 
-        case actions.DIVINE:
+        case actions.DIVINE:  // actor, value, [yx]
             console.log('reducers.js heard DIVINE');
             console.log('... but the future refused to change.  (Action not yet implemented.)')
-            // respond with elements of N face-down cards through socket to actor
-            // broadcast coordinates of those cards to all non-actors to be highlighted
-            // state does not change
-            return state;
+            newState = Object.assign({}, state);
+            newState.highlight = action.yx;
+            newState.history.push(action.message);
+            return newState;
 
+        case actions.UNHIGHLIGHT:
+            console.log('reducers.js heard UNHIGHLIGHT');
+            newState = Object.assign({}, state, {highlight: []});
+            return newState;
 
         case actions.WEAVE:
             console.log('reducers.js heard WEAVE');
