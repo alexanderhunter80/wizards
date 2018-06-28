@@ -11,6 +11,7 @@ const AP_PLUS = 'AP_PLUS';
 const AP_MINUS = 'AP_MINUS';
 
 const DIVINE = 'DIVINE';
+const UNHIGHLIGHT = 'UNHIGHLIGHT';
 const WEAVE = 'WEAVE';
 const OBSCURE = 'OBSCURE';
 const SCRY = 'SCRY';
@@ -123,9 +124,15 @@ function divine(actor, value, yx){
         actor: actor,
         value: value,
         yx: yx,
-        message: actor.name+' looked at '+value+' cards'
+        message: actor.name+' divined '+value+' cards'
     }
 };
+
+function unhighlight(){
+    return {
+        type: UNHIGHLIGHT
+    }
+}
 
 function weave(actor, yx1, yx2){
     return {
@@ -240,13 +247,13 @@ module.exports = {
     // card effects
     ATTACK, ATTACK_ALL, DRAIN, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
-    DIVINE, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
+    DIVINE, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD,
     // meta events
     ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_END, DIVINE_STEP_END, ACTION_STEP_END, READY,
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
-    divine, weave, scry, obscure, refresh, learn, learnDiscard,
+    divine, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard,
     // creator functions for meta events
     addPlayer, removePlayer, gameSetup, gameStart, gameEnd,/* turnAck, */turnEnd, divineStepEnd, actionStepEnd, ready,
 }
