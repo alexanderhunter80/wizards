@@ -390,7 +390,6 @@ function reducer(state = initialState, action){
             }
             // advance state.currentTurn to next % number-of-players
             newState.currentTurn = (newState.currentTurn + 1) % newState.players.length;
-            // figure out how to fire the next turnStart
             return newState;
 
 
