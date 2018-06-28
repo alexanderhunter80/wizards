@@ -213,7 +213,7 @@ module.exports = function(io){
             // regular state with HIGHLIGHT data
             socket.broadcast.emit('UPDATE', gameStore.getState());
             // super secret state with divined cards faceUp = true
-            let ephemeral = gameStore.getState();
+            let ephemeral = Object.assign({}, gameStore.getState());
             for(c of payload.yx){
                 ephemeral.gameboard.grid[c[0]][c[1]].faceUp = true;
             }
@@ -250,6 +250,7 @@ module.exports = function(io){
 
         // refresh, learn, etc 
 
+        
     
 
         
