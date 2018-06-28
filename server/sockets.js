@@ -128,13 +128,34 @@ module.exports = function(io){
 
 
 
-        // accept ACTION_STEP_END, loop back or move on
+        // accept ACTION_STEP_END, loop back or move on\
+
+        socket.on(actions.ACTION_STEP_END, (payload)=>{
+            console.log('sockets.js says: heard ACTION_STEP_END');
+            actOrDont(payload.actor);
+        });
+
+
+
+        // accept TURN_END, advance turn
+
+        socket.on(actions.TURN_END, (payload)=>{
+            console.log('sockets.js says: heard TURN_END');
+            gameStore.dispatch(actions.turnEnd());
+            update();
+            io.emit('TURN_START');
+        });
 
 
 
 
 
 
+        
+
+
+
+        // more stuff!
 
         socket.on(actions.ATTACK, (payload)=>{
             console.log('sockets.js says: heard ATTACK');
