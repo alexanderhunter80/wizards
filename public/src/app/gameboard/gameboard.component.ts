@@ -20,7 +20,7 @@ import { WebsocketService } from '../websocket.service';
 })
 
 export class GameboardComponent implements OnInit {
-  readyCheck = false;
+
   state: any = null;
 
   constructor(private _wss: WebsocketService) { }
@@ -30,23 +30,23 @@ export class GameboardComponent implements OnInit {
     obs.subscribe((state) => {
       this.state = state;
       // Checking to see if need to ready check for game start
+      this.assignCoord();
       console.log(this.state);
-      if (state && this.state.gameOn === false) {
-        this.readyCheck = true;
-      }// End of ready Check
     });
   }
+
   toggleState(card) {
     card.faceUp = (card.faceUp === false ) ? true : false;
   }
 
-  getGameboard() {
-
-  }
-
-  ready() {
-    this.readyCheck = false;
-    this._wss.ready();
+  assignCoord() {
+    if (this.state) {
+      for (const row of this.state.gameboard.grid) {
+        for (const card of row) {
+          card.coord = [this.state.gameboard.grid.indexOf(row), row.indexOf(card)];
+        }
+      }
+    }
   }
 
 

@@ -1,4 +1,5 @@
 <div class="wrapper" *ngIf="player">
+  <h3>{{player.name}}</h3>
   <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
     <div class="health">{{player.health}}</div>
   </div>
@@ -9,9 +10,22 @@
   <div class="hp" *ngIf="player.hptokens.length > 0">
     <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
   </div>
+  <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
   <div *ngIf="turn">
     <h2>It is your Turn</h2>
-    <button (click)="turnAck()" >Confirm Turn</button>
+    <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
+    <button (click)="turnEnd()" *ngIf="turnConfirm">End Turn</button>
     <button (click)="testAttack()" >Test Attack</button>
+  </div>
+  <div class="hand">
+    <div class="card" *ngFor="let spell of player.spells">
+      <h3>{{spell.name}}</h3>
+      <hr>
+      <h5>Effect:</h5>
+      {{spell.text}}
+      <br>
+      <h5>Cost Elements:</h5>
+      {{spell.elements}}
+    </div>
   </div>
 </div>

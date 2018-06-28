@@ -19,6 +19,7 @@ export class EnemiesComponent implements OnInit {
       console.log(this.state);
       if (this.state) {
         this.getEnemies();
+        this.convertTokens();
       }
     });
   }
@@ -35,5 +36,20 @@ export class EnemiesComponent implements OnInit {
       return this._wss.playerid !== enemy.socketid;
     });
     console.log(this.enemies);
+  }
+
+  convertTokens() {
+    for (let j = 0; j < this.enemies.length; j++) {
+        let tokens = [];
+        for (let i = 0; i < this.enemies[j].aptokens; i++) {
+          tokens.push(i);
+        }
+        this.enemies[j].aptokens = tokens;
+        tokens = [];
+        for (let i = 0; i < this.enemies[j].hptokens; i++) {
+          tokens.push(i);
+        }
+        this.enemies[j].hptokens = tokens;
+      }
   }
 }
