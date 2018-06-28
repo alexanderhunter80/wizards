@@ -22,6 +22,7 @@ function checkDeath(player){
         player.isGhost = true;
         console.log('HE DED');
         console.log('(death not yet fully implemented)');
+        // check if game ends
     }
 
 }
@@ -323,13 +324,31 @@ function reducer(state = initialState, action){
             console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
+                return player.id == action.actor.id;
             })
             // take indices of kept cards and add to actor's spells
 
             // take indices of kept cards and slice out of learnHelper.cardsDrawn
             // push rest of learnHelper.cardsDrawn into gameboard.spellDeck.discard
             return state;
+
+
+        case actions.EXHAUST:
+        console.log('reducers.js heard EXHAUST');
+        newState = Object.assign({}, state);
+        currentPlayer = newState.players.find((player)=>{
+            return player.id == action.actor.id;
+        })        
+        for(idx of action.cardIndices){
+            newState.gameboard.spellDeck.discard.push(currentPlayer.spells[idx]);
+            currentPlayer.spells[idx] == null;
+        }
+        currentPlayer.spells.filter((spell)=>{
+            return spell !== null;
+        });
+        newState.history.push(action.message);
+        return newState;
+
 
 
         case actions.ADD_PLAYER:
