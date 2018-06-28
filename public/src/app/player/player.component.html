@@ -13,8 +13,8 @@
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
   <div *ngIf="turn">
     <h2>It is your Turn</h2>
-    <button (click)="turnAck()" >Confirm Turn</button>
-    <button (click)="turnEnd()">End Turn</button>
+    <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
+    <button (click)="turnEnd()" *ngIf="turnConfirm">End Turn</button>
     <button (click)="testAttack()" >Test Attack</button>
   </div>
   <div class="hand">

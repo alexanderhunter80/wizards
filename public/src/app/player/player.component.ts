@@ -10,6 +10,7 @@ export class PlayerComponent implements OnInit {
   player: any;
   state: any;
   turn = false;
+  turnConfirm = false;
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
@@ -58,10 +59,12 @@ export class PlayerComponent implements OnInit {
   turnAck() {
     console.log('Acknowledged');
     this._wss.doTurn(this.player);
+    this.turnConfirm = true;
   }
   turnEnd() {
     console.log('Ending');
     this._wss.endTurn(this.player);
+    this.turnConfirm = false;
   }
   convertTokens() {
     let tokens = [];

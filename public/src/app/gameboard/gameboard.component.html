@@ -4,7 +4,7 @@
       <div class="card" (click)="toggleState(card)" [@cardState]="card.faceUp"> 
         <!-- front of the card-->
         <div class="front">
-          {{card.elem}}
+          <img src="../../assets/{{card.elem}}.png" alt="" width="100px" height="100px">
         </div>
         <!-- back of the card-->
         <div class="back"></div>

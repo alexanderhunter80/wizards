@@ -2,13 +2,15 @@
     position: absolute;
     height:100%;
     width:100%;
-    background-color: #CC3333;
+    background-color: white;
     backface-visibility: hidden;
     transform: rotateY(-180deg);
-    color: #fff;
     text-align: center;
     line-height: 208px;
     font-family: Helvetica;
+}
+.front img {
+    vertical-align: middle;
 }
 .back {
   position: absolute;
