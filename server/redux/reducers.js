@@ -256,7 +256,7 @@ function reducer(state = initialState, action){
 
         case actions.DIVINE:  // actor, value, [yx]
             console.log('reducers.js heard DIVINE');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
+            // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
             newState.highlight = action.yx;
             newState.history.push(action.message);
@@ -370,6 +370,7 @@ function reducer(state = initialState, action){
         case actions.TURN_END:
             console.log('reducers.js heard TURN_END');
             newState = Object.assign({}, state);
+            currentPlayer = newState.players[newState.currentTurn];
             // hp +- tokens
             if (currentPlayer.hptokens > 0){
                 if (currentPlayer.health < 5){
@@ -388,6 +389,7 @@ function reducer(state = initialState, action){
                 currentPlayer.hptokens++;
             }
             // advance state.currentTurn to next % number-of-players
+            newState.currentTurn = (newState.currentTurn + 1) % newState.players.length;
             // figure out how to fire the next turnStart
             return newState;
 
