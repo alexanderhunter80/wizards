@@ -74,7 +74,7 @@ module.exports = function(io){
             gameStore.dispatch(actions.turnStart());
             update();
             currentPlayer = gameStore.getState().players.find((player)=>{
-                return player.id == action.actor.id;
+                return player.id == payload.actor.id;
             })
             if(currentPlayer.adjustActions < 0){
                 // currentPlayer.adjustActions = 0;
