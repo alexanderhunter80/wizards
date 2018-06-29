@@ -45,6 +45,8 @@ export class PlayerComponent implements OnInit {
   }
 
   testAttack() {
+    this.gameboardComp.holdActionStep = true;
+    this._wss._actionStep.next(false);
     this._wss.doAttack(this.player, this.player, 1);
   }
 
@@ -63,10 +65,8 @@ export class PlayerComponent implements OnInit {
   }
   getTurn() {
     if (this.state.players.indexOf(this.player) === this.state.currentTurn) {
-      console.log('It is your TURN ' + this.player.name );
       this.turn = true;
     } else {
-      console.log('It is not your TURN');
       this.turn = false;
     }
   }
@@ -75,11 +75,11 @@ export class PlayerComponent implements OnInit {
     this.turnConfirm = true;
   }
   turnEnd() {
+    this.turnConfirm = false;
     this._wss.endTurn(this.player);
     for (enemy of this.enemiesComp.enemies) {
       enemy.target = false;
     }
-    this.turnConfirm = false;
   }
   convertTokens() {
     let tokens = [];
@@ -113,7 +113,6 @@ export class PlayerComponent implements OnInit {
     this.gameboardComp.holdActionStep = true;
     this._wss._actionStep.next(false);
     this.castSpell = true;
-    console.log('CAST action');
   }
   selectingSpell(spellCard) {
     if (this.castSpell) {
@@ -122,7 +121,6 @@ export class PlayerComponent implements OnInit {
       }
       spellCard.highlight = true;
       this.confirmSpell = false;
-      console.log('SELECTING');
     }
   }
   castingSpell() {

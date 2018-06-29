@@ -1,4 +1,4 @@
-<div *ngFor="let enemy of enemies" class="enemy" click()="selectEnemy(enemy)">
+<div *ngFor="let enemy of enemies" class="enemy" (click)="selectEnemy(enemy)">
   <h3>{{enemy.name}}</h3>
   <div *ngIf="enemy.shields > 0"class="shield">{{enemy.shields}}
     <div class="health">{{enemy.health}}</div>

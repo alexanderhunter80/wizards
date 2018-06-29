@@ -139,7 +139,7 @@ function reducer(state = initialState, action){
             target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
-            let damage = action.value;
+            damage = action.value;
             // check for shields and cancel 1:1
             if (target.shields > 0){
                 while(target.shields > 0 && damage > 0){
@@ -180,6 +180,9 @@ function reducer(state = initialState, action){
         case actions.DRAIN:
             console.log('reducers.js heard DRAIN');
             newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })
             target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
@@ -194,7 +197,7 @@ function reducer(state = initialState, action){
             while(damage > 0 && target.health > 0){
                 target.health--;
                 damage--;
-                if(actor.health < 5){actor.health++};
+                if(currentPlayer.health < 5){currentPlayer.health++};
             }
             checkDeath(target);
             isGameOver(newState);
@@ -380,7 +383,7 @@ function reducer(state = initialState, action){
                 return player.id == action.actor.id;
             })   
             idx = currentPlayer.spells.findIndex(spell=>spell.name==action.spell.name);
-            currentPlayer.spells.splice(idx);
+            currentPlayer.spells.splice(idx, 1);
             return newState;
 
 
@@ -391,9 +394,9 @@ function reducer(state = initialState, action){
                 return player.id == action.actor.id;
             })   
             idx = currentPlayer.spells.findIndex(spell=>spell.name==action.spell.name);
-            currentPlayer.spells.splice(idx);
+            currentPlayer.spells.splice(idx, 1);
             // one more spell
-            currentPlayer.spells.splice(Math.floor(Math.random()*currentPlayer.spells.length));
+            currentPlayer.spells.splice(Math.floor(Math.random()*currentPlayer.spells.length), 1);
             // 1 damage
             currentPlayer.health--;
             checkDeath(currentPlayer);
@@ -493,10 +496,14 @@ function reducer(state = initialState, action){
 
         case actions.REPLACE_ELEMENTS:
             console.log('reducers.js heard REPLACE_ELEMENTS');
+            console.log(action);
             newState = Object.assign({}, state);
             for(idx of action.yx){
                 newState.gameboard.deck.discard.push(newState.gameboard.grid[idx[0]][idx[1]]);
                 newState.gameboard.grid[idx[0]][idx[1]] = newState.gameboard.deck.topCard();
+                if ((idx[0] == 1 || idx[0] == 2) && (idx[1] == 1 || idx[1] == 2)){ // if one of the four central grid positions, make card faceup by default
+                    newState.gameboard.grid[idx[0]][idx[1]].faceUp = true;
+                }
             }
             return newState;
 

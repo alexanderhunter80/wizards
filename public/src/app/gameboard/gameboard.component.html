@@ -19,6 +19,15 @@
 <div *ngIf="spell.length > 0">
   <h1>Select a {{spell[0]}}</h1>
 </div>
-<div *ngIf="targeting">
+<div *ngIf="castSuccess">
+  <h1>Spell was cast successfully!!</h1>
+</div>
+<div *ngIf="castBotched">
+  <h1>Spell cast was botched!!  UH OH!</h1>
+</div>
+<div *ngIf="_wss.targetingPlayer">
   <h1>Select an Enemy to Target with Spell!</h1>
+</div>
+<div *ngIf="_wss.targetingCards">
+  <h1>Select the card to Target with Spell Effect!</h1>
 </div>

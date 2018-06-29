@@ -32,6 +32,8 @@ export class GameboardComponent implements OnInit {
   selected = false;
   spell: any = [];
   discard: any = [];
+  castSuccess = false;
+  castBotched = false;
 
   constructor(private _wss: WebsocketService) { }
 
@@ -115,9 +117,13 @@ export class GameboardComponent implements OnInit {
         this.discard.push(card.coord);
         if (this.spell.length === 0) {
           console.log('Spell cast Successful!!');
+          this.castSuccess = true;
+        setTimeout(() => {
+          this.castSuccess = false;
+        }, 3000);
           // finding selected spell
-          const spellToCast = this.player.spells.filter( x => return x.highlight === true; );
-          this._wss.spellSuccess(this.playerComp.player, this.discard, spellToCast);
+          const spellToCast = this.playerComp.player.spells.filter( x => return x.highlight === true; );
+          this._wss.spellSuccess(this.playerComp.player, this.discard, spellToCast[0]);
           // check if targeted spell
           // if (spellToCast.targeted) {
             // does spell target player?
@@ -128,41 +134,45 @@ export class GameboardComponent implements OnInit {
             //   }
             // }
           }
-        }
-          for (const action of spellToCast[0].effects) {
-            switch (action) {
-              case 'ATTACK':
-                break;
-              case 'CURE':
-                break;
-              case 'OBSCURE':
-                break;
-              case 'ATTACK_ALL':
-                break;
-              case 'SHIELD':
-                break;
-              case 'DRAIN':
-                break;
-              case 'HP_PLUS':
-                break;
-              case 'HP_MINUS':
-                break;
-              case 'AP_PLUS':
-                break;
-              case 'AP_MINUS':
-                break;
-              case 'WEAVE':
-                break;
-              case 'SCRY':
-                break;
-              case 'DIVINE':
-                break;
-            }
-          }
+        // }
+          // for (const action of spellToCast[0].effects) {
+          //   switch (action) {
+          //     case 'ATTACK':
+          //       break;
+          //     case 'CURE':
+          //       break;
+          //     case 'OBSCURE':
+          //       break;
+          //     case 'ATTACK_ALL':
+          //       break;
+          //     case 'SHIELD':
+          //       break;
+          //     case 'DRAIN':
+          //       break;
+          //     case 'HP_PLUS':
+          //       break;
+          //     case 'HP_MINUS':
+          //       break;
+          //     case 'AP_PLUS':
+          //       break;
+          //     case 'AP_MINUS':
+          //       break;
+          //     case 'WEAVE':
+          //       break;
+          //     case 'SCRY':
+          //       break;
+          //     case 'DIVINE':
+          //       break;
+          //   }
+          // }
           // Send end action
-        }
+        // }
       } else if (this.spell.length > 0 && !this.playerComp.castSpell) {
         console.log('Spell has been botched!');
+        this.castBotched = true;
+        setTimeout(() => {
+          this.castBotched = false;
+        }, 3000);
         this.spell = [];
       }
     }

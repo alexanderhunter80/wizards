@@ -19,7 +19,8 @@ export class WebsocketService {
     divine = false;
     divineCount: number;
     targetingPlayer = false;
-    effect = null;
+    targetingCards = false;
+    effects = null;
     // actionStep = false;
 
     _actionStep: BehaviorSubject<any> = new BehaviorSubject(false);
@@ -65,10 +66,19 @@ export class WebsocketService {
 
         this.socket.on('TARGET_PLAYER', (spellEffect) => {
             this.effects = spellEffect;
-            this.targeting = true;
+            this.targetingPlayer = true;
         });
 
-        this.socket.on('TARGET_CARDS');
+        this.socket.on('TARGET_CARDS', (spellEffect) => {
+            this.effects = spellEffect;
+            this.targetingCards = true;
+        });
+
+        
+
+        // this.socket.on('CAST_END', () => {
+        //     socket.emit('ACTION_STEP_END');
+        // });
     }
 
     getObservable() {
@@ -157,22 +167,25 @@ export class WebsocketService {
         this.socket.emit('DIVINE_END', {actor});
     }
     endTurn(actor) {
-        console.log('ENDing TURN');
         this.socket.emit('TURN_END', {actor});
     }
     spellSuccess(actor, cards, spell) {
-        this.socket.emit('REMOVE_ELEMENT', {actor, cards});
+        this.socket.emit('REPLACE_ELEMENTS', {actor, cards});
         this.socket.emit('CAST_SUCCESS', {actor, spell});
     }
 
     sendTarget(actor, target) {
-        this.socket.emit('CAST_EFFECT', {actor, target, effects});
+        this.socket.emit('CAST_EFFECT', {actor, target, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
+        this.targetingPlayer = false;
     }
 
     sendCards(actor, cards) {
-        this.socket.emit('CAST_EFFECT', {actor, cards, effects});
+        this.socket.emit('CAST_EFFECT', {actor, cards, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
+        this.targetingCards = false;
     }
+
+
 
   }

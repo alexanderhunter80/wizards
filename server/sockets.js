@@ -5,7 +5,7 @@ const cloner = require('cloner');
 
 let currentPlayer = null;
 let wizardNames = [
-    'Merlin', 'Caramon', 'Raistlin', 'Rincewind', 'Ridcully', 'Elminster', 'Mordenkainen', 'Bigby', 'Drawmij', 'Leomund', 'Melf', 'Nystul', 'Tenser', 'Evard', 'Otiluke', 'Grimskull', 'Harlequin', 'Morgana', 'Maleficent', 'Gandalf', 'Glinda', 'Harry Dresden', 'Molly Carpenter', "Rand al'Thor", 'Tim', 'Cassandra', 'Hecate', 'Skald', 'Medea', 'Circe', 'Blaise', 'Ganondorf', 'Prospero', 'Maeve', 'Mab', 'Titania', 'Aurora', 'Ursula', 'Sabrina', 'Gruntilda', 'Granny Weatherwax', 'Nanny Ogg', 'Magrat Garlick', 'Mirri Maz Duur', 'Erszebet Karpaty', 'Iris', 'Melisandre', 'Sycorax', 'Jafar', 'Belgarath', 
+    'Merlin', 'Caramon', 'Raistlin', 'Rincewind', 'Ridcully', 'Elminster', 'Mordenkainen', 'Bigby', 'Drawmij', 'Leomund', 'Melf', 'Nystul', 'Tenser', 'Evard', 'Otiluke', 'Grimskull', 'Harlequin', 'Morgana', 'Maleficent', 'Gandalf', 'Glinda', 'Harry Dresden', 'Molly Carpenter', "Rand al'Thor", 'Tim', 'Cassandra', 'Hecate', 'Skald', 'Medea', 'Circe', 'Blaise', 'Ganondorf', 'Prospero', 'Maeve', 'Mab', 'Titania', 'Aurora', 'Ursula', 'Sabrina', 'Gruntilda', 'Granny Weatherwax', 'Nanny Ogg', 'Magrat Garlick', 'Mirri Maz Duur', 'Erszebet Karpaty', 'Iris', 'Melisandre', 'Sycorax', 'Jafar', 'Belgarath', 'Iskandar Khayon'
 ]
 let wizName = null;
 let wizIndex = null;
@@ -15,6 +15,7 @@ module.exports = function(io){
     function update(){
         console.log('sockets.js says: emitting UPDATE');
         io.emit('UPDATE', gameStore.getState());
+        console.log(gameStore.getState());
     }
 
     function actOrDont(actor, socket){
@@ -165,35 +166,108 @@ module.exports = function(io){
 
 
 
+        socket.on(actions.REPLACE_ELEMENTS, (payload)=>{
+            gameStore.dispatch(actions.replaceElements(payload.actor, payload.cards));
+            update();
+        });
+
+
+
+        function endSpell(socket){
+            update();
+            socket.emit('CAST_END');
+        }
 
         socket.on(actions.CAST_SUCCESS, (payload)=>{
             console.log('sockets.js says: heard CAST_SUCCESS: '+payload.spell.name);
             gameStore.dispatch(actions.castSuccess(payload.actor, payload.spell));
             update();
-            if(spell.targeted == true){
-                if(spell.effects[0].targetPlayer == true){
-                    // remove first effect, send TARGET_PLAYER
-                    let furtherEffects = spell.effects;
+            if(payload.spell.targeted == true){
+                if(payload.spell.effects[0].targetPlayer == true){
+                    // send TARGET_PLAYER
+                    console.log('should send TARGET_PLAYER');
+                    let furtherEffects = payload.spell.effects;
                     socket.emit('TARGET_PLAYER', {furtherEffects})
-                } else if (spell.effects[0].targetCards == true){
-                    // remove first effect, send TARGET_CARDS
-                    let effectValue = spell.effects[0].value;
-                    let furtherEffects = spell.effects;
+                } else if (payload.spell.effects[0].targetCards == true){
+                    // send TARGET_CARDS
+                    console.log('should send TARGET_CARDS');
+                    let effectValue = payload.spell.effects[0].value;
+                    let furtherEffects = payload.spell.effects;
                     socket.emit('TARGET_CARDS', {furtherEffects, value: effectValue});
                 } else {
+                    console.log('does not need targeting');
                     gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
-                    update();
-                    // send some kinda event
+                    endSpell(socket);
                 }
             }
         });
 
+
         socket.on(actions.CAST_EFFECT, (payload)=>{
             console.log('sockets.js says: heard CAST_EFFECT');
             // handle payload.furtherEffects
+            console.log(payload.furtherEffects);
+            for(let fx in payload.furtherEffects){   
+                console.log(payload.furtherEffects[fx]);
+                switch(payload.furtherEffects[fx].type){
+
+                    case actions.ATTACK:
+                        console.log('case ATTACK');
+                        gameStore.dispatch(actions.attack(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.ATTACK_ALL:
+                        console.log('case ATTACK_ALL');
+                        gameStore.dispatch(actions.attackAll(payload.actor, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.DRAIN: 
+                        console.log('case DRAIN');
+                        gameStore.dispatch(actions.drain(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.CURE: 
+                        console.log('case CURE');
+                        gameStore.dispatch(actions.cure(payload.actor, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.SHIELD: 
+                        console.log('case SHIELD');
+                        gameStore.dispatch(actions.shield(payload.actor, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.AP_PLUS: 
+                        console.log('case AP_PLUS');
+                        gameStore.dispatch(actions.apPlus(payload.actor, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.AP_MINUS: 
+                        console.log('case AP_MINUS');
+                        gameStore.dispatch(actions.apMinus(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.HP_PLUS: 
+                        console.log('case HP_PLUS');
+                        gameStore.dispatch(actions.hpPlus(payload.actor, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions.HP_MINUS: 
+                        console.log('case HP_MINUS');
+                        gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        break;
+
+                    case actions. OBSCURE: 
+                        console.log('case OBSCURE');
+                        gameStore.dispatch(actions.obscure(payload.actor, payload.yx));
+                        break;
+
+                    // more things
+
+            }}
+            endSpell(socket);
 
 
-
+                // THIS IS CRAP, DON'T ACTUALLY USE THIS
                 // if(spell.effects[0].targetPlayer == true){
                 //     // remove first effect, send TARGET_PLAYER
                 //     let furtherEffects = spell.effects.slice(1);
