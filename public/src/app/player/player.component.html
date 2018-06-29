@@ -12,16 +12,30 @@
   </div>
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
   <div *ngIf="turn">
-    <h2>It is your Turn</h2>
+    <h2>It is your turn, {{player.name}}</h2>
     <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
-    <button (click)="turnEnd()" *ngIf="turnConfirm">End Turn</button>
-    <button (click)="testAttack()" >Test Attack</button>
+    <button (click)="turnEnd()" *ngIf="turnConfirm && !this._wss.actionStep">End Turn</button>
+    
+    <div *ngIf="this.actionStep">
+      <button (click)="actionDivine()">Divine</button>
+      <button (click)="actionLearn()">Learn</button>
+      <button (click)="actionWeave()">Weave</button>
+      <button (click)="actionCast()">Cast</button>
+      <button (click)="testAttack()" >Test Attack</button>
+    </div>
+    <div *ngIf="castSpell">
+      <button (click)="castingSpell()">Confirm Spell</button>
+    </div>
   </div>
   <div *ngIf="_wss.divine">
     <h2>You may now divine {{_wss.divineCount}} cards!</h2>
   </div>
+  <div *ngIf="confirmSpell">
+    <h2>You must needs choose a Spell!</h2>
+  </div>
+
   <div class="hand">
-    <div class="card" *ngFor="let spell of player.spells">
+    <div *ngFor="let spell of player.spells" (click)="selectingSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
       <h3>{{spell.name}}</h3>
       <hr>
       <h5>Effect:</h5>

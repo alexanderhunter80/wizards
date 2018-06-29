@@ -21,7 +21,7 @@ module.exports = class Deck {
             this.cards.push(new ElementCard('aether'));
         };
         this.shuffle();
-        console.log('finished initializing');
+        console.log('finished initializing Element deck');
     };
 
     initializeAsSpellDeck(){
@@ -31,10 +31,15 @@ module.exports = class Deck {
             }
         }
         this.shuffle();
+        console.log('finished initializing Spell deck');
     };
 
     topCard(){
-        return this.cards.pop();
+        let tempCard = this.cards.pop();
+        if(this.cards.length == 0){
+            this.shuffle();
+        }
+        return tempCard;
     };
 
     push(card){

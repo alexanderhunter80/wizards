@@ -1,5 +1,5 @@
 <div class="container">
-    <app-enemies></app-enemies>
-    <app-gameboard></app-gameboard>
-    <app-player></app-player>
+    <app-enemies #enemiesComp [gameboardComp]='gameboardComp' [playerComp]='playerComp'></app-enemies>
+    <app-gameboard #gameboardComp [playerComp]='playerComp' [enemiesComp]='enemiesComp'></app-gameboard>
+    <app-player #playerComp [gameboardComp]='gameboardComp' [enemiesComp]='enemiesComp'></app-player>
 </div>

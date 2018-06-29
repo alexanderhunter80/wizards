@@ -6,6 +6,8 @@ const Deck = require('../classes/deck');
 
 const initialState = {
     gameOn: false,
+    gameOver: false,
+    winner: null,
     players: [],
     currentTurn: null,
     nextPlayer: 1,
@@ -15,16 +17,36 @@ const initialState = {
     highlight: [],
 }
 
-let newState, idx, temp, yx, currentPlayer, target, damage;
+let newState, idx, temp, yx, currentPlayer, target, damage, endItAll;
 
 function checkDeath(player){
     if(player.health <= 0){
         player.isGhost = true;
         console.log('HE DED');
         console.log('(death not yet fully implemented)');
-        // check if game ends
+        return true;
     }
+    return false;
+}
 
+function isGameOver(state){
+    let playersAlive = state.players.reduce((alive, player)=>{
+        if(player.isGhost){
+            return alive + 0;
+        } else {
+            return alive + 1;
+        }
+    }, 0);
+    console.log(playersAlive+' players still alive');
+    if (playersAlive == 1){
+        state.gameOn = false;
+        state.gameOver = true;
+        state.winner = state.players.find((player)=>{
+            return !player.isGhost;
+        });
+        state.history.push(state.winner.name+' won the game, and is now the Archchancellor!');
+    }
+    return state;
 }
 
 function shuffle(array) {  // Fisher-Yates shuffle
@@ -36,7 +58,7 @@ function shuffle(array) {  // Fisher-Yates shuffle
         array[counter] = array[index];
         array[index] = temp;
     }
-    return array;
+    return array;  
 }
 
 function reducer(state = initialState, action){
@@ -110,18 +132,6 @@ function reducer(state = initialState, action){
             return newState;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         case actions.ATTACK: 
             console.log('reducers.js heard ATTACK');
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
@@ -140,6 +150,7 @@ function reducer(state = initialState, action){
             // deal damage and check for death
             target.health -= damage;
             checkDeath(target);
+            isGameOver(newState);
             newState.history.push(action.message);
             return newState;
 
@@ -159,6 +170,7 @@ function reducer(state = initialState, action){
                     }
                     target.health -= damage;
                     checkDeath(target);
+                    isGameOver(newState);
                 }
             }
             newState.history.push(action.message);
@@ -185,6 +197,7 @@ function reducer(state = initialState, action){
                 if(actor.health < 5){actor.health++};
             }
             checkDeath(target);
+            isGameOver(newState);
             newState.history.push(action.message);
             return newState;
 
@@ -315,39 +328,77 @@ function reducer(state = initialState, action){
                 newState.learnHelper.cardsDrawn.push(newState.gameboard.spellDeck.topCard());
             }
             newState.learnHelper.keep = action.keep;
-            // to be implemented: a stage-2 action where the actor returns the non-kept cards to be discarded
             return newState;
 
 
         case actions.LEARN_DISCARD:
             console.log('reducers.js heard LEARN_DISCARD');
-            console.log('... but the future refused to change.  (Action not yet implemented.)')
+            console.log('reducers.js says: LEARN_DISCARD is untested!');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
                 return player.id == action.actor.id;
             })
-            // take indices of kept cards and add to actor's spells
-
-            // take indices of kept cards and slice out of learnHelper.cardsDrawn
+            // take indices of kept cards and add to actor's spells, while nulling in learnHelper.cardsDrawn to be filtered out momentarily
+            for(idx of action.cardIndices){
+                currentPlayer.spells.push(newState.learnHelper.cardsDrawn[idx]);
+                newState.learnHelper.cardsDrawn[idx] = null;
+            }
+            // filter nulled cards
+            newState.learnHelper.cardsDrawn.filter((spell)=>{
+                return spell !== null;
+            });
             // push rest of learnHelper.cardsDrawn into gameboard.spellDeck.discard
-            return state;
+            while(newState.learnHelper.cardsDrawn.length > 0){
+                gameboard.spellDeck.discard.push(newState.learnHelper.cardsDrawn.pop());
+            }
+            return newState;
 
 
         case actions.EXHAUST:
-        console.log('reducers.js heard EXHAUST');
-        newState = Object.assign({}, state);
-        currentPlayer = newState.players.find((player)=>{
-            return player.id == action.actor.id;
-        })        
-        for(idx of action.cardIndices){
-            newState.gameboard.spellDeck.discard.push(currentPlayer.spells[idx]);
-            currentPlayer.spells[idx] == null;
-        }
-        currentPlayer.spells.filter((spell)=>{
-            return spell !== null;
-        });
-        newState.history.push(action.message);
-        return newState;
+            console.log('reducers.js heard EXHAUST');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })        
+            for(idx of action.cardIndices){
+                newState.gameboard.spellDeck.discard.push(currentPlayer.spells[idx]);
+                currentPlayer.spells[idx] == null;
+            }
+            currentPlayer.spells.filter((spell)=>{
+                return spell !== null;
+            });
+            newState.history.push(action.message);
+            return newState;
+
+
+
+
+        case actions.CAST_SUCCESS:
+            console.log('reducers.js heard CAST_SUCCESS');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })   
+            idx = currentPlayer.spells.findIndex(spell=>spell.name==action.spell.name);
+            currentPlayer.spells.splice(idx);
+            return newState;
+
+
+        case actions.CAST_FAIL:
+            console.log('reducers.js heard CAST_FAIL');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })   
+            idx = currentPlayer.spells.findIndex(spell=>spell.name==action.spell.name);
+            currentPlayer.spells.splice(idx);
+            // one more spell
+            currentPlayer.spells.splice(Math.floor(Math.random()*currentPlayer.spells.length));
+            // 1 damage
+            currentPlayer.health--;
+            checkDeath(currentPlayer);
+            isGameOver(newState);
+            return newState;
 
 
 
@@ -405,6 +456,7 @@ function reducer(state = initialState, action){
             } else if (currentPlayer.hpTokens < 0){
                 currentPlayer.health--;
                 checkDeath(currentPlayer);
+                isGameOver(newState);
                 currentPlayer.hptokens++;
             }
             // advance state.currentTurn to next % number-of-players
@@ -428,7 +480,25 @@ function reducer(state = initialState, action){
             return state;
 
 
+        case actions.RESET_ADJUST:
+            console.log('reducers.js heard RESET_ADJUST');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })
+            currentPlayer.adjustActions = 0;
+            return newState;
 
+
+
+        case actions.REPLACE_ELEMENTS:
+            console.log('reducers.js heard REPLACE_ELEMENTS');
+            newState = Object.assign({}, state);
+            for(idx of action.yx){
+                newState.gameboard.deck.discard.push(newState.gameboard.grid[idx[0]][idx[1]]);
+                newState.gameboard.grid[idx[0]][idx[1]] = newState.gameboard.deck.topCard();
+            }
+            return newState;
 
 
 

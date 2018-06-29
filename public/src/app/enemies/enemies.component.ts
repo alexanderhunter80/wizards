@@ -7,6 +7,11 @@ import { WebsocketService} from '../websocket.service';
   styleUrls: ['./enemies.component.scss']
 })
 export class EnemiesComponent implements OnInit {
+
+  @Input() gameboardComp: GameboardComponent;
+
+  @Input() playerComp: PlayerComponent;
+
   enemies: any = null;
   state: any = null;
 
@@ -51,5 +56,12 @@ export class EnemiesComponent implements OnInit {
         }
         this.enemies[j].hptokens = tokens;
       }
+  }
+
+  selectEnemy(enemy) {
+    if (this._wss.targetingPlayer) {
+      enemy.target = true;
+      this._wss.sendTarget(this.playerComp.player, enemy);
+    }
   }
 }

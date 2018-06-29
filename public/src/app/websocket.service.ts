@@ -18,6 +18,11 @@ export class WebsocketService {
     enemies: any;
     divine = false;
     divineCount: number;
+    targetingPlayer = false;
+    effect = null;
+    // actionStep = false;
+
+    _actionStep: BehaviorSubject<any> = new BehaviorSubject(false);
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
 
@@ -41,30 +46,11 @@ export class WebsocketService {
         this.socket.on('INIT', (state) => {
             console.log('websocket.service says: state INIT');
             this._state.next(state);
-            // this.state = state;
-            // console.log(this.state);
-            // this.player = this.state.players.find((player)=>{
-            // 	return player.socketid == this.playerid;
-            // });
-            // console.log(this.player);
-            // this.enemies.push(this.state.players.find((player)=>{
-            // 	return player.socketid !== this.playerid;
-            // }));
-            // console.log(this.enemies);
         });
 
         this.socket.on('UPDATE', (state) => {
             console.log('websocket.service says: state UPDATE');
             this._state.next(state);
-            // this.state = state;
-            // this.player = this.state.players.find((player)=>{
-            // 	return player.socketid == this.playerid;
-            // });
-            // console.log(this.player);
-            // this.enemies.push(this.state.players.find((player)=>{
-            // 	return player.socketid !== this.playerid;
-            // }));
-            // console.log(this.enemies);
         });
 
         this.socket.on('DIVINE_STEP_START', payload => {
@@ -72,10 +58,25 @@ export class WebsocketService {
             this.divineCount = payload.value;
             this.divine = true;
         });
+
+        this.socket.on('ACTION_STEP_START', () => {
+            this._actionStep.next(true);
+        });
+
+        this.socket.on('TARGET_PLAYER', (spellEffect) => {
+            this.effects = spellEffect;
+            this.targeting = true;
+        });
+
+        this.socket.on('TARGET_CARDS');
     }
 
     getObservable() {
         return this._state.asObservable();
+    }
+
+    getActionStepBoolean() {
+        return this._actionStep.asObservable();
     }
 
     addPlayer(name) {
@@ -120,8 +121,13 @@ export class WebsocketService {
     }
 
     doDivine(actor, value, yx) {
-		console.log('EMITTING DIVINE');
+        console.log('EMITTING DIVINE');
         this.socket.emit('DIVINE', {actor, value, yx});
+    }
+
+    doDivineStep(actor, value, yx) {
+        console.log('EMITTING DIVINE_STEP');
+        this.socket.emit('DIVINE_STEP', {actor, value, yx});
     }
 
     doWeave(actor, yx1, yx2) {
@@ -144,10 +150,29 @@ export class WebsocketService {
         console.log('starting TURN');
         this.socket.emit('TURN_ACK', {actor});
     }
+    doDivineStepEnd() {
+        this.socket.emit('DIVINE_STEP_END');
+    }
+    doDivineEnd(actor) {
+        this.socket.emit('DIVINE_END', {actor});
+    }
     endTurn(actor) {
-		console.log('ENDing TURN');
-		this.socket.emit('UNHIGHLIGHT');
+        console.log('ENDing TURN');
         this.socket.emit('TURN_END', {actor});
+    }
+    spellSuccess(actor, cards, spell) {
+        this.socket.emit('REMOVE_ELEMENT', {actor, cards});
+        this.socket.emit('CAST_SUCCESS', {actor, spell});
+    }
+
+    sendTarget(actor, target) {
+        this.socket.emit('CAST_EFFECT', {actor, target, effects});
+        this.effects = null;
+    }
+
+    sendCards(actor, cards) {
+        this.socket.emit('CAST_EFFECT', {actor, cards, effects});
+        this.effects = null;
     }
 
   }

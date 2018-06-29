@@ -11,6 +11,7 @@ const AP_PLUS = 'AP_PLUS';
 const AP_MINUS = 'AP_MINUS';
 
 const DIVINE = 'DIVINE';
+const DIVINE_END = 'DIVINE_END';
 const UNHIGHLIGHT = 'UNHIGHLIGHT';
 const WEAVE = 'WEAVE';
 const OBSCURE = 'OBSCURE';
@@ -19,6 +20,9 @@ const REFRESH = 'REFRESH';
 const LEARN = 'LEARN';
 const LEARN_DISCARD = 'LEARN_DISCARD';
 const EXHAUST = 'EXHAUST';
+const CAST_SUCCESS = 'CAST_SUCCESS';
+const CAST_EFFECT = 'CAST_EFFECT';
+const CAST_FAIL = 'CAST_FAIL';
 
 const READY = 'READY';
 const ADD_PLAYER = 'ADD_PLAYER';
@@ -34,6 +38,8 @@ const DIVINE_STEP = 'DIVINE_STEP';
 const DIVINE_STEP_END = 'DIVINE_STEP_END';
 // const ACTION_STEP_START = 'ACTION_STEP_START';
 const ACTION_STEP_END = 'ACTION_STEP_END';
+const RESET_ADJUST = 'RESET_ADJUST';
+const REPLACE_ELEMENTS = 'REPLACE_ELEMENTS';
 
 function attack(actor, target, value, chain = false){
     return {
@@ -130,6 +136,13 @@ function divine(actor, value, yx){
     }
 };
 
+function divineEnd(actor){
+    return {
+        type: DIVINE_END,
+        actor: actor
+    }
+}
+
 function unhighlight(){
     return {
         type: UNHIGHLIGHT
@@ -189,7 +202,7 @@ function learnDiscard(actor, cardIndices){
     return {
         type: LEARN_DISCARD,
         actor: actor,
-        cards: cardIndices
+        cardIndices: cardIndices
     }
 }
 
@@ -201,6 +214,32 @@ function exhaust(actor, cardIndices){
         message: actor.name+' discarded '+cardIndices.length+' spells'
     }
 }
+
+function castSuccess(actor, spell){
+    return {
+        type: CAST_SUCCESS,
+        actor: actor,
+        spell: spell,
+        message: actor.name+' cast '+spell.name+'!'
+    }
+};
+
+function castEffect(actor, spell){
+    return {
+        type: CAST_EFFECT,
+        actor: actor,
+        spell: spell
+    }
+}
+
+function castFail(actor, spell){
+    return {
+        type: CAST_FAIL,
+        actor: actor,
+        spell: spell,
+        message: actor.name+' botched casting '+spell.name+'!'
+    }
+};
 
 function ready(actor){
     return {
@@ -262,17 +301,32 @@ function actionStepStart(){};
 
 function actionStepEnd(){};
 
+function resetAdjust(actor){
+    return {
+        type: RESET_ADJUST,
+        actor: actor
+    }
+}
+
+function replaceElements(actor, yx){
+    return {
+        type: REPLACE_ELEMENTS,
+        actor: actor,
+        yx: yx
+    }
+}
+
 module.exports = {
     // card effects
     ATTACK, ATTACK_ALL, DRAIN, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
-    DIVINE, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD, EXHAUST,
+    DIVINE, DIVINE_END, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD, EXHAUST, CAST_SUCCESS, CAST_EFFECT, CAST_FAIL,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_START, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY,
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_START, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY, RESET_ADJUST, REPLACE_ELEMENTS, 
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
-    divine, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard, exhaust,
+    divine, divineEnd, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard, exhaust, castSuccess, castEffect, castFail,
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepEnd, actionStepEnd, ready,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepEnd, actionStepEnd, ready, resetAdjust, replaceElements,
 }

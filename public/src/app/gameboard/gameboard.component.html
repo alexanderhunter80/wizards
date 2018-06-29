@@ -1,7 +1,7 @@
 <div *ngIf="state && state.gameOn">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
-      <div class="card" (click)="divineTime(card);" [@cardState]="card.faceUp"> 
+      <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card);" [@cardState]="card.faceUp"> 
         <!-- front of the card-->
         <div class="front">
           <img src="../../assets/{{card.elem}}.png" alt="" width="100px" height="100px">
@@ -11,4 +11,14 @@
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="selected">
+  <br>
+  <h2>Card has already been selected!!</h2>
+</div>
+<div *ngIf="spell.length > 0">
+  <h1>Select a {{spell[0]}}</h1>
+</div>
+<div *ngIf="targeting">
+  <h1>Select an Enemy to Target with Spell!</h1>
 </div>
