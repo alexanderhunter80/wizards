@@ -209,7 +209,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard CURE');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
+                return player.id == action.actor.id;
             })
             if(currentPlayer.health > 5){currentPlayer.health = 5;}
             newState.history.push(action.message);
@@ -220,7 +220,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard SHIELD');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
+                return player.id == action.actor.id;
             })
             currentPlayer.shields += action.value;
             newState.history.push(action.message);
@@ -231,7 +231,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard HP_PLUS');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
+                return player.id == action.actor.id;
             })
             currentPlayer.hptokens += action.value;
             newState.history.push(action.message);
@@ -253,7 +253,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard AP_PLUS');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
+                return player.id == action.actor.id;
             })
             currentPlayer.aptokens += action.value;
             newState.history.push(action.message);

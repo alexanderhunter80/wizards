@@ -194,12 +194,14 @@ module.exports = function(io){
                     let effectValue = payload.spell.effects[0].value;
                     let furtherEffects = payload.spell.effects;
                     socket.emit('TARGET_CARDS', {furtherEffects, value: effectValue});
-                } else {
-                    console.log('does not need targeting');
-                    gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
-                    endSpell(socket);
                 }
-            }
+            } else {
+                console.log('does not need targeting');
+                
+                gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
+                
+                endSpell(socket);
+            } 
         });
 
 
