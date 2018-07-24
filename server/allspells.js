@@ -5,7 +5,7 @@ const actions = require('./redux/actions');
 
 module.exports = [
     { name: 'Quickness', text: 'AP +2', elements: 'AA', effects: [{type: actions.AP_PLUS, value: 2}], targeted: false, copies: 4 },
-    { name: 'Stoneskin', text: 'Shield 1', elements: 'EE', effects: [{type: actions.CURE, value: 1}], targeted: false, copies: 4 },
+    { name: 'Stoneskin', text: 'Shield 1', elements: 'EE', effects: [{type: actions.SHIELD, value: 1}], targeted: false, copies: 4 },
     { name: 'Fireball', text: 'Attack 1', elements: 'FF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 4 },
     { name: 'Potion', text: 'Cure 1', elements: 'WW', effects: [{type: actions.CURE, value: 1}], targeted: false, copies: 4 },
 
