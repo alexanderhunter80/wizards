@@ -189,5 +189,9 @@ export class WebsocketService {
         this.divineCount = 0;
     }
 
+    targetCardsToggle() {
+        (this.targetingCards) ? this.targetingCards = false : this.targetingCards = true;
+    }
+
 
   }

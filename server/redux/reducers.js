@@ -290,7 +290,7 @@ function reducer(state = initialState, action){
             newState = Object.assign({}, state);
             temp = newState.gameboard.grid[action.yx1[0]][action.yx1[1]];
             newState.gameboard.grid[action.yx1[0]][action.yx1[1]] = newState.gameboard.grid[action.yx2[0]][action.yx2[1]];
-            temp = newState.gameboard.grid[action.yx2[0]][action.yx2[1]]
+            temp = newState.gameboard.grid[action.yx2[0]][action.yx2[1]];
             return newState;
 
 

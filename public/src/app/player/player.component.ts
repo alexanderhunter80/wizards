@@ -21,6 +21,7 @@ export class PlayerComponent implements OnInit {
   actionStep: any = false;
   castSpell: any = false;
   confirmSpell: Boolean = false;
+  weave = false;
 
 
 
@@ -110,6 +111,8 @@ export class PlayerComponent implements OnInit {
   actionWeave() {
     this.gameboardComp.holdActionStep = true;
     this._wss._actionStep.next(false);
+    this.weave = true;
+    this.gameboardComp.weaveCounterSetup();
     console.log('WEAVE action');
   }
   actionCast() {
@@ -154,5 +157,9 @@ export class PlayerComponent implements OnInit {
         }
       }
     }
+  }
+
+  weaveToggle() {
+    (this.weave) ? this.weave = false : this.weave = true;
   }
 }

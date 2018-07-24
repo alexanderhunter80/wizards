@@ -30,6 +30,8 @@ export class GameboardComponent implements OnInit {
   holdActionStep: Boolean = false;
   state: any = null;
   divineCards = [];
+  weaveCards = [];
+  weaveCounter = 0;
   divineCounter = 0;
   selected = false;
   spell: any = [];
@@ -136,5 +138,32 @@ export class GameboardComponent implements OnInit {
         }, 3000);
         this.spell = [];
       }
+    }
+
+    doWeave(card) {
+      if (this.playerComp.weave && this.weaveCounter > 0) {
+        const bsCoord = JSON.stringify(card.coord);
+        const bsHighlight = JSON.stringify(this.weaveCards);
+        if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) {
+          this.weaveCards.push(card.coord);
+          this.weaveCounter--;
+          card.highlight = true;
+       } else { // card has been previously selected
+         this.selected = true;
+         setTimeout(() => {
+          this.selected = false;
+        }, 5000);
+       }
+      }
+      if (this.playerComp.weave && this.weaveCounter === 0) {
+        this.playerComp.weaveToggle();
+        console.log(this.weaveCards);
+        this._wss.doWeave(this.state.players[this.state.currentTurn], this.weaveCards[0], this.weaveCards[1]);
+        this.weaveCards = [];
+      }
+    }
+
+    weaveCounterSetup() {
+      this.weaveCounter = 2;
     }
 }
