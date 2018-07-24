@@ -1,48 +1,58 @@
 <div class="wrapper" *ngIf="player">
   <h3>{{player.name}}</h3>
   <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
-    <div class="health">{{player.health}}</div>
+      <div class="health">{{player.health}}</div>
   </div>
   <div *ngIf="player.shields === 0" class="onlyHealth">{{player.health}}</div>
   <div class="ap" *ngIf="player.aptokens.length > 0">
-    <div class="apToken" *ngFor="let aptoken of player.aptokens">AP</div>
+      <div class="apToken" *ngFor="let aptoken of player.aptokens">AP</div>
   </div>
   <div class="hp" *ngIf="player.hptokens.length > 0">
-    <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
+      <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
   </div>
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
   <div *ngIf="turn">
-    <h2>It is your turn, {{player.name}}</h2>
-    <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
-    <button (click)="turnEnd()" *ngIf="turnConfirm && !this._wss.actionStep">End Turn</button>
-    
-    <div *ngIf="this.actionStep">
-      <button (click)="actionDivine()">Divine</button>
-      <button (click)="actionLearn()">Learn</button>
-      <button (click)="actionWeave()">Weave</button>
-      <button (click)="actionCast()">Cast</button>
-      <button (click)="testAttack()" >Test Attack</button>
-    </div>
-    <div *ngIf="castSpell">
-      <button (click)="castingSpell()">Confirm Spell</button>
-    </div>
+      <h2>It is your turn, {{player.name}}</h2>
+      <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
+      <button (click)="turnEnd()" *ngIf="turnConfirm && !this._wss.actionStep && !this.actionStep && this.gameboardComp.holdActionStep && !this._wss.divine && !this.castSpell && !this.gameboardComp.spell.length && !this._wss.targetingPlayer && !this._wss.targetingCards">End Turn</button>
+      <!-- <div>
+        <h4>Current State of End Turn parts</h4>
+        <p>Turn Confirm: {{turnConfirm}}</p>
+        <p>WSS Action Step: {{!this._wss.actionStep}}</p>
+        <p>Action Step: {{!this.actionStep}}</p>
+        <p>GBC Hold Action Step: {{this.gameboardComp.holdActionStep}}</p>
+        <p>WSS Divine: {{!this._wss.divine}}</p>
+        <p>Cast Spell: {{!this.castSpell}}</p>
+        <p>GBC length bool: {{!this.gameboardComp.spell.length}}</p>
+        <p>WSS Target Player: {{!this._wss.targetPlayer}}</p>
+      </div> -->
+      <div *ngIf="this.actionStep">
+          <button (click)="actionDivine()">Divine</button>
+          <button (click)="actionLearn()">Learn</button>
+          <button (click)="actionWeave()">Weave</button>
+          <button (click)="actionCast()">Cast</button>
+          <button (click)="testAttack()" >Test Attack</button>
+      </div>
+      <div *ngIf="castSpell">
+          <button (click)="castingSpell()">Confirm Spell</button>
+      </div>
   </div>
   <div *ngIf="_wss.divine">
-    <h2>You may now divine {{_wss.divineCount}} cards!</h2>
+      <h2>You may now divine {{_wss.divineCount}} cards!</h2>
   </div>
   <div *ngIf="confirmSpell">
-    <h2>You must needs choose a Spell!</h2>
+      <h2>You must needs choose a Spell!</h2>
   </div>
 
   <div class="hand">
-    <div *ngFor="let spell of player.spells" (click)="selectingSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
-      <h3>{{spell.name}}</h3>
-      <hr>
-      <h5>Effect:</h5>
-      {{spell.text}}
-      <br>
-      <h5>Cost Elements:</h5>
-      {{spell.elements}}
-    </div>
+      <div *ngFor="let spell of player.spells" (click)="selectingSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
+            <h3>{{spell.name}}</h3>
+            <hr>
+            <h5>Effect:</h5>
+            {{spell.text}}
+            <br>
+            <h5>Cost Elements:</h5>
+            {{spell.elements}}
+      </div>
   </div>
 </div>

@@ -132,6 +132,7 @@ export class GameboardComponent implements OnInit {
         this.castBotched = true;
         setTimeout(() => {
           this.castBotched = false;
+          // **********add sending spell botched event here***********
         }, 3000);
         this.spell = [];
       }
