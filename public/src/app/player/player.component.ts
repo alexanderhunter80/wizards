@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WebsocketService } from '../websocket.service';
+import { GameboardComponent } from '../gameboard/gameboard.component';
+import { EnemiesComponent } from '../enemies/enemies.component';
 
 @Component({
   selector: 'app-player',

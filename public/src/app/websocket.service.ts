@@ -24,11 +24,6 @@ export class WebsocketService {
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
 
-    // Observable for swapping to enemy component
-    private targetEnemies = new Subject<any>();
-
-    callEnemySwap$ = this.targetEnemies.asObservable();
-
     private allPlayersSource = new Subject<any>();
     allPlayers$ = this.allPlayersSource.asObservable();
 
@@ -81,10 +76,6 @@ export class WebsocketService {
         // this.socket.on('CAST_END', () => {
         //     socket.emit('ACTION_STEP_END');
         // });
-    }
-
-    swapToEnemyComponent() {
-        this.targetEnemies.next();
     }
 
     getObservable() {

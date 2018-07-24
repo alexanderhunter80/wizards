@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { trigger, state, style, animate, transition} from '@angular/animations';
 import { WebsocketService } from '../websocket.service';
+import { PlayerComponent } from '../player/player.component';
+import { EnemiesComponent } from '../enemies/enemies.component';
 
 @Component({
   selector: 'app-gameboard',
