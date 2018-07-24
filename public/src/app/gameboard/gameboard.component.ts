@@ -87,7 +87,7 @@ export class GameboardComponent implements OnInit {
          this.selected = true;
          setTimeout(() => {
           this.selected = false;
-        }, 3000);
+        }, 5000);
        }
 
       }
@@ -98,7 +98,7 @@ export class GameboardComponent implements OnInit {
         this.divineCards = [];
         setTimeout(() => {
           this._wss.doDivineStepEnd();
-        }, 3000);
+        }, 5000);
       } else if (this._wss.divine && this._wss.divineCount === 0 && this.holdActionStep) {
         this.holdActionStep = false;
         this._wss.divine = false;
@@ -107,7 +107,7 @@ export class GameboardComponent implements OnInit {
         this.divineCards = [];
         setTimeout(() => {
           this._wss.doDivineEnd(this.playerComp.player);
-        }, 3000);
+        }, 5000);
       }
     }
 
@@ -122,51 +122,9 @@ export class GameboardComponent implements OnInit {
           this.castSuccess = false;
         }, 3000);
           // finding selected spell
-          const spellToCast = this.playerComp.player.spells.filter( x => return x.highlight === true; );
+          const spellToCast = this.playerComp.player.spells.filter( x => { return x.highlight === true; });
           this._wss.spellSuccess(this.playerComp.player, this.discard, spellToCast[0]);
-          // check if targeted spell
-          // if (spellToCast.targeted) {
-            // does spell target player?
-            // if (spellToCast.targetPlayer === true) {
-            //   this.targeting = true;
-            //   target  = this.enemiesComp.enemies.filter( x => return x.target === true; );
-            //   if (!targeting && target.length > 0) {
-            //   }
-            // }
           }
-        // }
-          // for (const action of spellToCast[0].effects) {
-          //   switch (action) {
-          //     case 'ATTACK':
-          //       break;
-          //     case 'CURE':
-          //       break;
-          //     case 'OBSCURE':
-          //       break;
-          //     case 'ATTACK_ALL':
-          //       break;
-          //     case 'SHIELD':
-          //       break;
-          //     case 'DRAIN':
-          //       break;
-          //     case 'HP_PLUS':
-          //       break;
-          //     case 'HP_MINUS':
-          //       break;
-          //     case 'AP_PLUS':
-          //       break;
-          //     case 'AP_MINUS':
-          //       break;
-          //     case 'WEAVE':
-          //       break;
-          //     case 'SCRY':
-          //       break;
-          //     case 'DIVINE':
-          //       break;
-          //   }
-          // }
-          // Send end action
-        // }
       } else if (this.spell.length > 0 && !this.playerComp.castSpell) {
         console.log('Spell has been botched!');
         this.castBotched = true;

@@ -4,9 +4,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, Subject, BehaviorSubject } from 'rxjs'; // rxjs/observable doesn't work with Angular 6
 
-// import * as Rx from 'rxjs';
-// import { environement } from '../environments/environment';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -26,6 +23,11 @@ export class WebsocketService {
     _actionStep: BehaviorSubject<any> = new BehaviorSubject(false);
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
+
+    // Observable for swapping to enemy component
+    private targetEnemies = new Subject<any>();
+
+    callEnemySwap$ = this.targetEnemies.asObservable();
 
     private allPlayersSource = new Subject<any>();
     allPlayers$ = this.allPlayersSource.asObservable();
@@ -74,11 +76,15 @@ export class WebsocketService {
             this.targetingCards = true;
         });
 
-        
+
 
         // this.socket.on('CAST_END', () => {
         //     socket.emit('ACTION_STEP_END');
         // });
+    }
+
+    swapToEnemyComponent() {
+        this.targetEnemies.next();
     }
 
     getObservable() {
@@ -168,6 +174,7 @@ export class WebsocketService {
     }
     endTurn(actor) {
         this.socket.emit('TURN_END', {actor});
+        this.wipeDivine();
     }
     spellSuccess(actor, cards, spell) {
         this.socket.emit('REPLACE_ELEMENTS', {actor, cards});
@@ -186,6 +193,10 @@ export class WebsocketService {
         this.targetingCards = false;
     }
 
+    wipeDivine() {
+        this.divine = false;
+        this.divineCount = 0;
+    }
 
 
   }

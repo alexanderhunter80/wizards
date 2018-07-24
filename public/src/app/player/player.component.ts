@@ -18,7 +18,7 @@ export class PlayerComponent implements OnInit {
   turnConfirm = false;
   actionStep: any = false;
   castSpell: any = false;
-  confirmSpell: bool = false;
+  confirmSpell: Boolean = false;
 
 
 
@@ -76,8 +76,9 @@ export class PlayerComponent implements OnInit {
   }
   turnEnd() {
     this.turnConfirm = false;
+    this.gameboardComp.holdActionStep = false;
     this._wss.endTurn(this.player);
-    for (enemy of this.enemiesComp.enemies) {
+    for (const enemy of this.enemiesComp.enemies) {
       enemy.target = false;
     }
   }
@@ -125,7 +126,7 @@ export class PlayerComponent implements OnInit {
   }
   castingSpell() {
     this.castSpell = false;
-    const spellToCast = this.player.spells.filter( x => return x.highlight === true; );
+    const spellToCast = this.player.spells.filter( x => { return x.highlight === true; } );
     console.log(spellToCast);
     if (spellToCast.length === 0) {
       this.confirmSpell = true;

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WebsocketService} from '../websocket.service';
 
+
 @Component({
   selector: 'app-enemies',
   templateUrl: './enemies.component.html',
@@ -21,7 +22,6 @@ export class EnemiesComponent implements OnInit {
     const obs = this._wss.getObservable();
     obs.subscribe((state) => {
       this.state = state;
-      console.log(this.state);
       if (this.state) {
         this.getEnemies();
         this.convertTokens();
@@ -31,12 +31,6 @@ export class EnemiesComponent implements OnInit {
 
 
   getEnemies() {
-    // for (let person of this.state.players) {
-    //   if (this._wss.playerid !== person.socketid) {
-    //     this.enemies.push(person);
-    //     console.log(this.enemies);
-    //   }
-    // }
     this.enemies = this.state.players.filter((enemy) => {
       return this._wss.playerid !== enemy.socketid;
     });
