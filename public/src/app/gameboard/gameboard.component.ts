@@ -49,6 +49,12 @@ export class GameboardComponent implements OnInit {
       this.assignCoord();
       console.log(this.state);
     });
+
+    const asObs = this._wss.getActionStepBoolean();
+    asObs.subscribe((step) => {
+      console.log('action step updated');
+      this.holdActionStep = step;
+      });
   }
 
   toggleState(card) {
@@ -105,6 +111,7 @@ export class GameboardComponent implements OnInit {
         }, 5000);
       } else if (this._wss.divine && this._wss.divineCount === 0 && this.holdActionStep) {
         this.holdActionStep = false;
+        this.playerComp.actionStep = false;
         this._wss.divine = false;
         this._wss.doDivine(this.state.players[this.state.currentTurn], this.divineCounter, this.divineCards);
         this.divineCounter = 0;
@@ -166,4 +173,8 @@ export class GameboardComponent implements OnInit {
     weaveCounterSetup() {
       this.weaveCounter = 2;
     }
+
+    // holdActionStepToggle() {
+    //   (this.holdActionStep) ? this.holdActionStep = false : this.holdActionStep = true;
+    // }
 }

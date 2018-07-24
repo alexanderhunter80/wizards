@@ -377,6 +377,11 @@ module.exports = function(io){
             gameStore.dispatch(actions.weave(payload.actor, payload.yx1, payload.yx2));
             update();
             socket.broadcast.emit('HIGHLIGHT', {type: 'WEAVE', coords: [payload.yx1, payload.yx2]});
+            setTimeout(() => {
+                gameStore.dispatch(actions.unhighlight());
+                update();
+                actOrDont(payload.actor, socket);
+            }, 5000);
         });
 
         socket.on(actions.OBSCURE, (payload)=>{

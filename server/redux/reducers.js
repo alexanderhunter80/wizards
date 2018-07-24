@@ -288,9 +288,10 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard WEAVE');
             console.log('reducers.js says: WEAVE is untested!');
             newState = Object.assign({}, state);
+            newState.highlight = [action.yx1, action.yx2];
             temp = newState.gameboard.grid[action.yx1[0]][action.yx1[1]];
             newState.gameboard.grid[action.yx1[0]][action.yx1[1]] = newState.gameboard.grid[action.yx2[0]][action.yx2[1]];
-            temp = newState.gameboard.grid[action.yx2[0]][action.yx2[1]];
+            newState.gameboard.grid[action.yx2[0]][action.yx2[1]] = temp;
             return newState;
 
 

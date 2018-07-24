@@ -105,6 +105,7 @@ function hpMinus(actor, target, value){
         type: HP_MINUS,
         actor: actor,
         target: target,
+        value: value,
         message: actor.name+' passed '+target.name+' '+value+' Burn tokens'
     }
 };

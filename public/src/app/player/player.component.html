@@ -14,18 +14,17 @@
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
       <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
-      <button (click)="turnEnd()" *ngIf="turnConfirm && !this._wss.actionStep && !this.actionStep && this.gameboardComp.holdActionStep && !this._wss.divine && !this.castSpell && !this.gameboardComp.spell.length && !this._wss.targetingPlayer && !this._wss.targetingCards">End Turn</button>
-      <!-- <div>
+      <button (click)="turnEnd()" *ngIf="turnConfirm && !this.actionStep && !this._wss.divine && !this.castSpell && !this.gameboardComp.spell.length && !this._wss.targetingPlayer && !this._wss.targetingCards">End Turn</button>
+      <div>
         <h4>Current State of End Turn parts</h4>
         <p>Turn Confirm: {{turnConfirm}}</p>
-        <p>WSS Action Step: {{!this._wss.actionStep}}</p>
         <p>Action Step: {{!this.actionStep}}</p>
         <p>GBC Hold Action Step: {{this.gameboardComp.holdActionStep}}</p>
         <p>WSS Divine: {{!this._wss.divine}}</p>
         <p>Cast Spell: {{!this.castSpell}}</p>
         <p>GBC length bool: {{!this.gameboardComp.spell.length}}</p>
         <p>WSS Target Player: {{!this._wss.targetPlayer}}</p>
-      </div> -->
+      </div>
       <div *ngIf="this.actionStep">
           <button (click)="actionDivine()">Divine</button>
           <button (click)="actionLearn()">Learn</button>

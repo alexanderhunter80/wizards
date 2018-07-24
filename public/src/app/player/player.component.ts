@@ -98,26 +98,26 @@ export class PlayerComponent implements OnInit {
     this.player.hptokens = tokens;
   }
   actionDivine() {
-    this.gameboardComp.holdActionStep = true;
-    this._wss._actionStep.next(false);
+    // this.gameboardComp.holdActionStepToggle();
+    // this._wss._actionStep.next(false);
     this._wss.divine = true;
     this._wss.divineCount = 2;
   }
   actionLearn() {
-    this.gameboardComp.holdActionStep = true;
-    this._wss._actionStep.next(false);
+    // this.gameboardComp.holdActionStepToggle();
+    // this._wss._actionStep.next(false);
     console.log('LEARN action');
   }
   actionWeave() {
-    this.gameboardComp.holdActionStep = true;
-    this._wss._actionStep.next(false);
+    // this.gameboardComp.holdActionStepToggle();
+    // this._wss._actionStep.next(false);
     this.weave = true;
     this.gameboardComp.weaveCounterSetup();
     console.log('WEAVE action');
   }
   actionCast() {
-    this.gameboardComp.holdActionStep = true;
-    this._wss._actionStep.next(false);
+   // this.gameboardComp.holdActionStepToggle();
+    // this._wss._actionStep.next(false);
     this.castSpell = true;
   }
   selectingSpell(spellCard) {
