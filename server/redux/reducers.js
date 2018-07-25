@@ -128,7 +128,7 @@ function reducer(state = initialState, action){
                 currentPlayer.adjustActions--;
                 currentPlayer.aptokens++;
             }
-            newState.history = [... state.history, currentPlayer.name+' started their turn'];
+            newState.history.push(currentPlayer.name+' started their turn');
             return newState;
 
 
@@ -329,11 +329,11 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard LEARN');
             newState = Object.assign({}, state);
             // draw N SpellCards from deck, send through socket to actor along with KEEP value
-            for(let c=0; c < action.draw; c++){
+            for (let c=0; c < action.draw; c++){
                 newState.learnHelper.cardsDrawn.push(newState.gameboard.spellDeck.topCard());
             }
             newState.learnHelper.keep = action.keep;
-            newState.history = [... state.history, action.message];
+            newState.history.push(action.message);
             return newState;
 
 
@@ -467,7 +467,7 @@ function reducer(state = initialState, action){
             }
             // advance state.currentTurn to next % number-of-players
             newState.currentTurn = (newState.currentTurn + 1) % newState.players.length;
-            newState.history = [... state.history, currentPlayer.name+ ' has ended their turn.'];
+            newState.history.push(currentPlayer.name+ ' has ended their turn.');
             return newState;
 
 

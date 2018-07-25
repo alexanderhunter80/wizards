@@ -14,7 +14,10 @@ export class WebsocketService {
     enemies: any;
     divineCount  = 0;
     weaveCount = 0;
+    spell = null;
     effects = null;
+    // effectsCounter = 0;
+    actor = null;
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
 
@@ -62,12 +65,6 @@ export class WebsocketService {
         this.socket.on('TARGET_CARDS', (spellEffect) => {
             this.effects = spellEffect;
         });
-
-
-
-        // this.socket.on('CAST_END', () => {
-        //     socket.emit('ACTION_STEP_END');
-        // });
     }
 
     getObservable() {
@@ -167,13 +164,16 @@ export class WebsocketService {
     spellSuccess(actor, discard, spell) {
         this.socket.emit('REPLACE_ELEMENTS', {actor, cards: discard});
         // do differently if spell targets players vs self
-        if (spell.targeted) {
-            this.socket.emit('CAST_SUCCESS', {actor, spell});
-        } else {
-            this.socket.emit('CAST_SUCCESS', {actor, spell});
-            this.socket.emit('CAST_EFFECT', {actor : actor, furtherEffects : spell.effects});
-            this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
-        }
+        this.spell = spell;
+        this.effects = spell.effects;
+        this.doSpellEffects();
+        // if (spell.targeted) {
+        //     // this.socket.emit('CAST_SUCCESS', {actor, spell});
+        // } else {
+        //     // this.socket.emit('CAST_SUCCESS', {actor, spell});
+        //     // this.socket.emit('CAST_EFFECT', {actor : actor, furtherEffects : spell.effects});
+        //     // this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+        // }
     }
 
     spellFailure(actor, cards, spell) {
@@ -239,5 +239,11 @@ export class WebsocketService {
     learn(actor, cardIndices) {
         this.socket.emit('LEARN_DISCARD', {actor, cardIndices});
         this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+    }
+
+    doSpellEffects() {
+        if (this.effects.length > 0) {
+            //
+        }
     }
   }

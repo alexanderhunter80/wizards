@@ -186,13 +186,13 @@ module.exports = function(io){
                 if(payload.spell.effects[0].targetPlayer == true){
                     // send TARGET_PLAYER
                     console.log('should send TARGET_PLAYER');
-                    let furtherEffects = payload.spell.effects;
+                    const furtherEffects = payload.spell.effects;
                     socket.emit('TARGET_PLAYER', {furtherEffects})
                 } else if (payload.spell.effects[0].targetCards == true){
                     // send TARGET_CARDS
                     console.log('should send TARGET_CARDS');
-                    let effectValue = payload.spell.effects[0].value;
-                    let furtherEffects = payload.spell.effects;
+                    const effectValue = payload.spell.effects[0].value;
+                    const furtherEffects = payload.spell.effects;
                     socket.emit('TARGET_CARDS', {furtherEffects, value: effectValue});
                 }
             } else {
