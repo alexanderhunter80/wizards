@@ -1,6 +1,10 @@
 .wrapper{
     width: 1275px;
     text-align: center;
+    
+}
+.wrapper h3{
+    color: white;
 }
 .onlyHealth {
     height: 100px;
@@ -86,12 +90,13 @@
 }
 .ready {
     background-color: green;
+    border: 1px solid green;
     color: white;
     height: 50px;
     width: 100px;
     margin: 50px;
     border-radius: 10%;
-    box-shadow:0 1px 2px black;
+    box-shadow:0 1px 2px darkgreen;
     font-size: 1.3em;
     font-weight: bolder;
 }
@@ -107,4 +112,7 @@
 }
 .highlight {
     border: 3px gold solid;
+}
+.hand {
+    
 }
