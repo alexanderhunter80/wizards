@@ -333,12 +333,12 @@ function reducer(state = initialState, action){
                 newState.learnHelper.cardsDrawn.push(newState.gameboard.spellDeck.topCard());
             }
             newState.learnHelper.keep = action.keep;
+            newState.history = [... state.history, action.message];
             return newState;
 
 
         case actions.LEARN_DISCARD:
             console.log('reducers.js heard LEARN_DISCARD');
-            console.log('reducers.js says: LEARN_DISCARD is untested!');
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
                 return player.id == action.actor.id;
@@ -354,8 +354,9 @@ function reducer(state = initialState, action){
             });
             // push rest of learnHelper.cardsDrawn into gameboard.spellDeck.discard
             while(newState.learnHelper.cardsDrawn.length > 0){
-                gameboard.spellDeck.discard.push(newState.learnHelper.cardsDrawn.pop());
+                newState.gameboard.spellDeck.discard.push(newState.learnHelper.cardsDrawn.pop());
             }
+            newState.learnHelper.keep = null;
             return newState;
 
 
@@ -466,6 +467,7 @@ function reducer(state = initialState, action){
             }
             // advance state.currentTurn to next % number-of-players
             newState.currentTurn = (newState.currentTurn + 1) % newState.players.length;
+            newState.history = [... state.history, currentPlayer.name+ ' has ended their turn.'];
             return newState;
 
 

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { HttpClientModule } from '@angular/common/http';
 import { GameService } from './game.service';
-
 import { ActionService } from './action.service';
 import { WebsocketService } from './websocket.service';
 
@@ -14,13 +13,15 @@ import { GameboardComponent } from './gameboard/gameboard.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EnemiesComponent } from './enemies/enemies.component';
 import { PlayerComponent } from './player/player.component';
+import { LearnComponent } from './learn/learn.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameboardComponent,
     EnemiesComponent,
-    PlayerComponent
+    PlayerComponent,
+    LearnComponent
   ],
   imports: [
     BrowserModule,

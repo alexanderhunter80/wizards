@@ -75,8 +75,14 @@ export class EnemiesComponent implements OnInit {
 
   selectEnemy(enemy) {
     if (this.gameState.mode === 'targetingPlayer') {
-      // enemy.target = true;
+      enemy.target = true;
       this._wss.sendTarget(this.playerComp.player, enemy);
+    }
+  }
+
+  clearEnemies() {
+    for (const enemy of this.enemies) {
+      enemy.target = false;
     }
   }
 }

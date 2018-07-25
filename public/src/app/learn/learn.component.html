@@ -1,0 +1,17 @@
+<div *ngIf="gameState.mode === 'learnAction' && state">
+  <div class="hand">
+    <div *ngFor="let spell of state.learnHelper.cardsDrawn" (click)="learnSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
+      <h3>{{spell.name}}</h3>
+      <hr>
+      <h5>Effect:</h5>
+      {{spell.text}}
+      <br>
+      <h5>Cost Elements:</h5>
+      {{spell.elements}}
+    </div>
+  </div>
+
+  <div *ngIf="selected">
+    <h2>Spell has already been selected!!</h2>
+  </div>
+</div>

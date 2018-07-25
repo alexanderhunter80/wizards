@@ -10,7 +10,7 @@ module.exports = [
     { name: 'Potion', text: 'Cure 1', elements: 'WW', effects: [{type: actions.CURE, value: 1}], targeted: false, copies: 4 },
 
     { name: 'Gust of Wind', text: 'Target AP -1', elements: 'AE', effects: [{type: actions.AP_MINUS, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
-    { name: 'Arc', text: 'Attack 1, Chain once', elements: 'AF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
+    // { name: 'Arc', text: 'Attack 1, Chain once', elements: 'AF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
     { name: 'Smoke Bomb', text: 'Obscure 2', elements: 'AW', effects: [{type: actions.OBSCURE, value: 2, targetCards: true}], targeted: true, copies: 3 },
     { name: 'Magma Ball', text: 'Burn 2', elements: 'EF', effects: [{type: actions.HP_MINUS, value: 2, targetPlayer: true}], targeted: true, copies: 3 },
     { name: 'Placebo', text: 'Regen 1', elements: 'EW', effects: [{type: actions.HP_PLUS, value: 1}], targeted: false, copies: 3 },
@@ -19,7 +19,7 @@ module.exports = [
 
 
     // { name: 'Haste', text: 'AP +3', elements: 'AAA', effects: [{type: actions.AP_PLUS, value: 3}], targeted: false, copies: 2},
-    // { name: 'Slow', text: 'Target AP -2', elements: 'AAE', effects: [{type: actions.AP_MINUS, value: 2, targetCards: true}], targeted: true, copies: 2},
+    // { name: 'Slow', text: 'Target AP -2', elements: 'AAE', effects: [{type: actions.AP_MINUS, value: 2, targetPlayer: true}], targeted: true, copies: 2},
     // { name: 'Glittering Cloud', text: 'Attack 1 against all opponents', elements: 'AAF', effects: [{type: actions.ATTACK_ALL, value: 1}], targeted: false, copies: 2},
     // { name: 'Contemplation', text: 'AP +1, Divine 2', elements: 'AAW', effects: [{type: actions.AP_PLUS, value: 1}, {type: actions.DIVINE, value: 2}], targeted: false, copies: 2},
     // { name: 'Grounding', text: 'Target AP -1, and you may strip up to 2 +HP tokens from that target', elements: 'EEA', effects: [{type: actions.AP_MINUS, value: 1, targetCards: true}, /*{type: actions.HP_MINUS, value: 2, targetCards: true}*/], targeted: true, copies: 2}, //strip
@@ -27,14 +27,14 @@ module.exports = [
     // { name: 'Scald', text: 'Burn 2, and you may strip up to 2 +AP tokens from that target', elements: 'EEF', effects: [{type: actions.HP_MINUS, value: 2, targetCards: true}, /*{type: actions.AP_MINUS, value: 2, targetCards: true}*/], targeted: true, copies: 2}, //strip
     // { name: 'Strength', text: 'Shield 1, Regen 1', elements: 'EEW', effects: [{type: actions.SHIELD, value: 1}, {type: actions.HP_PLUS, value: 1}], targeted: false, copies: 2},
     
-    // { name: 'Twin Laser', text: 'Target 2 opponents: Attack 2', elements: 'FFA', effects: [{type: actions.ATTACK, value: 2, targetPlayer: true}/*, attacks 2 targets {type: actions.ATTACK, value: 2, targetPlayer: true} */], targeted: true, copies: 2},
+    // { name: 'Twin Laser', text: 'Target 2 opponents: Attack 2', elements: 'FFA', effects: [{type: actions.ATTACK, value: 2, targetPlayer: true}, {type: actions.ATTACK, value: 2, targetPlayer: true}], targeted: true, copies: 2},
     // { name: 'Fist of Flame', text: 'Attack 1, Burn 3', elements: 'FFE', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.HP_MINUS, value: 3, targetCards: true}], targeted: true, copies: 2},
     // { name: 'Flamethrower', text: 'Attack 3', elements: 'FFF', effects: [{type: actions.ATTACK, value: 3, targetPlayer: true}], targeted: true, copies: 2},
     // { name: 'Jet of Steam', text: 'Attack 2, Obscure 1', elements: 'FFW', effects: [{type: actions.ATTACK, value: 2, targetPlayer: true}, {type: actions.OBSCURE, value: 1, targetCards: true}], targeted: true, copies: 2},
     
     // { name: 'Oracle', text: 'Divine 4 -OR- Obscure 2 -OR- Scry 2 -OR- Weave 2', elements: 'WWA', effects: [{type: actions.DIVINE, value: 4},/*OR*/ {type: actions.OBSCURE, value: 2}, /*OR*/{type: actions.SCRY, value: 2}, /*OR*/{type: actions.WEAVE, value: 2}], targeted: false, copies: 2},
     // { name: 'Vitality', text: 'Regen 3', elements: 'WWE', effects: [{type: actions.HP_PLUS, value: 3}], targeted: false, copies: 2},
-    // { name: 'Life Drain', text: 'Attack 2, Cure = damage dealt', elements: 'WWF', effects: [{type: actions.ATTACK, value: 2, targetPlayer: true}/*, {type: actions.DRAIN, value: 2}*/], targeted: true, copies: 2},
+    // { name: 'Life Drain', text: 'Attack 2, Cure = damage dealt', elements: 'WWF', effects: [{type: actions.DRAIN, value: 2, targetPlayer: true}], targeted: true, copies: 2},
     // { name: 'Empower', text: 'Cure 2, Divine 2', elements: 'WWW', effects: [{type: actions.CURE, value: 2}, {type: actions.DIVINE, value: 2}], targeted: false, copies: 2},
 
     // { name: 'Accelereate', text: 'AP +4', elements: 'AAAA', effects: [{type: actions.AP_PLUS, value: 4}], targeted: false, copies: 1},

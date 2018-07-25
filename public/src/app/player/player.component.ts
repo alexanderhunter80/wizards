@@ -76,8 +76,6 @@ export class PlayerComponent implements OnInit {
     this._wss.doTurn(this.player);
   }
   turnEnd() {
-    this.turnConfirm = false;
-    this.gameboardComp.holdActionStep = false;
     this._wss.endTurn(this.player);
     for (const enemy of this.enemiesComp.enemies) {
       enemy.target = false;
@@ -111,14 +109,10 @@ export class PlayerComponent implements OnInit {
     this._wss.actionDivine(2);
   }
   actionLearn() {
-    this.gameboardComp.holdActionStepToggle();
-    this._wss._actionStep.next(false);
-    console.log('LEARN action');
+    this._wss.actionLearn(this.player);
   }
   actionWeave() {
-    this.weave = true;
-    this.gameboardComp.weaveCounterSetup();
-    console.log('WEAVE action');
+    this._wss.actionWeave();
   }
   actionCast() {
     this._wss.actionCast();
@@ -130,16 +124,12 @@ export class PlayerComponent implements OnInit {
       }
       spellCard.highlight = true;
       this._wss.actionCast();
-      // this.confirmSpell = false;
     }
   }
   castingSpell() {
-    this.castSpell = false;
     const spellToCast =  this.getSpellToCast();
     console.log(spellToCast);
     if (spellToCast.length === 0) {
-      // this.confirmSpell = true;
-      // this.castSpell = true;
       this._wss.spellSelectFail();
     } else {
       for (const letter of spellToCast[0].elements) {
@@ -168,7 +158,4 @@ export class PlayerComponent implements OnInit {
 getSpellToCast() {
     return this.player.spells.filter( x => { return x.highlight === true; } );
 }
-  // weaveToggle() {
-  //   (this.weave) ? this.weave = false : this.weave = true;
-  // }
 }

@@ -31,7 +31,6 @@ export class GameboardComponent implements OnInit {
   state: any = null;
   divineCards = [];
   weaveCards = [];
-  weaveCounter = 0;
   divineCounter = 0;
   selected = false;
   spell: any = [];
@@ -61,7 +60,7 @@ export class GameboardComponent implements OnInit {
   }
 
   toggleState(card) {
-    if (this.spell.length > 0 && !this.playerComp.castSpell) {
+    if (this.spell.length > 0 && this.gameState.mode === 'castAction') {
     card.faceUp = (card.faceUp === false ) ? true : true;
     }
   }
@@ -148,30 +147,25 @@ export class GameboardComponent implements OnInit {
     }
 
     doWeave(card) {
-      if (this.playerComp.weave && this.weaveCounter > 0) {
+      if (this.gameState.mode === 'weaveAction' && this._wss.getWeaveCount() > 0) {
+        // checking if card already selected
         const bsCoord = JSON.stringify(card.coord);
         const bsHighlight = JSON.stringify(this.weaveCards);
-        if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) {
+        if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) { // fresh card selected
           this.weaveCards.push(card.coord);
-          this.weaveCounter--;
+          this._wss.weave();
           card.highlight = true;
-       } else { // card has been previously selected
+       } else { // card has been previously selected(notifying user)
          this.selected = true;
          setTimeout(() => {
           this.selected = false;
-        }, 5000);
+        }, 3000);
        }
       }
-      if (this.playerComp.weave && this.weaveCounter === 0) {
-        this.playerComp.weaveToggle();
-        console.log(this.weaveCards);
-        this._wss.doWeave(this.state.players[this.state.currentTurn], this.weaveCards[0], this.weaveCards[1]);
+      if (this.gameState.mode === 'weaveAction' && this._wss.getWeaveCount() === 0) {
+        this._wss.doWeave(this.player, this.weaveCards[0], this.weaveCards[1]);
         this.weaveCards = [];
       }
-    }
-
-    weaveCounterSetup() {
-      this.weaveCounter = 2;
     }
 
     getCurrentPlayer() {

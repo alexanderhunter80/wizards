@@ -1,5 +1,6 @@
 <div class="container">
     <app-enemies #enemiesComp [gameboardComp]='gameboardComp' [playerComp]='playerComp'></app-enemies>
     <app-gameboard #gameboardComp [playerComp]='playerComp' [enemiesComp]='enemiesComp'></app-gameboard>
+    <app-learn></app-learn>
     <app-player #playerComp [gameboardComp]='gameboardComp' [enemiesComp]='enemiesComp'></app-player>
 </div>
