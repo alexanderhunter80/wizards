@@ -211,6 +211,7 @@ function reducer(state = initialState, action){
             currentPlayer = newState.players.find((player)=>{
                 return player.id == action.actor.id;
             })
+            currentPlayer.health += action.value;
             if(currentPlayer.health > 5){currentPlayer.health = 5;}
             newState.history.push(action.message);
             return newState;

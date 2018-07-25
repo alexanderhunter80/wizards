@@ -50,7 +50,7 @@ function attack(actor, target, value, chain = false){
         chain: chain,
         message: actor.name+' attacked '+target.name+' for '+value+' damage'
     }
-}
+};
 
 function attackAll(actor, value){
     return {
@@ -59,7 +59,7 @@ function attackAll(actor, value){
         value: value,
         message: actor.name+' attacked everyone else for '+value+' damage'
     }
-}
+};
 
 function drain(actor, target, value){
     return {
@@ -69,10 +69,9 @@ function drain(actor, target, value){
         value: value,
         message: actor.name+' drained '+target.name+' for '+value+' damage'
     }
-}
+};
 
 function cure(actor, value){
-    console.log("actions cure test")
     return {
         type: CURE,
         actor: actor,
@@ -80,7 +79,7 @@ function cure(actor, value){
         message: actor.name+' healed '+value+' points'
     }
     
-}
+};
 
 function shield(actor, value){
     return {

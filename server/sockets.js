@@ -200,7 +200,7 @@ module.exports = function(io){
                 
                 gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
                 
-                endSpell(socket);
+                // endSpell(socket);
             } 
         });
 
