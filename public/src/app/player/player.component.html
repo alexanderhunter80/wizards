@@ -4,43 +4,39 @@
       <div class="health">{{player.health}}</div>
   </div>
   <div *ngIf="player.shields === 0" class="onlyHealth">{{player.health}}</div>
-  <div class="ap" *ngIf="player.aptokens.length > 0">
-      <div class="apToken" *ngFor="let aptoken of player.aptokens">AP</div>
+  <div class="ap" *ngIf="player.aptokens >= 0">
+      <div class="apToken" *ngFor="let aptoken of player.apTokens">AP</div>
   </div>
-  <div class="hp" *ngIf="player.hptokens.length > 0">
-      <div class="hpToken" *ngFor="let hptoken of player.hptokens">HP</div>
+  <div class="ap" *ngIf="player.aptokens < 0">
+    <div class="negApToken" *ngFor="let aptoken of player.apTokens">-AP</div>
   </div>
+  <div class="hp" *ngIf="player.hptokens >= 0">
+      <div class="hpToken" *ngFor="let hptoken of player.hpTokens">HP</div>
+  </div>
+  <div class="hp" *ngIf="player.hptokens < 0">
+    <div class="negHpToken" *ngFor="let hptoken of player.hpTokens">-HP</div>
+</div>
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
-      <button (click)="turnAck()" *ngIf="!turnConfirm" >Confirm Turn</button>
+      <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " >Confirm Turn</button>
       <button (click)="turnEnd()" *ngIf="turnConfirm && !this.actionStep && !this._wss.divine && !this.castSpell && !this.gameboardComp.spell.length && !this._wss.targetingPlayer && !this._wss.targetingCards">End Turn</button>
-      <div>
-        <h4>Current State of End Turn parts</h4>
-        <p>Turn Confirm: {{turnConfirm}}</p>
-        <p>Action Step: {{!this.actionStep}}</p>
-        <p>GBC Hold Action Step: {{this.gameboardComp.holdActionStep}}</p>
-        <p>WSS Divine: {{!this._wss.divine}}</p>
-        <p>Cast Spell: {{!this.castSpell}}</p>
-        <p>GBC length bool: {{!this.gameboardComp.spell.length}}</p>
-        <p>WSS Target Player: {{!this._wss.targetPlayer}}</p>
-      </div>
-      <div *ngIf="this.actionStep">
+      <div *ngIf="gameState.mode === 'actionStepStart' ">
           <button (click)="actionDivine()">Divine</button>
           <button (click)="actionLearn()">Learn</button>
           <button (click)="actionWeave()">Weave</button>
           <button (click)="actionCast()">Cast</button>
           <button (click)="testAttack()" >Test Attack</button>
       </div>
-      <div *ngIf="castSpell">
+      <div *ngIf="gameState.mode === 'castAction'">
           <button (click)="castingSpell()">Confirm Spell</button>
       </div>
   </div>
-  <div *ngIf="_wss.divine">
+  <div *ngIf="gameState.mode === 'divineStep' || gameState.mode === 'divineAction' ">
       <h2>You may now divine {{_wss.divineCount}} cards!</h2>
   </div>
-  <div *ngIf="confirmSpell">
-      <h2>You must needs choose a Spell!</h2>
+  <div *ngIf="gameState.value === 11">
+      <h2>You must choose a Spell!</h2>
   </div>
 
   <div class="hand">

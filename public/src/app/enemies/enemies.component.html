@@ -4,11 +4,17 @@
     <div class="health">{{enemy.health}}</div>
   </div>
   <div *ngIf="enemy.shields === 0"class="onlyHealth">{{enemy.health}}</div>
-  <div class="ap" *ngIf="enemy.aptokens.length > 0">
-    <div class="apToken" *ngFor="let aptoken of enemy.aptokens">AP</div>
+  <div class="ap" *ngIf="enemy.aptokens >= 0">
+    <div class="apToken" *ngFor="let aptoken of enemy.apTokens">AP</div>
   </div>
-  <div class="hp" *ngIf="enemy.hptokens.length > 0">
-    <div class="hpToken" *ngFor="let hptoken of enemy.hptokens">HP</div>
+  <div class="ap" *ngIf="enemy.aptokens < 0">
+    <div class="negApToken" *ngFor="let aptoken of enemy.apTokens">-AP</div>
+  </div>
+  <div class="hp" *ngIf="enemy.hptokens >= 0">
+    <div class="hpToken" *ngFor="let hptoken of enemy.hpTokens">HP</div>
+  </div>
+  <div class="hp" *ngIf="enemy.hptokens < 0">
+    <div class="negHpToken" *ngFor="let hptoken of enemy.hpTokens">-HP</div>
   </div>
 </div>
 

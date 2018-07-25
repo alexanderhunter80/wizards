@@ -72,7 +72,6 @@ function drain(actor, target, value){
 }
 
 function cure(actor, value){
-    console.log("actions cure test")
     return {
         type: CURE,
         actor: actor,

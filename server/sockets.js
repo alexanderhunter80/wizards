@@ -6,7 +6,7 @@ const cloner = require('cloner');
 let currentPlayer = null;
 let wizardNames = [
     'Merlin', 'Caramon', 'Raistlin', 'Rincewind', 'Ridcully', 'Elminster', 'Mordenkainen', 'Bigby', 'Drawmij', 'Leomund', 'Melf', 'Nystul', 'Tenser', 'Evard', 'Otiluke', 'Grimskull', 'Harlequin', 'Morgana', 'Maleficent', 'Gandalf', 'Glinda', 'Harry Dresden', 'Molly Carpenter', "Rand al'Thor", 'Tim', 'Cassandra', 'Hecate', 'Skald', 'Medea', 'Circe', 'Blaise', 'Ganondorf', 'Prospero', 'Maeve', 'Mab', 'Titania', 'Aurora', 'Ursula', 'Sabrina', 'Gruntilda', 'Granny Weatherwax', 'Nanny Ogg', 'Magrat Garlick', 'Mirri Maz Duur', 'Erszebet Karpaty', 'Iris', 'Melisandre', 'Sycorax', 'Jafar', 'Belgarath', 'Iskandar Khayon'
-]
+];
 let wizName = null;
 let wizIndex = null;
 

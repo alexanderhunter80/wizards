@@ -1,4 +1,4 @@
-<div *ngIf="state && state.gameOn">
+<div *ngIf="gameState.value > 1">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); doWeave(card);" [@cardState]="card.faceUp"> 

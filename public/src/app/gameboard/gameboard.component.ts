@@ -27,7 +27,7 @@ export class GameboardComponent implements OnInit {
 
   @Input() enemiesComp: EnemiesComponent;
 
-  holdActionStep: Boolean = false;
+  player: any = null;
   state: any = null;
   divineCards = [];
   weaveCards = [];
@@ -38,6 +38,7 @@ export class GameboardComponent implements OnInit {
   discard: any = [];
   castSuccess = false;
   castBotched = false;
+  gameState: any = null;
 
   constructor(private _wss: WebsocketService) { }
 
@@ -46,15 +47,17 @@ export class GameboardComponent implements OnInit {
     obs.subscribe((state) => {
       this.state = state;
       // Checking to see if need to ready check for game start
-      this.assignCoord();
-      console.log(this.state);
+      if (this.state) {
+        this.assignCoord();
+        this.getCurrentPlayer();
+      }
     });
 
-    const asObs = this._wss.getActionStepBoolean();
-    asObs.subscribe((step) => {
-      console.log('action step updated');
-      this.holdActionStep = step;
-      });
+    const gsObs = this._wss.getGameState();
+    gsObs.subscribe((gs) => {
+      console.log('game state updated');
+      this.gameState = gs;
+    });
   }
 
   toggleState(card) {
@@ -84,13 +87,13 @@ export class GameboardComponent implements OnInit {
     }
 
     divineTime(card) {
-      if (this._wss.divine && this._wss.divineCount > 0) {
+      if (this._wss.getDivineCount() > 0) {
         // checking if card already viewed
         const bsCoord = JSON.stringify(card.coord);
         const bsHighlight = JSON.stringify(this.divineCards);
         if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) {
           this.divineCards.push(card.coord);
-          this._wss.divineCount--;
+          this._wss.divineCard();
           this.divineCounter++;
           card.highlight = true;
        } else {
@@ -101,29 +104,25 @@ export class GameboardComponent implements OnInit {
        }
 
       }
-      if (this._wss.divine && this._wss.divineCount === 0 && !this.holdActionStep) {
-        this._wss.divine = false;
-        this._wss.doDivineStep(this.state.players[this.state.currentTurn], this.divineCounter, this.divineCards);
+      if (this.gameState.mode === 'divineStep' && this._wss.getDivineCount() === 0 ) {
+        this._wss.doDivineStep(this.player, this.divineCounter, this.divineCards);
         this.divineCounter = 0;
         this.divineCards = [];
         setTimeout(() => {
           this._wss.doDivineStepEnd();
-        }, 5000);
-      } else if (this._wss.divine && this._wss.divineCount === 0 && this.holdActionStep) {
-        this.holdActionStep = false;
-        this.playerComp.actionStep = false;
-        this._wss.divine = false;
-        this._wss.doDivine(this.state.players[this.state.currentTurn], this.divineCounter, this.divineCards);
+        }, 3000);
+      } else if (this.gameState.mode === 'divineAction' && this._wss.getDivineCount() === 0 ) {
+        this._wss.doDivine(this.player, this.divineCounter, this.divineCards);
         this.divineCounter = 0;
         this.divineCards = [];
         setTimeout(() => {
-          this._wss.doDivineEnd(this.playerComp.player);
-        }, 5000);
+          this._wss.doDivineEnd(this.player);
+        }, 3000);
       }
     }
 
     spellCheck(card) {
-      if (this.spell.length > 0 && (this.spell[0] === card.elem || card.elem === 'aether') && !this.playerComp.castSpell) {
+      if (this.spell.length > 0 && (this.spell[0] === card.elem || card.elem === 'aether') && this.gameState.mode === 'spellElemSelect') {
         this.spell.shift();
         this.discard.push(card.coord);
         if (this.spell.length === 0) {
@@ -133,16 +132,17 @@ export class GameboardComponent implements OnInit {
           this.castSuccess = false;
         }, 3000);
           // finding selected spell
-          const spellToCast = this.playerComp.player.spells.filter( x => { return x.highlight === true; });
-          this._wss.spellSuccess(this.playerComp.player, this.discard, spellToCast[0]);
+          const spellToCast = this.playerComp.getSpellToCast();
+          this._wss.spellSuccess(this.player, this.discard, spellToCast[0]);
           }
-      } else if (this.spell.length > 0 && !this.playerComp.castSpell) {
-        console.log('Spell has been botched!');
-        this.castBotched = true;
+      } else if (this.spell.length > 0 && this.gameState.mode === 'spellElemSelect') {
+          console.log('Spell has been botched!');
+          this.castBotched = true;
         setTimeout(() => {
           this.castBotched = false;
-          // **********add sending spell botched event here***********
         }, 3000);
+        const spellToCast = this.playerComp.getSpellToCast();
+        this._wss.spellFailure(this.player, this.discard, spellToCast[0]);
         this.spell = [];
       }
     }
@@ -174,7 +174,13 @@ export class GameboardComponent implements OnInit {
       this.weaveCounter = 2;
     }
 
-    // holdActionStepToggle() {
-    //   (this.holdActionStep) ? this.holdActionStep = false : this.holdActionStep = true;
-    // }
+    getCurrentPlayer() {
+      console.log(this.state);
+      for (const person of this.state.players) {
+        if (this._wss.playerid === person.socketid) {
+          this.player = person;
+          break;
+        }
+      }
+    }
 }
