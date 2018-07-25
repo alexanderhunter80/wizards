@@ -12,8 +12,8 @@ export class WebsocketService {
     state: any;
     playerid: string;
     enemies: any;
-    divineCount: number;
-    targetingCards = false;
+    divineCount  = 0;
+    weaveCount = 0;
     effects = null;
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -33,9 +33,6 @@ export class WebsocketService {
             console.log('playerid');
             console.log(this.playerid);
         });
-        // this.playerid = this.socket.id;
-        // this.player = {id: null, socketid: null, name: null, health: null, shields: null, aptokens: null, hptokens: null};
-        // this.enemies = [];
 
         this.socket.on('INIT', (state) => {
             console.log('websocket.service says: state INIT');
@@ -50,7 +47,7 @@ export class WebsocketService {
         this.socket.on('DIVINE_STEP_START', payload => {
             console.log('websocket.service says: state DIVINE STEP');
             this.divineCount = payload.value;
-            this._gameState.next({'mode' : 'divineStep' : 'value' : 4});
+            this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
         });
 
         this.socket.on('ACTION_STEP_START', () => {
@@ -59,12 +56,11 @@ export class WebsocketService {
 
         this.socket.on('TARGET_PLAYER', (spellEffect) => {
             this.effects = spellEffect;
-            this._gameState.next({'mode' : 'targetingPlayer' : 'value' : 13});
+            this._gameState.next({'mode' : 'targetingPlayer' , 'value' : 13});
         });
 
         this.socket.on('TARGET_CARDS', (spellEffect) => {
             this.effects = spellEffect;
-            this.targetingCards = true;
         });
 
 
@@ -135,6 +131,7 @@ export class WebsocketService {
 
     doWeave(actor, yx1, yx2) {
         this.socket.emit('WEAVE', {actor, yx1, yx2});
+        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     doObscure(actor, value, yx) {
@@ -161,15 +158,22 @@ export class WebsocketService {
     }
     doDivineEnd(actor) {
         this.socket.emit('DIVINE_END', {actor});
-        this._gameState.next({'mode' : 'divineActionEnd' , 'value' : 8});
+        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
     endTurn(actor) {
         this.socket.emit('TURN_END', {actor});
-        this.wipeDivine();
     }
-    spellSuccess(actor, cards, spell) {
-        this.socket.emit('REPLACE_ELEMENTS', {actor, cards});
-        this.socket.emit('CAST_SUCCESS', {actor, spell});
+
+    spellSuccess(actor, discard, spell) {
+        this.socket.emit('REPLACE_ELEMENTS', {actor, cards: discard});
+        // do differently if spell targets players vs self
+        if (spell.targeted) {
+            this.socket.emit('CAST_SUCCESS', {actor, spell});
+        } else {
+            this.socket.emit('CAST_SUCCESS', {actor, spell});
+            this.socket.emit('CAST_EFFECT', {actor : actor, furtherEffects : spell.effects});
+            this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+        }
     }
 
     spellFailure(actor, cards, spell) {
@@ -180,22 +184,13 @@ export class WebsocketService {
     sendTarget(actor, target) {
         this.socket.emit('CAST_EFFECT', {actor, target, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
-        this._gameState.next({'mode' : 'awaiting', 'value' : 99});
+        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     sendCards(actor, cards) {
         this.socket.emit('CAST_EFFECT', {actor, cards, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
-        this.targetingCards = false;
-        this._gameState.next({'mode' : 'awaiting', 'value' : 99});
-    }
-
-    wipeDivine() {
-        this.divineCount = 0;
-    }
-
-    targetCardsToggle() {
-        (this.targetingCards) ? this.targetingCards = false : this.targetingCards = true;
+        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     getDivineCount() {
@@ -215,6 +210,16 @@ export class WebsocketService {
         this._gameState.next({'mode' : 'castAction', 'value' : 10});
     }
 
+    actionWeave() {
+        this._gameState.next({'mode' : 'weaveAction', 'value' : 14});
+        this.weaveCount = 2;
+    }
+
+    actionLearn(actor) {
+        this.socket.emit('LEARN', {actor, draw: 4, keep: 2});
+        this._gameState.next({'mode' : 'learnAction', 'value' : 16});
+    }
+
     spellSelectFail() {
         this._gameState.next({'mode' : 'castAction', 'value' : 11});
     }
@@ -223,4 +228,16 @@ export class WebsocketService {
         this._gameState.next({'mode' : 'spellElemSelect', 'value' : 12});
     }
 
+    getWeaveCount() {
+        return this.weaveCount;
+    }
+
+    weave() {
+        this.weaveCount--;
+    }
+
+    learn(actor, cardIndices) {
+        this.socket.emit('LEARN_DISCARD', {actor, cardIndices});
+        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+    }
   }

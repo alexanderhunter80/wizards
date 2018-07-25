@@ -197,7 +197,10 @@ module.exports = function(io){
                 }
             } else {
                 console.log('does not need targeting');
-                
+                console.log(payload.spell.effects[0].type);
+                console.log(payload.spell.effects[0].value);
+                console.log(payload.actor);
+                console.log('******************************');
                 gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
                 
                 // endSpell(socket);

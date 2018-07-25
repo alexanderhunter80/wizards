@@ -1,4 +1,4 @@
-<div *ngIf="gameState.value > 1">
+<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' ">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); doWeave(card);" [@cardState]="card.faceUp"> 
@@ -16,7 +16,6 @@
   </div>
 </div>
 <div *ngIf="selected">
-  <br>
   <h2>Card has already been selected!!</h2>
 </div>
 <div *ngIf="spell.length > 0">
@@ -28,9 +27,9 @@
 <div *ngIf="castBotched">
   <h1>Spell cast was botched!!  UH OH!</h1>
 </div>
-<div *ngIf="_wss.targetingPlayer">
+<div *ngIf="gameState.mode === 'targetingPlayer' ">
   <h1>Select an Enemy to Target with Spell!</h1>
 </div>
-<div *ngIf="_wss.targetingCards">
+<div *ngIf="gameState.mode === 'targetingCards'">
   <h1>Select the card to Target with Spell Effect!</h1>
 </div>

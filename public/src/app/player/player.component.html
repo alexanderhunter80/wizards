@@ -20,7 +20,7 @@
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
       <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " >Confirm Turn</button>
-      <button (click)="turnEnd()" *ngIf="turnConfirm && !this.actionStep && !this._wss.divine && !this.castSpell && !this.gameboardComp.spell.length && !this._wss.targetingPlayer && !this._wss.targetingCards">End Turn</button>
+      <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0">End Turn</button>
       <div *ngIf="gameState.mode === 'actionStepStart' ">
           <button (click)="actionDivine()">Divine</button>
           <button (click)="actionLearn()">Learn</button>
@@ -35,6 +35,9 @@
   <div *ngIf="gameState.mode === 'divineStep' || gameState.mode === 'divineAction' ">
       <h2>You may now divine {{_wss.divineCount}} cards!</h2>
   </div>
+  <div *ngIf="gameState.mode === 'weaveAction' ">
+    <h2>You may now weave 2 cards!</h2>
+</div>
   <div *ngIf="gameState.value === 11">
       <h2>You must choose a Spell!</h2>
   </div>
