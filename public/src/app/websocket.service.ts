@@ -11,18 +11,14 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs'; // rxjs/observable 
 export class WebsocketService {
     state: any;
     playerid: string;
-    player: any;
     enemies: any;
-    divine = false;
     divineCount: number;
-    targetingPlayer = false;
     targetingCards = false;
     effects = null;
-    // actionStep = false;
-
-    _actionStep: BehaviorSubject<any> = new BehaviorSubject(false);
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
+
+    _gameState: BehaviorSubject<any> = new BehaviorSubject({'mode' : 'ready', 'value' : 1});
 
     private allPlayersSource = new Subject<any>();
     allPlayers$ = this.allPlayersSource.asObservable();
@@ -54,16 +50,16 @@ export class WebsocketService {
         this.socket.on('DIVINE_STEP_START', payload => {
             console.log('websocket.service says: state DIVINE STEP');
             this.divineCount = payload.value;
-            this.divine = true;
+            this._gameState.next({'mode' : 'divineStep' : 'value' : 4});
         });
 
         this.socket.on('ACTION_STEP_START', () => {
-            this._actionStep.next(true);
+            this._gameState.next({'mode' : 'actionStepStart' , 'value' : 6});
         });
 
         this.socket.on('TARGET_PLAYER', (spellEffect) => {
             this.effects = spellEffect;
-            this.targetingPlayer = true;
+            this._gameState.next({'mode' : 'targetingPlayer' : 'value' : 13});
         });
 
         this.socket.on('TARGET_CARDS', (spellEffect) => {
@@ -82,8 +78,8 @@ export class WebsocketService {
         return this._state.asObservable();
     }
 
-    getActionStepBoolean() {
-        return this._actionStep.asObservable();
+    getGameState() {
+        return this._gameState.asObservable();
     }
 
     addPlayer(name) {
@@ -152,16 +148,20 @@ export class WebsocketService {
     doReady(actor) {
         console.log('sending READY');
         this.socket.emit('READY', {actor});
+        this._gameState.next({'mode' : 'start', 'value' : 2});
     }
     doTurn(actor) {
         console.log('starting TURN');
+        this._gameState.next({'mode' : 'awaiting', 'value' : 99});
         this.socket.emit('TURN_ACK', {actor});
     }
     doDivineStepEnd() {
         this.socket.emit('DIVINE_STEP_END');
+        this._gameState.next({'mode' : 'divineStepEnd' , 'value' : 5});
     }
     doDivineEnd(actor) {
         this.socket.emit('DIVINE_END', {actor});
+        this._gameState.next({'mode' : 'divineActionEnd' , 'value' : 8});
     }
     endTurn(actor) {
         this.socket.emit('TURN_END', {actor});
@@ -172,20 +172,25 @@ export class WebsocketService {
         this.socket.emit('CAST_SUCCESS', {actor, spell});
     }
 
+    spellFailure(actor, cards, spell) {
+        this.socket.emit('REPLACE_ELEMENTS', {actor, cards});
+        this.socket.emit('CAST_FAIL', {actor, spell});
+    }
+
     sendTarget(actor, target) {
         this.socket.emit('CAST_EFFECT', {actor, target, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
-        this.targetingPlayer = false;
+        this._gameState.next({'mode' : 'awaiting', 'value' : 99});
     }
 
     sendCards(actor, cards) {
         this.socket.emit('CAST_EFFECT', {actor, cards, furtherEffects: this.effects.furtherEffects});
         this.effects = null;
         this.targetingCards = false;
+        this._gameState.next({'mode' : 'awaiting', 'value' : 99});
     }
 
     wipeDivine() {
-        this.divine = false;
         this.divineCount = 0;
     }
 
@@ -193,5 +198,29 @@ export class WebsocketService {
         (this.targetingCards) ? this.targetingCards = false : this.targetingCards = true;
     }
 
+    getDivineCount() {
+        return this.divineCount;
+    }
+
+    actionDivine(num) {
+        this.divineCount = num;
+        this._gameState.next({'mode' : 'divineAction', 'value' : 7});
+    }
+
+    divineCard() {
+        this.divineCount--;
+    }
+
+    actionCast() {
+        this._gameState.next({'mode' : 'castAction', 'value' : 10});
+    }
+
+    spellSelectFail() {
+        this._gameState.next({'mode' : 'castAction', 'value' : 11});
+    }
+
+    spellElemSelect() {
+        this._gameState.next({'mode' : 'spellElemSelect', 'value' : 12});
+    }
 
   }

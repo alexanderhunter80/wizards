@@ -15,13 +15,10 @@ export class PlayerComponent implements OnInit {
   @Input() enemiesComp: EnemiesComponent;
 
   player: any;
-  state: any;
+  state: any = null;
   turn = false;
-  turnConfirm = false;
-  actionStep: any = false;
-  castSpell: any = false;
-  confirmSpell: Boolean = false;
   weave = false;
+  gameState: any = null;
 
 
 
@@ -40,16 +37,14 @@ export class PlayerComponent implements OnInit {
       }
     });
 
-    const asObs = this._wss.getActionStepBoolean();
-    asObs.subscribe((step) => {
-      console.log('action step updated');
-      this.actionStep = step;
-      });
+    const gsObs = this._wss.getGameState();
+    gsObs.subscribe((gs) => {
+      console.log('game state updated');
+      this.gameState = gs;
+    });
   }
 
   testAttack() {
-    this.gameboardComp.holdActionStep = true;
-    this._wss._actionStep.next(false);
     this._wss.doAttack(this.player, this.player, 1);
   }
 
@@ -69,13 +64,16 @@ export class PlayerComponent implements OnInit {
   getTurn() {
     if (this.state.players.indexOf(this.player) === this.state.currentTurn) {
       this.turn = true;
+      if (!this.state.history[this.state.history.length - 1].includes(this.player.name)) {
+        this._wss._gameState.next({'mode' : 'turnStart', 'value' : 3});
+      }
     } else {
       this.turn = false;
     }
   }
+
   turnAck() {
     this._wss.doTurn(this.player);
-    this.turnConfirm = true;
   }
   turnEnd() {
     this.turnConfirm = false;
@@ -87,55 +85,62 @@ export class PlayerComponent implements OnInit {
   }
   convertTokens() {
     let tokens = [];
-    for (let i = 0; i < this.player.aptokens; i++) {
-      tokens.push(i);
+    if (this.player.aptokens >= 0) {
+      for (let i = 0; i < this.player.aptokens; i++) {
+        tokens.push(i);
+      }
+    } else if (this.player.aptokens < 0) {
+      for (let i = 0; i > this.player.aptokens; i--) {
+        tokens.push(i);
+      }
     }
-    this.player.aptokens = tokens;
+    this.player.apTokens = tokens;
     tokens = [];
-    for (let i = 0; i < this.player.hptokens; i++) {
-      tokens.push(i);
+    if (this.player.hptokens >= 0) {
+      for (let i = 0; i < this.player.hptokens; i++) {
+        tokens.push(i);
+      }
+    } else if (this.player.hptokens < 0) {
+        for (let i = 0; i > this.player.hptokens; i--) {
+        tokens.push(i);
+      }
     }
-    this.player.hptokens = tokens;
+    this.player.hpTokens = tokens;
   }
   actionDivine() {
-    // this.gameboardComp.holdActionStepToggle();
-    // this._wss._actionStep.next(false);
-    this._wss.divine = true;
-    this._wss.divineCount = 2;
+    this._wss.actionDivine(2);
   }
   actionLearn() {
-    // this.gameboardComp.holdActionStepToggle();
-    // this._wss._actionStep.next(false);
+    this.gameboardComp.holdActionStepToggle();
+    this._wss._actionStep.next(false);
     console.log('LEARN action');
   }
   actionWeave() {
-    // this.gameboardComp.holdActionStepToggle();
-    // this._wss._actionStep.next(false);
     this.weave = true;
     this.gameboardComp.weaveCounterSetup();
     console.log('WEAVE action');
   }
   actionCast() {
-   // this.gameboardComp.holdActionStepToggle();
-    // this._wss._actionStep.next(false);
-    this.castSpell = true;
+    this._wss.actionCast();
   }
   selectingSpell(spellCard) {
-    if (this.castSpell) {
+    if (this.gameState.mode === 'castAction') {
       for (const spell of this.player.spells) {
         spell.highlight = false;
       }
       spellCard.highlight = true;
-      this.confirmSpell = false;
+      this._wss.actionCast();
+      // this.confirmSpell = false;
     }
   }
   castingSpell() {
     this.castSpell = false;
-    const spellToCast = this.player.spells.filter( x => { return x.highlight === true; } );
+    const spellToCast =  this.getSpellToCast();
     console.log(spellToCast);
     if (spellToCast.length === 0) {
-      this.confirmSpell = true;
-      this.castSpell = true;
+      // this.confirmSpell = true;
+      // this.castSpell = true;
+      this._wss.spellSelectFail();
     } else {
       for (const letter of spellToCast[0].elements) {
         switch (letter) {
@@ -155,11 +160,15 @@ export class PlayerComponent implements OnInit {
             this.gameboardComp.spell.push('water');
             break;
         }
+        this._wss.spellElemSelect();
       }
     }
   }
 
-  weaveToggle() {
-    (this.weave) ? this.weave = false : this.weave = true;
-  }
+getSpellToCast() {
+    return this.player.spells.filter( x => { return x.highlight === true; } );
+}
+  // weaveToggle() {
+  //   (this.weave) ? this.weave = false : this.weave = true;
+  // }
 }

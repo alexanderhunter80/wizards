@@ -458,11 +458,11 @@ function reducer(state = initialState, action){
                     }
                     currentPlayer.hpTokens--;
                 }
-            } else if (currentPlayer.hpTokens < 0){
+            } else if (currentPlayer.hptokens < 0){
                 currentPlayer.health--;
+                currentPlayer.hptokens++;
                 checkDeath(currentPlayer);
                 isGameOver(newState);
-                currentPlayer.hptokens++;
             }
             // advance state.currentTurn to next % number-of-players
             newState.currentTurn = (newState.currentTurn + 1) % newState.players.length;

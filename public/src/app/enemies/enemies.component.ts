@@ -17,6 +17,7 @@ export class EnemiesComponent implements OnInit {
 
   enemies: any = null;
   state: any = null;
+  gameState: any = null;
 
   constructor(private _wss: WebsocketService) { }
 
@@ -28,6 +29,12 @@ export class EnemiesComponent implements OnInit {
         this.getEnemies();
         this.convertTokens();
       }
+    });
+
+    const gsObs = this._wss.getGameState();
+    gsObs.subscribe((gs) => {
+      console.log('game state updated');
+      this.gameState = gs;
     });
   }
 
@@ -42,21 +49,33 @@ export class EnemiesComponent implements OnInit {
   convertTokens() {
     for (let j = 0; j < this.enemies.length; j++) {
         let tokens = [];
-        for (let i = 0; i < this.enemies[j].aptokens; i++) {
-          tokens.push(i);
+        if (this.enemies[j].aptokens >= 0) {
+          for (let i = 0; i < this.enemies[j].aptokens; i++) {
+            tokens.push(i);
+          }
+        } else if (this.enemies[j].aptokens < 0) {
+          for (let i = 0; i > this.enemies[j].aptokens; i--) {
+            tokens.push(i);
+          }
         }
-        this.enemies[j].aptokens = tokens;
+        this.enemies[j].apTokens = tokens;
         tokens = [];
-        for (let i = 0; i < this.enemies[j].hptokens; i++) {
-          tokens.push(i);
+        if (this.enemies[j].hptokens >= 0) {
+          for (let i = 0; i < this.enemies[j].hptokens; i++) {
+            tokens.push(i);
+          }
+        } else if (this.enemies[j].hptokens < 0) {
+          for (let i = 0; i > this.enemies[j].hptokens; i--) {
+            tokens.push(i);
+          }
         }
-        this.enemies[j].hptokens = tokens;
+        this.enemies[j].hpTokens = tokens;
       }
   }
 
   selectEnemy(enemy) {
-    if (this._wss.targetingPlayer) {
-      enemy.target = true;
+    if (this.gameState.mode === 'targetingPlayer') {
+      // enemy.target = true;
       this._wss.sendTarget(this.playerComp.player, enemy);
     }
   }
