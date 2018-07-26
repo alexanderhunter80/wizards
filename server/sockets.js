@@ -369,7 +369,6 @@ module.exports = function(io){
             console.log('sockets.js says: heard DIVINE_END');
             gameStore.dispatch(actions.unhighlight());
             update();
-            actOrDont(payload.actor, socket);
         });
 
         socket.on(actions.UNHIGHLIGHT, ()=>{
@@ -386,7 +385,6 @@ module.exports = function(io){
             setTimeout(() => {
                 gameStore.dispatch(actions.unhighlight());
                 update();
-                actOrDont(payload.actor, socket);
             }, 3000);
         });
 

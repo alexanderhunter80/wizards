@@ -136,7 +136,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard ATTACK');
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
-            let target = newState.players.find((player)=>{
+            target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
             damage = action.value;
@@ -183,10 +183,10 @@ function reducer(state = initialState, action){
             newState = Object.assign({}, state);
             currentPlayer = newState.players.find((player)=>{
                 return player.id == action.actor.id;
-            })
+            });
             target = newState.players.find((player)=>{
                 return player.id == action.target.id;
-            })
+            });
             damage = action.value;
             if (target.shields > 0){
                 while(target.shields > 0 && damage > 0){

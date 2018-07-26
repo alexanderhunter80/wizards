@@ -144,8 +144,6 @@ export class WebsocketService {
 
     doDivine(value, yx) {
         this.socket.emit('DIVINE', {actor : this.actor, value, yx});
-        // Further Effects?
-        this.endActionStepCheck();
     }
 
     doDivineStep(value, yx) {
@@ -186,7 +184,8 @@ export class WebsocketService {
     }
     doDivineEnd() {
         this.socket.emit('DIVINE_END', {actor : this.actor});
-        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+        // Further Effects?
+        this.endActionStepCheck();
     }
     endTurn() {
         this.socket.emit('TURN_END', {actor : this.actor});
