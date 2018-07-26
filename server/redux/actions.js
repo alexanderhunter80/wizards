@@ -99,13 +99,22 @@ function hpPlus(actor, value){
     }
 };
 
-function hpMinus(actor, target, value){
+function hpMinus(actor, target, value, targetPlayer, limited){
+    let memo = '', player = '';
+    (targetPlayer) ? player = target.name : player = 'everyone';
+    if(limited){
+        memo = actor.name + ' attempts to strip up to ' + value + ' Regen tokens from '+ player;
+    } else {
+        memo = actor.name+ ' passed ' + player +' '+value+' Burn tokens'
+    }
     return {
         type: HP_MINUS,
         actor: actor,
-        target: target,
+        target: target, 
+        targetPlayer: targetPlayer,
+        limited: limited,
         value: value,
-        message: actor.name+' passed '+target.name+' '+value+' Burn tokens'
+        message: memo
     }
 };
 
@@ -118,15 +127,22 @@ function apPlus(actor, value){
     }
 };
 
-function apMinus(actor, target, value){ // , targetPlayer, limited){
+function apMinus(actor, target, value, targetPlayer, limited){
+    let memo = '', player = '';
+    (targetPlayer) ? player = target.name : player = 'everyone';
+    if(limited){
+        memo = actor.name + ' attempts to strip up to ' + value + ' Haste tokens from '+ player;
+    } else {
+        memo = actor.name+ ' passed ' + player +' '+value+' Slow tokens'
+    }
     return {
         type: AP_MINUS,
         actor: actor,
         target: target,
         value: value,
-        // targetPlayer: targetPlayer,
-        // limited: limited,
-        message: actor.name+' passed '+target.name+' '+value+' Slow tokens'
+        targetPlayer: targetPlayer,
+        limited: limited,
+        message: memo
     }
 };
 

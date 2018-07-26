@@ -243,10 +243,26 @@ function reducer(state = initialState, action){
         case actions.HP_MINUS:
             console.log('reducers.js heard HP_MINUS');
             newState = Object.assign({}, state);
-            currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
-            })
-            currentPlayer.hptokens -= action.value;
+            if(actions.targetPlayer){
+                currentPlayer = newState.players.find((player)=>{
+                    return player.id == action.target.id;
+                })
+                currentPlayer.hptokens -= action.value;
+                if(action.limited && currentPlayer.hptokens < 0) { // only strip tokens
+                    currentPlayer.hptokens = 0;
+                }
+            } else {
+                for(let target of newState.players){
+                    if(target.id == action.actor.id){
+                        continue;
+                    } else {
+                        target.hptokens -= action.value;
+                        if(action.limited && target.hptokens < 0) { // only strip tokens
+                            target.hptokens = 0;
+                        }
+                    }
+                }
+            }
             newState.history.push(action.message);
             return newState;
 
@@ -265,10 +281,26 @@ function reducer(state = initialState, action){
         case actions.AP_MINUS:
             console.log('reducers.js heard AP_MINUS');
             newState = Object.assign({}, state);
-            currentPlayer = newState.players.find((player)=>{
-                return player.id == action.target.id;
-            })
-            currentPlayer.aptokens -= action.value;
+            if(actions.targetPlayer){
+                currentPlayer = newState.players.find((player)=>{
+                    return player.id == action.target.id;
+                })
+                currentPlayer.aptokens -= action.value;
+                if(action.limited && currentPlayer.aptokens < 0) { // only strip tokens
+                    currentPlayer.aptokens = 0;
+                }
+            } else {
+                for(let target of newState.players){
+                    if(target.id == action.actor.id){
+                        continue;
+                    } else {
+                        target.aptokens -= action.value;
+                        if(action.limited && target.aptokens < 0) { // only strip tokens
+                            target.aptokens = 0;
+                        }
+                    }
+                }
+            }
             newState.history.push(action.message);
             return newState;
 
