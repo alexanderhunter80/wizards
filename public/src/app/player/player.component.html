@@ -3,7 +3,7 @@
   <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
       <div class="health">{{player.health}}</div>
   </div>
-  <div *ngIf="player.shields === 0" class="onlyHealth">{{player.health}}</div>
+  <div *ngIf="player.shields === 0" class="onlyHealth" >{{player.health}}</div>
   <div class="ap" *ngIf="player.aptokens >= 0">
       <div class="apToken" *ngFor="let aptoken of player.apTokens">AP</div>
   </div>
@@ -16,11 +16,11 @@
   <div class="hp" *ngIf="player.hptokens < 0">
     <div class="negHpToken" *ngFor="let hptoken of player.hpTokens">-HP</div>
 </div>
-  <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready">Ready</button>
+  <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready"><img src="../../assets/ready.png"></button>
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
-      <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " >Confirm Turn</button>
-      <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0">End Turn</button>
+      <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " ><img src="../../assets/turn2.png"></button>
+      <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0"><img src="../../assets/turn1.png"></button>
       <div *ngIf="gameState.mode === 'actionStepStart' ">
           <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
           <button (click)="actionLearn()"><img src="../../assets/learn.png"></button>
@@ -30,7 +30,7 @@
           <button (click)="actionCast()"><img src="../../assets/cast.png"></button>
       </div>
       <div *ngIf="gameState.mode === 'castAction'">
-          <button (click)="castingSpell()">Confirm Spell</button>
+          <button (click)="castingSpell()"><img src="../../assets/star.png"></button>
       </div>
   </div>
   <div *ngIf="gameState.mode === 'divineStep' || gameState.mode === 'divineAction' ">
