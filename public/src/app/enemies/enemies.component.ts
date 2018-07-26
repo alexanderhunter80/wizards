@@ -75,8 +75,13 @@ export class EnemiesComponent implements OnInit {
 
   selectEnemy(enemy) {
     if (this.gameState.mode === 'targetingPlayer') {
-      enemy.target = true;
-      this._wss.sendTarget(this.playerComp.player, enemy);
+      if (enemy.target) {
+        this._wss.enemyTargetFail();
+      } else {
+          enemy.target = true;
+          this._wss.sendTarget(enemy);
+          if (this._wss.getEffectsCount() === 0) {this.clearEnemies(); }
+        }
     }
   }
 
@@ -85,4 +90,5 @@ export class EnemiesComponent implements OnInit {
       enemy.target = false;
     }
   }
+
 }

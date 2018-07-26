@@ -29,15 +29,14 @@ export class GameboardComponent implements OnInit {
 
   player: any = null;
   state: any = null;
-  divineCards = [];
-  weaveCards = [];
-  divineCounter = 0;
-  selected = false;
-  spell: any = [];
+  gameState: any = null;
+  cardsToSend = [];
+  counter = 0;
+  spellElems: any = [];
   discard: any = [];
+  selected = false;
   castSuccess = false;
   castBotched = false;
-  gameState: any = null;
 
   constructor(private _wss: WebsocketService) { }
 
@@ -60,8 +59,8 @@ export class GameboardComponent implements OnInit {
   }
 
   toggleState(card) {
-    if (this.spell.length > 0 && this.gameState.mode === 'castAction') {
-    card.faceUp = (card.faceUp === false ) ? true : true;
+    if (this.gameState.mode === 'spellElemSelect') {
+        card.faceUp = (card.faceUp === false ) ? true : true;
     }
   }
 
@@ -75,96 +74,105 @@ export class GameboardComponent implements OnInit {
       }
     }
   }
-    showHighlight(card) {
+
+  showHighlight(card) {
+    const bsCoord = JSON.stringify(card.coord);
+    const bsHighlight = JSON.stringify(this.state.highlight);
+    if (bsHighlight.indexOf(bsCoord) !== -1) {
+      card.highlight = true;
+    } else {
+      card.highlight = false;
+    }
+  }
+
+  divineTime(card) {
+    if ((this.gameState.mode === 'divineStep' || this.gameState.mode === 'divineAction') && this._wss.getCounter() > 0) {
+      // checking if card already viewed
       const bsCoord = JSON.stringify(card.coord);
-      const bsHighlight = JSON.stringify(this.state.highlight);
-      if (bsHighlight.indexOf(bsCoord) !== -1) {
+      const bsHighlight = JSON.stringify(this.cardsToSend);
+      if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) {
+        this.cardsToSend.push(card.coord);
+        this._wss.reduceCounter();
+        this.counter++;
         card.highlight = true;
       } else {
-        card.highlight = false;
-      }
+          this.selected = true;
+          setTimeout(() => {
+            this.selected = false;
+          }, 5000);
+        }
+
     }
-
-    divineTime(card) {
-      if (this._wss.getDivineCount() > 0) {
-        // checking if card already viewed
-        const bsCoord = JSON.stringify(card.coord);
-        const bsHighlight = JSON.stringify(this.divineCards);
-        if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) {
-          this.divineCards.push(card.coord);
-          this._wss.divineCard();
-          this.divineCounter++;
-          card.highlight = true;
-       } else {
-         this.selected = true;
-         setTimeout(() => {
-          this.selected = false;
-        }, 5000);
-       }
-
-      }
-      if (this.gameState.mode === 'divineStep' && this._wss.getDivineCount() === 0 ) {
-        this._wss.doDivineStep(this.player, this.divineCounter, this.divineCards);
-        this.divineCounter = 0;
-        this.divineCards = [];
+    if (this.gameState.mode === 'divineStep' && this._wss.getCounter() === 0 ) {
+        this._wss.doDivineStep(this.player, this.counter, this.cardsToSend);
+        this.counter = 0;
+        this.cardsToSend = [];
         setTimeout(() => {
           this._wss.doDivineStepEnd();
         }, 3000);
-      } else if (this.gameState.mode === 'divineAction' && this._wss.getDivineCount() === 0 ) {
-        this._wss.doDivine(this.player, this.divineCounter, this.divineCards);
-        this.divineCounter = 0;
-        this.divineCards = [];
-        setTimeout(() => {
-          this._wss.doDivineEnd(this.player);
-        }, 3000);
+    } else if (this.gameState.mode === 'divineAction' && this._wss.getCounter() === 0 ) {
+          this._wss.doDivine(this.player, this.counter, this.cardsToSend);
+          this.counter = 0;
+          this.cardsToSend = [];
+          setTimeout(() => {
+            this._wss.doDivineEnd(this.player);
+          }, 3000);
       }
-    }
+  }
 
-    spellCheck(card) {
-      if (this.spell.length > 0 && (this.spell[0] === card.elem || card.elem === 'aether') && this.gameState.mode === 'spellElemSelect') {
-        this.spell.shift();
-        this.discard.push(card.coord);
-        if (this.spell.length === 0) {
-          console.log('Spell cast Successful!!');
-          this.castSuccess = true;
-        setTimeout(() => {
-          this.castSuccess = false;
-        }, 3000);
-          // finding selected spell
-          const spellToCast = this.playerComp.getSpellToCast();
-          this._wss.spellSuccess(this.player, this.discard, spellToCast[0]);
+  spellCheck(card) {
+      if (this.spellElems.length > 0 && (this.spellElems[0] === card.elem || card.elem === 'aether') && this.gameState.mode === 'spellElemSelect') {
+          this.spellElems.shift();
+          this.discard.push(card.coord);
+          if (this.spellElems.length === 0) {
+              console.log('Spell cast Successful!!');
+              this.castSuccess = true;
+              setTimeout(() => {
+                this.castSuccess = false;
+              }, 3000);
+              // finding selected spell
+              const spellToCast = this.playerComp.getSpellToCast();
+              this._wss.spellSuccess(this.player, this.discard, spellToCast[0]);
           }
-      } else if (this.spell.length > 0 && this.gameState.mode === 'spellElemSelect') {
-          console.log('Spell has been botched!');
-          this.castBotched = true;
-        setTimeout(() => {
-          this.castBotched = false;
-        }, 3000);
-        const spellToCast = this.playerComp.getSpellToCast();
-        this._wss.spellFailure(this.player, this.discard, spellToCast[0]);
-        this.spell = [];
+      } else if (this.spellElems.length > 0 && this.gameState.mode === 'spellElemSelect') {
+            console.log('Spell has been botched!');
+            this.castBotched = true;
+            setTimeout(() => {
+                this.castBotched = false;
+            }, 3000);
+            const spellToCast = this.playerComp.getSpellToCast();
+            this._wss.spellFailure(this.player, this.discard, spellToCast[0]);
+            this.spellElems = [];
+        }
+  }
+
+    weaveTime(card) {
+      if (this.gameState.mode === 'weaveAction' && this._wss.getCounter() > 0) {
+          this.cardCheck(card);
+      }
+      if (this.gameState.mode === 'weaveAction' && this._wss.getCounter() === 0) {
+          this._wss.doWeave(this.player, this.cardsToSend[0], this.cardsToSend[1]);
+          this.cardsToSend = [];
       }
     }
 
-    doWeave(card) {
-      if (this.gameState.mode === 'weaveAction' && this._wss.getWeaveCount() > 0) {
-        // checking if card already selected
-        const bsCoord = JSON.stringify(card.coord);
-        const bsHighlight = JSON.stringify(this.weaveCards);
-        if (bsHighlight.indexOf(bsCoord) === -1 && !card.faceUp) { // fresh card selected
-          this.weaveCards.push(card.coord);
-          this._wss.weave();
-          card.highlight = true;
-       } else { // card has been previously selected(notifying user)
-         this.selected = true;
-         setTimeout(() => {
-          this.selected = false;
-        }, 3000);
-       }
+    scryTime(card) {
+      if (this.gameState.mode === 'scryAction' && this._wss.getCounter() > 0) {
+          this.cardCheck(card);
       }
-      if (this.gameState.mode === 'weaveAction' && this._wss.getWeaveCount() === 0) {
-        this._wss.doWeave(this.player, this.weaveCards[0], this.weaveCards[1]);
-        this.weaveCards = [];
+      if (this.gameState.mode === 'scryAction' && this._wss.getCounter() === 0) {
+          this._wss.doScry(this.player, this.counter, this.cardsToSend);
+          this.cardsToSend = [];
+      }
+    }
+
+    obscureTime(card) {
+      if (this.gameState.mode === 'obscureAction' && this._wss.getCounter() > 0) {
+          this.cardCheck(card, false);
+      }
+      if (this.gameState.mode === 'obscureAction' && this._wss.getCounter() === 0) {
+          this._wss.doObscure(this.player, this.counter, this.cardsToSend);
+          this.cardsToSend = [];
       }
     }
 
@@ -176,5 +184,21 @@ export class GameboardComponent implements OnInit {
           break;
         }
       }
+    }
+
+    cardCheck(card, fd = true) {
+      // checking if card already selected
+          const bsCoord = JSON.stringify(card.coord);
+          const bsHighlight = JSON.stringify(this.cardsToSend);
+          if (bsHighlight.indexOf(bsCoord) === -1 && ((fd) ? !card.faceUp : card.faceUp)) { // fresh card selected
+              this.cardsToSend.push(card.coord);
+              this._wss.reduceCounter();
+              card.highlight = true;
+          } else { // card has been previously selected(notifying user)
+                this.selected = true;
+                setTimeout(() => {
+                    this.selected = false;
+                  }, 3000);
+            }
     }
 }

@@ -106,7 +106,7 @@ export class PlayerComponent implements OnInit {
     this.player.hpTokens = tokens;
   }
   actionDivine() {
-    this._wss.actionDivine(2);
+    this._wss.actionDivine();
   }
   actionLearn() {
     this._wss.actionLearn(this.player);
@@ -117,6 +117,15 @@ export class PlayerComponent implements OnInit {
   actionCast() {
     this._wss.actionCast();
   }
+
+  actionObscure() {
+    this._wss.actionObscure();
+  }
+
+  actionScry() {
+    this._wss.actionScry();
+  }
+
   selectingSpell(spellCard) {
     if (this.gameState.mode === 'castAction') {
       for (const spell of this.player.spells) {
@@ -126,6 +135,7 @@ export class PlayerComponent implements OnInit {
       this._wss.actionCast();
     }
   }
+
   castingSpell() {
     const spellToCast =  this.getSpellToCast();
     console.log(spellToCast);
@@ -135,19 +145,19 @@ export class PlayerComponent implements OnInit {
       for (const letter of spellToCast[0].elements) {
         switch (letter) {
           case 'A':
-            this.gameboardComp.spell.push('air');
+            this.gameboardComp.spellElems.push('air');
             break;
           case 'E':
-            this.gameboardComp.spell.push('earth');
+            this.gameboardComp.spellElems.push('earth');
             break;
           case 'X':
-            this.gameboardComp.spell.push('aether');
+            this.gameboardComp.spellElems.push('aether');
             break;
           case 'F':
-            this.gameboardComp.spell.push('fire');
+            this.gameboardComp.spellElems.push('fire');
             break;
           case 'W':
-            this.gameboardComp.spell.push('water');
+            this.gameboardComp.spellElems.push('water');
             break;
         }
         this._wss.spellElemSelect();
@@ -155,7 +165,8 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-getSpellToCast() {
-    return this.player.spells.filter( x => { return x.highlight === true; } );
-}
+  getSpellToCast() {
+      return this.player.spells.filter( x => { return x.highlight === true; } );
+  }
+
 }
