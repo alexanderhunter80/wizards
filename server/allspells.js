@@ -4,17 +4,17 @@ const actions = require('./redux/actions');
 // { name: '', text: '', elements: '', effects: [{type: actions.XXX, args}], targeted: XXX, copies: N },
 
 module.exports = [
-    { name: 'Quickness', text: 'AP +2', elements: 'AA', effects: [{type: actions.AP_PLUS, value: 2}], targeted: false, copies: 4 },
-    { name: 'Stoneskin', text: 'Shield 1', elements: 'EE', effects: [{type: actions.SHIELD, value: 1}], targeted: false, copies: 4 },
-    { name: 'Fireball', text: 'Attack 1', elements: 'FF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 4 },
-    { name: 'Potion', text: 'Cure 1', elements: 'WW', effects: [{type: actions.CURE, value: 1}], targeted: false, copies: 4 },
+    // { name: 'Quickness', text: 'AP +2', elements: 'AA', effects: [{type: actions.AP_PLUS, value: 2}], targeted: false, copies: 4 },
+    // { name: 'Stoneskin', text: 'Shield 1', elements: 'EE', effects: [{type: actions.SHIELD, value: 1}], targeted: false, copies: 4 },
+    // { name: 'Fireball', text: 'Attack 1', elements: 'FF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 4 },
+    // { name: 'Potion', text: 'Cure 1', elements: 'WW', effects: [{type: actions.CURE, value: 1}], targeted: false, copies: 4 },
 
-    { name: 'Gust of Wind', text: 'Target AP -1', elements: 'AE', effects: [{type: actions.AP_MINUS, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
-    { name: 'Arc', text: 'Attack 1, Chain once', elements: 'AF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
-    { name: 'Smoke Bomb', text: 'Obscure 2', elements: 'AW', effects: [{type: actions.OBSCURE, value: 2}], targeted: true, copies: 3 },
-    { name: 'Magma Ball', text: 'Burn 2', elements: 'EF', effects: [{type: actions.HP_MINUS, value: 2, targetPlayer: true}], targeted: true, copies: 3 },
-    { name: 'Placebo', text: 'Regen 1', elements: 'EW', effects: [{type: actions.HP_PLUS, value: 1}], targeted: false, copies: 3 },
-    { name: 'Energy Drain', text: 'Attack 1, Cure = damage dealt', elements: 'FW', effects: [{type: actions.DRAIN, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
+    // { name: 'Gust of Wind', text: 'Target AP -1', elements: 'AE', effects: [{type: actions.AP_MINUS, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
+    // { name: 'Arc', text: 'Attack 1, Chain once', elements: 'AF', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.ATTACK, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
+    // { name: 'Smoke Bomb', text: 'Obscure 2', elements: 'AW', effects: [{type: actions.OBSCURE, value: 2}], targeted: true, copies: 3 },
+    // { name: 'Magma Ball', text: 'Burn 2', elements: 'EF', effects: [{type: actions.HP_MINUS, value: 2, targetPlayer: true}], targeted: true, copies: 3 },
+    // { name: 'Placebo', text: 'Regen 1', elements: 'EW', effects: [{type: actions.HP_PLUS, value: 1}], targeted: false, copies: 3 },
+    // { name: 'Energy Drain', text: 'Attack 1, Cure = damage dealt', elements: 'FW', effects: [{type: actions.DRAIN, value: 1, targetPlayer: true}], targeted: true, copies: 3 },
 
 
 
@@ -22,7 +22,7 @@ module.exports = [
     { name: 'Slow', text: 'Target AP -2', elements: 'AAE', effects: [{type: actions.AP_MINUS, value: 2, targetPlayer: true}], targeted: true, copies: 2},
     { name: 'Glittering Cloud', text: 'Attack 1 against all opponents', elements: 'AAF', effects: [{type: actions.ATTACK_ALL, value: 1}], targeted: false, copies: 2},
     { name: 'Contemplation', text: 'AP +1, Divine 2', elements: 'AAW', effects: [{type: actions.AP_PLUS, value: 1}, {type: actions.DIVINE, value: 2}], targeted: false, copies: 2},
-    // { name: 'Grounding', text: 'Target AP -1, and you may strip up to 2 +HP tokens from that target', elements: 'EEA', effects: [{type: actions.AP_MINUS, value: 1, targetPlayer: true}, {type: actions.HP_MINUS, value: 2, targetPlayer: true, limited: true}], targeted: true, copies: 2}, //strip
+    // { name: 'Grounding', text: 'Target AP -1, and you may strip up to 2 +HP tokens from that target', elements: 'EEA', effects: [{type: actions.AP_MINUS, value: 1, targetPlayer: true}, {type: actions.HP_MINUS, value: 2, targetPlayer: true, limted: true}], targeted: true, copies: 2}, //strip
     { name: 'Armour', text: 'Shield 2', elements: 'EEE', effects: [{type: actions.SHIELD, value: 2}], targeted: false, copies: 2},
     // { name: 'Scald', text: 'Burn 2, and you may strip up to 2 +AP tokens from that target', elements: 'EEF', effects: [{type: actions.HP_MINUS, value: 2, targetPlayer: true}, {type: actions.AP_MINUS, value: 2, targetPlayer: true, limited: true}], targeted: true, copies: 2}, //strip
     { name: 'Strength', text: 'Shield 1, Regen 1', elements: 'EEW', effects: [{type: actions.SHIELD, value: 1}, {type: actions.HP_PLUS, value: 1}], targeted: false, copies: 2},

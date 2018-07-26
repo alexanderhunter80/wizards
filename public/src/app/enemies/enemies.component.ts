@@ -80,7 +80,9 @@ export class EnemiesComponent implements OnInit {
       } else {
           enemy.target = true;
           this._wss.sendTarget(enemy);
-          if (this._wss.getEffectsCount() === 0) {this.clearEnemies(); }
+          if (this._wss.getEffectsCount() === 0) {
+              this.clearEnemies();
+          }
         }
     }
   }

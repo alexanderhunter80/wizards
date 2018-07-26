@@ -1,4 +1,4 @@
-<div class="wrapper" *ngIf="player">
+<div class="wrapper" *ngIf="player != null">
   <h3>{{player.name}}</h3>
   <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
       <div class="health">{{player.health}}</div>
@@ -28,7 +28,6 @@
           <button (click)="actionScry()">Scry</button>
           <button (click)="actionObscure()">Obscure</button>
           <button (click)="actionCast()">Cast</button>
-          <button (click)="testAttack()" >Test Attack</button>
       </div>
       <div *ngIf="gameState.mode === 'castAction'">
           <button (click)="castingSpell()">Confirm Spell</button>

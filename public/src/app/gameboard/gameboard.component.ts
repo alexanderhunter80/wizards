@@ -27,7 +27,6 @@ export class GameboardComponent implements OnInit {
 
   @Input() enemiesComp: EnemiesComponent;
 
-  player: any = null;
   state: any = null;
   gameState: any = null;
   cardsToSend = [];
@@ -47,7 +46,6 @@ export class GameboardComponent implements OnInit {
       // Checking to see if need to ready check for game start
       if (this.state) {
         this.assignCoord();
-        this.getCurrentPlayer();
       }
     });
 
@@ -104,18 +102,18 @@ export class GameboardComponent implements OnInit {
 
     }
     if (this.gameState.mode === 'divineStep' && this._wss.getCounter() === 0 ) {
-        this._wss.doDivineStep(this.player, this.counter, this.cardsToSend);
+        this._wss.doDivineStep(this.counter, this.cardsToSend);
         this.counter = 0;
         this.cardsToSend = [];
         setTimeout(() => {
           this._wss.doDivineStepEnd();
         }, 3000);
     } else if (this.gameState.mode === 'divineAction' && this._wss.getCounter() === 0 ) {
-          this._wss.doDivine(this.player, this.counter, this.cardsToSend);
+          this._wss.doDivine(this.counter, this.cardsToSend);
           this.counter = 0;
           this.cardsToSend = [];
           setTimeout(() => {
-            this._wss.doDivineEnd(this.player);
+            this._wss.doDivineEnd();
           }, 3000);
       }
   }
@@ -129,20 +127,20 @@ export class GameboardComponent implements OnInit {
               this.castSuccess = true;
               setTimeout(() => {
                 this.castSuccess = false;
+                // finding selected spell
+                const spellToCast = this.playerComp.getSpellToCast();
+                this._wss.spellSuccess(this.discard, spellToCast[0]);
               }, 3000);
-              // finding selected spell
-              const spellToCast = this.playerComp.getSpellToCast();
-              this._wss.spellSuccess(this.player, this.discard, spellToCast[0]);
           }
       } else if (this.spellElems.length > 0 && this.gameState.mode === 'spellElemSelect') {
             console.log('Spell has been botched!');
             this.castBotched = true;
             setTimeout(() => {
                 this.castBotched = false;
+                const spellToCast = this.playerComp.getSpellToCast();
+                this._wss.spellFailure(this.discard, spellToCast[0]);
+                this.spellElems = [];
             }, 3000);
-            const spellToCast = this.playerComp.getSpellToCast();
-            this._wss.spellFailure(this.player, this.discard, spellToCast[0]);
-            this.spellElems = [];
         }
   }
 
@@ -151,7 +149,7 @@ export class GameboardComponent implements OnInit {
           this.cardCheck(card);
       }
       if (this.gameState.mode === 'weaveAction' && this._wss.getCounter() === 0) {
-          this._wss.doWeave(this.player, this.cardsToSend[0], this.cardsToSend[1]);
+          this._wss.doWeave(this.cardsToSend[0], this.cardsToSend[1]);
           this.cardsToSend = [];
       }
     }
@@ -161,7 +159,7 @@ export class GameboardComponent implements OnInit {
           this.cardCheck(card);
       }
       if (this.gameState.mode === 'scryAction' && this._wss.getCounter() === 0) {
-          this._wss.doScry(this.player, this.counter, this.cardsToSend);
+          this._wss.doScry(this.counter, this.cardsToSend);
           this.cardsToSend = [];
       }
     }
@@ -171,18 +169,8 @@ export class GameboardComponent implements OnInit {
           this.cardCheck(card, false);
       }
       if (this.gameState.mode === 'obscureAction' && this._wss.getCounter() === 0) {
-          this._wss.doObscure(this.player, this.counter, this.cardsToSend);
+          this._wss.doObscure(this.counter, this.cardsToSend);
           this.cardsToSend = [];
-      }
-    }
-
-    getCurrentPlayer() {
-      console.log(this.state);
-      for (const person of this.state.players) {
-        if (this._wss.playerid === person.socketid) {
-          this.player = person;
-          break;
-        }
       }
     }
 

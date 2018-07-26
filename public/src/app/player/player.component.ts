@@ -13,8 +13,7 @@ export class PlayerComponent implements OnInit {
   @Input() gameboardComp: GameboardComponent;
 
   @Input() enemiesComp: EnemiesComponent;
-
-  player: any;
+  player: any = null;
   state: any = null;
   turn = false;
   weave = false;
@@ -25,7 +24,6 @@ export class PlayerComponent implements OnInit {
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    this.player = null;
     const obs = this._wss.getObservable();
     obs.subscribe((state) => {
       console.log('state observable was updated');
@@ -44,28 +42,23 @@ export class PlayerComponent implements OnInit {
     });
   }
 
-  testAttack() {
-    this._wss.doAttack(this.player, this.player, 1);
-  }
-
   getPlayer() {
-    for (const person of this.state.players) {
-      if (this._wss.playerid === person.socketid) {
-        this.player = person;
-        break;
+      for (const person of this.state.players) {
+          if (this._wss.playerid === person.socketid) {
+              this.player = person;
+              break;
+          }
       }
-    }
   }
-
-
   ready() {
-    this._wss.doReady(this.player);
+    this._wss.doReady();
   }
+
   getTurn() {
     if (this.state.players.indexOf(this.player) === this.state.currentTurn) {
       this.turn = true;
       if (!this.state.history[this.state.history.length - 1].includes(this.player.name)) {
-        this._wss._gameState.next({'mode' : 'turnStart', 'value' : 3});
+        this._wss.turnStart();
       }
     } else {
       this.turn = false;
@@ -73,43 +66,44 @@ export class PlayerComponent implements OnInit {
   }
 
   turnAck() {
-    this._wss.doTurn(this.player);
+    this._wss.doTurn();
   }
   turnEnd() {
-    this._wss.endTurn(this.player);
+    this._wss.endTurn();
     for (const enemy of this.enemiesComp.enemies) {
       enemy.target = false;
     }
   }
   convertTokens() {
-    let tokens = [];
-    if (this.player.aptokens >= 0) {
-      for (let i = 0; i < this.player.aptokens; i++) {
-        tokens.push(i);
+      let tokens = [];
+      if (this.player.aptokens >= 0) {
+        for (let i = 0; i < this.player.aptokens; i++) {
+          tokens.push(i);
+        }
+      } else if (this.player.aptokens < 0) {
+        for (let i = 0; i > this.player.aptokens; i--) {
+          tokens.push(i);
+        }
       }
-    } else if (this.player.aptokens < 0) {
-      for (let i = 0; i > this.player.aptokens; i--) {
-        tokens.push(i);
+      this.player.apTokens = tokens;
+      tokens = [];
+      if (this.player.hptokens >= 0) {
+        for (let i = 0; i < this.player.hptokens; i++) {
+          tokens.push(i);
+        }
+      } else if (this.player.hptokens < 0) {
+          for (let i = 0; i > this.player.hptokens; i--) {
+          tokens.push(i);
+        }
       }
-    }
-    this.player.apTokens = tokens;
-    tokens = [];
-    if (this.player.hptokens >= 0) {
-      for (let i = 0; i < this.player.hptokens; i++) {
-        tokens.push(i);
-      }
-    } else if (this.player.hptokens < 0) {
-        for (let i = 0; i > this.player.hptokens; i--) {
-        tokens.push(i);
-      }
-    }
-    this.player.hpTokens = tokens;
+      this.player.hpTokens = tokens;
   }
+
   actionDivine() {
     this._wss.actionDivine();
   }
   actionLearn() {
-    this._wss.actionLearn(this.player);
+    this._wss.actionLearn();
   }
   actionWeave() {
     this._wss.actionWeave();

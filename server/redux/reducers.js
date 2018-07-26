@@ -122,9 +122,9 @@ function reducer(state = initialState, action){
                 currentPlayer.aptokens--;
                 if (currentPlayer.aptokens > 0 && currentPlayer.passives.overdrive) {
                     currentPlayer.adjustActions++;
-                    currentPlayer.apTokens--;
+                    currentPlayer.aptokens--;
                 }
-            } else if (currentPlayer.apTokens < 0){
+            } else if (currentPlayer.aptokens < 0){
                 currentPlayer.adjustActions--;
                 currentPlayer.aptokens++;
             }
@@ -136,7 +136,7 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard ATTACK');
             // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
-            target = newState.players.find((player)=>{
+            let target = newState.players.find((player)=>{
                 return player.id == action.target.id;
             })
             damage = action.value;
@@ -158,11 +158,12 @@ function reducer(state = initialState, action){
         case actions.ATTACK_ALL:
             console.log('reducers.js heard ATTACK_ALL');
             newState = Object.assign({}, state);
-            for (target of newState.players){
-                if(target == actions.actor){
+            for (let target of newState.players){
+                if(target.id == action.actor.id){
                     continue;
                 } else {
-                    if (target.shields > 0){
+                    damage = action.value;
+                    if (target.shields > 0){ // damage shields first
                         while(target.shields > 0 && damage > 0){
                             target.shields--;
                             damage--;
@@ -297,7 +298,6 @@ function reducer(state = initialState, action){
 
         case actions.SCRY:
             console.log('reducers.js heard SCRY');
-            console.log('reducers.js says: SCRY is untested!');
             newState = Object.assign({}, state);
             for (yx of action.yx){
                 newState.gameboard.grid[yx[0]][yx[1]].faceUp = true;
@@ -307,7 +307,6 @@ function reducer(state = initialState, action){
 
         case actions.OBSCURE:
             console.log('reducers.js heard OBSCURE');
-            console.log('reducers.js says: OBSCURE is untested!');
             newState = Object.assign({}, state);
             for (yx of action.yx){
                 newState.gameboard.grid[yx[0]][yx[1]].faceUp = false;
