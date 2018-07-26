@@ -287,7 +287,6 @@ function reducer(state = initialState, action){
 
         case actions.WEAVE:
             console.log('reducers.js heard WEAVE');
-            console.log('reducers.js says: WEAVE is untested!');
             newState = Object.assign({}, state);
             newState.highlight = [action.yx1, action.yx2];
             temp = newState.gameboard.grid[action.yx1[0]][action.yx1[1]];
@@ -387,6 +386,7 @@ function reducer(state = initialState, action){
             })   
             idx = currentPlayer.spells.findIndex(spell=>spell.name==action.spell.name);
             currentPlayer.spells.splice(idx, 1);
+            newState.history.push(action.message);
             return newState;
 
 

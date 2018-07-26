@@ -12,11 +12,9 @@ export class WebsocketService {
     state: any;
     playerid: string;
     enemies: any;
-    divineCount  = 0;
-    weaveCount = 0;
+    counter  = 0;
     spell = null;
-    effects = null;
-    // effectsCounter = 0;
+    effects = [];
     actor = null;
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -49,7 +47,7 @@ export class WebsocketService {
 
         this.socket.on('DIVINE_STEP_START', payload => {
             console.log('websocket.service says: state DIVINE STEP');
-            this.divineCount = payload.value;
+            this.counter = payload.value;
             this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
         });
 
@@ -104,7 +102,7 @@ export class WebsocketService {
        this.socket.emit('HP_PLUS', {actor, value});
     }
 
-     doHpMinus(actor, target, value) {
+    doHpMinus(actor, target, value) {
        this.socket.emit('HP_MINUS', {actor, target, value});
     }
 
@@ -117,26 +115,31 @@ export class WebsocketService {
     }
 
     doDivine(actor, value, yx) {
-        console.log('EMITTING DIVINE');
         this.socket.emit('DIVINE', {actor, value, yx});
+        // Further Effects?
+        (this.effects.length > 0) ? this.doSpellEffects() : this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     doDivineStep(actor, value, yx) {
-        console.log('EMITTING DIVINE_STEP');
         this.socket.emit('DIVINE_STEP', {actor, value, yx});
     }
 
     doWeave(actor, yx1, yx2) {
         this.socket.emit('WEAVE', {actor, yx1, yx2});
-        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+        // Further Effects?
+        (this.effects.length > 0) ? this.doSpellEffects() : this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     doObscure(actor, value, yx) {
         this.socket.emit('OBSCURE', {actor, value, yx});
+        // Further Effects?
+        (this.effects.length > 0) ? this.doSpellEffects() : this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     doScry(actor, value, yx) {
         this.socket.emit('SCRY', {actor, value, yx});
+        // Further Effects?
+        (this.effects.length > 0) ? this.doSpellEffects() : this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
     doReady(actor) {
@@ -162,57 +165,59 @@ export class WebsocketService {
     }
 
     spellSuccess(actor, discard, spell) {
+        // replace used gameboard elements
         this.socket.emit('REPLACE_ELEMENTS', {actor, cards: discard});
-        // do differently if spell targets players vs self
+        // remove spell from player's hand
+        this.socket.emit('CAST_SUCCESS', {actor, spell});
+        // save spell, spell effects, and actor for all spell effects;
         this.spell = spell;
         this.effects = spell.effects;
+        this.actor = actor;
+
+        // do first spell effect
         this.doSpellEffects();
-        // if (spell.targeted) {
-        //     // this.socket.emit('CAST_SUCCESS', {actor, spell});
-        // } else {
-        //     // this.socket.emit('CAST_SUCCESS', {actor, spell});
-        //     // this.socket.emit('CAST_EFFECT', {actor : actor, furtherEffects : spell.effects});
-        //     // this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
-        // }
     }
 
-    spellFailure(actor, cards, spell) {
-        this.socket.emit('REPLACE_ELEMENTS', {actor, cards});
+    spellFailure(actor, discard, spell) {
+        // replace used gameboard elements
+        this.socket.emit('REPLACE_ELEMENTS', {actor, cards: discard});
+        // player to experience cast fail punishment
         this.socket.emit('CAST_FAIL', {actor, spell});
     }
 
-    sendTarget(actor, target) {
-        this.socket.emit('CAST_EFFECT', {actor, target, furtherEffects: this.effects.furtherEffects});
-        this.effects = null;
-        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+    sendTarget(target) {
+        this.socket.emit('CAST_EFFECT', {actor: this.actor, target, furtherEffects: [this.effects[0]]});
+        this.effects.shift();
+        // Further Effects?
+        (this.effects.length > 0) ? this.doSpellEffects() : this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
     }
 
-    sendCards(actor, cards) {
-        this.socket.emit('CAST_EFFECT', {actor, cards, furtherEffects: this.effects.furtherEffects});
-        this.effects = null;
-        this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
-    }
-
-    getDivineCount() {
-        return this.divineCount;
-    }
-
-    actionDivine(num) {
-        this.divineCount = num;
+    actionDivine(num = 2) {
+        this.counter = num;
         this._gameState.next({'mode' : 'divineAction', 'value' : 7});
     }
 
-    divineCard() {
-        this.divineCount--;
+    actionScry(num = 1) {
+        this.counter = num;
+        this._gameState.next({'mode' : 'scryAction', 'value' : 17});
+    }
+
+    actionObscure(num = 1) {
+        this.counter = num;
+        this._gameState.next({'mode' : 'obscureAction', 'value' : 18});
+    }
+
+    actionWeave() {
+        this.counter = 2;
+        this._gameState.next({'mode' : 'weaveAction', 'value' : 15});
     }
 
     actionCast() {
         this._gameState.next({'mode' : 'castAction', 'value' : 10});
     }
 
-    actionWeave() {
-        this._gameState.next({'mode' : 'weaveAction', 'value' : 14});
-        this.weaveCount = 2;
+    reduceCounter() {
+        this.counter--;
     }
 
     actionLearn(actor) {
@@ -228,12 +233,8 @@ export class WebsocketService {
         this._gameState.next({'mode' : 'spellElemSelect', 'value' : 12});
     }
 
-    getWeaveCount() {
-        return this.weaveCount;
-    }
-
-    weave() {
-        this.weaveCount--;
+    getCounter() {
+        return this.counter;
     }
 
     learn(actor, cardIndices) {
@@ -242,8 +243,48 @@ export class WebsocketService {
     }
 
     doSpellEffects() {
+        console.log(this.effects);
         if (this.effects.length > 0) {
-            //
+            if (this.effects[0].targetPlayer) {
+                this._gameState.next({'mode' : 'targetingPlayer' , 'value' : 13});
+            } else { // not targeted
+                console.log(this.effects[0]);
+                switch (this.effects[0].type) {
+                    case 'DIVINE':
+                        this.actionDivine(this.effects[0].value);
+                        this.effects.shift();
+                        break;
+                    case 'WEAVE':
+                        this.actionWeave();
+                        this.effects.shift();
+                        break;
+                    case 'SCRY':
+                        this.actionScry(this.effects[0].value);
+                        this.effects.shift();
+                        break;
+                    case 'OBSCURE':
+                        this.actionObscure(this.effects[0].value);
+                        this.effects.shift();
+                        break;
+                    default:
+                        this.socket.emit('CAST_EFFECT', {actor : this.actor, furtherEffects : [this.effects[0]]});
+                        this.effects.shift();
+                        break;
+                }
+            }
+        }
+        if (this.effects.length === 0 && this.spell) { // killing leftover's
+            this.actor = null;
+            this.spell = null;
         }
     }
+
+    enemyTargetFail() {
+        this._gameState.next({'mode' : 'targetingPlayer', 'value' : 14});
+    }
+
+    getEffectsCount() {
+        return this.effects.length;
+    }
+
   }

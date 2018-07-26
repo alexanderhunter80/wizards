@@ -118,12 +118,14 @@ function apPlus(actor, value){
     }
 };
 
-function apMinus(actor, target, value){
+function apMinus(actor, target, value){ // , targetPlayer, limited){
     return {
         type: AP_MINUS,
         actor: actor,
         target: target,
         value: value,
+        // targetPlayer: targetPlayer,
+        // limited: limited,
         message: actor.name+' passed '+target.name+' '+value+' Slow tokens'
     }
 };

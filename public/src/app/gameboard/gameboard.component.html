@@ -1,7 +1,7 @@
 <div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' ">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
-      <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); doWeave(card);" [@cardState]="card.faceUp"> 
+      <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
         <!-- front of the card-->
         <div class="front">
           <img src="../../assets/{{card.elem}}.png" alt="" width="100px" height="100px">
@@ -16,10 +16,10 @@
   </div>
 </div>
 <div *ngIf="selected">
-  <h2>Card has already been selected!!</h2>
+  <h2>That Card is invalid!!</h2>
 </div>
-<div *ngIf="spell.length > 0">
-  <h1>Select a {{spell[0]}}</h1>
+<div *ngIf="spellElems.length > 0">
+  <h1>Select a {{spellElems[0]}}</h1>
 </div>
 <div *ngIf="castSuccess">
   <h1>Spell was cast successfully!!</h1>

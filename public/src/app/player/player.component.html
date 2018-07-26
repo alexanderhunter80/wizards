@@ -25,6 +25,8 @@
           <button (click)="actionDivine()">Divine</button>
           <button (click)="actionLearn()">Learn</button>
           <button (click)="actionWeave()">Weave</button>
+          <button (click)="actionScry()">Scry</button>
+          <button (click)="actionObscure()">Obscure</button>
           <button (click)="actionCast()">Cast</button>
           <button (click)="testAttack()" >Test Attack</button>
       </div>
@@ -33,11 +35,17 @@
       </div>
   </div>
   <div *ngIf="gameState.mode === 'divineStep' || gameState.mode === 'divineAction' ">
-      <h2>You may now divine {{_wss.divineCount}} cards!</h2>
+      <h2>You may now divine {{_wss.counter}} cards!</h2>
   </div>
   <div *ngIf="gameState.mode === 'weaveAction' ">
     <h2>You may now weave 2 cards!</h2>
-</div>
+  </div>
+  <div *ngIf="gameState.mode === 'obscureAction' ">
+    <h2>You may now obscure {{_wss.counter}} cards!</h2>
+  </div>
+  <div *ngIf="gameState.mode === 'scryAction' ">
+    <h2>You may now scry {{_wss.counter}} cards!</h2>
+  </div>
   <div *ngIf="gameState.value === 11">
       <h2>You must choose a Spell!</h2>
   </div>
