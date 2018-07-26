@@ -251,7 +251,7 @@ module.exports = function(io){
 
                     case actions.AP_MINUS: 
                         console.log('case AP_MINUS');
-                        gameStore.dispatch(actions.apMinus(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        gameStore.dispatch(actions.apMinus(payload.actor, payload.target, payload.furtherEffects[fx].value, payload.furtherEffects[fx].targetPlayer, payload.furtherEffects[fx].limited));
                         break;
 
                     case actions.HP_PLUS: 
@@ -261,7 +261,7 @@ module.exports = function(io){
 
                     case actions.HP_MINUS: 
                         console.log('case HP_MINUS');
-                        gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value));
+                        gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value, payload.furtherEffects[fx].targetPlayer, payload.furtherEffects[fx].limited));
                         break;
 
                     case actions. OBSCURE: 
