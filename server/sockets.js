@@ -21,11 +21,14 @@ module.exports = function(io){
     function actOrDont(actor, socket){
         console.log('sockets.js says: checking actOrDont');
         if(actor.adjustActions > 0){
-            console.log('sockets.js says: extra action!')
+            console.log('sockets.js says: extra action!');
             gameStore.dispatch(actions.resetAdjust(actor));
+            update();
             socket.emit('ACTION_STEP_START');
         } else {
             console.log('sockets.js says: moving on');
+            gameStore.dispatch(actions.resetAdjust(actor));
+            update();
             socket.emit('TURN_FINISHED');
         }
     }

@@ -8,7 +8,6 @@ import { WebsocketService } from '../websocket.service';
 })
 export class LearnComponent implements OnInit {
 
-  player: any;
   state: any;
   gameState: any;
   keepCards = [];
@@ -18,14 +17,10 @@ export class LearnComponent implements OnInit {
   constructor(private _wss: WebsocketService) { }
 
   ngOnInit() {
-    this.player = null;
     const obs = this._wss.getObservable();
     obs.subscribe((state) => {
       console.log('state observable was updated');
       this.state = state;
-      if (this.state) {
-        this.getPlayer();
-      }
     });
 
     const gsObs = this._wss.getGameState();
@@ -33,15 +28,6 @@ export class LearnComponent implements OnInit {
       console.log('game state updated');
       this.gameState = gs;
     });
-  }
-
-  getPlayer() {
-    for (const person of this.state.players) {
-      if (this._wss.playerid === person.socketid) {
-        this.player = person;
-        break;
-      }
-    }
   }
 
   learnSpell(spellCard) {
@@ -61,7 +47,7 @@ export class LearnComponent implements OnInit {
     }
     if (this.gameState.mode === 'learnAction' && this.keepCounter === this.state.learnHelper.keep) {
       console.log(this.keepCards);
-      this._wss.learn(this.player, this.keepCards);
+      this._wss.learn(this.keepCards);
       this.keepCounter = 0;
       this.keepCards = [];
     }
