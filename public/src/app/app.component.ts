@@ -102,3 +102,4 @@ export class AppComponent implements OnInit {
         .tune({ x: e.pageX, y: e.pageY })
         .replay();
     });
+ 

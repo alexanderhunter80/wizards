@@ -1,5 +1,5 @@
-<div class="wrapper" *ngIf="player != null">
-  <h3>{{player.name}}</h3>
+<div class="wrapper" *ngIf="player">
+  <h3 class="name">{{player.name}}</h3>
   <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
       <div class="health">{{player.health}}</div>
   </div>
@@ -22,12 +22,12 @@
       <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " >Confirm Turn</button>
       <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0">End Turn</button>
       <div *ngIf="gameState.mode === 'actionStepStart' ">
-          <button (click)="actionDivine()">Divine</button>
-          <button (click)="actionLearn()">Learn</button>
-          <button (click)="actionWeave()">Weave</button>
-          <button (click)="actionScry()">Scry</button>
-          <button (click)="actionObscure()">Obscure</button>
-          <button (click)="actionCast()">Cast</button>
+          <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
+          <button (click)="actionLearn()"><img src="../../assets/learn.png"></button>
+          <button (click)="actionWeave()"><img src="../../assets/weave.png"></button>
+          <button (click)="actionScry()"><img src="../../assets/scry.png"></button>
+          <button (click)="actionObscure()"><img src="../../assets/obscure.png"></button>
+          <button (click)="actionCast()"><img src="../../assets/cast.png"></button>
       </div>
       <div *ngIf="gameState.mode === 'castAction'">
           <button (click)="castingSpell()">Confirm Spell</button>
