@@ -46,7 +46,7 @@ module.exports = [
     { name: 'Third Eye', text: 'Divine 4, then Weave twice', elements: 'AAWW', effects: [{type: actions.DIVINE, value: 4, targetCards: true}, {type: actions.WEAVE, targetCards: true}, {type: actions.WEAVE, targetCards: true}], targeted: true, copies: 1},
     { name: 'Immolate', text: 'Burn 5', elements: 'EEFF', effects: [{type: actions.HP_MINUS, value: 5, targetPlayer: true}], targeted: true, copies: 1},
     { name: 'Adaptation', text: 'Regen 5', elements: 'EEWW', effects: [{type: actions.HP_PLUS, value: 5}], targeted: false, copies: 1},
-    { name: 'Soul Drain', text: 'Attack 3, Cure = damage dealt', effects: [{type: actions.DRAIN, value: 3, targetPlayer: true}], targeted: true, copies: 1},
+    { name: 'Soul Drain', text: 'Attack 3, Cure = damage dealt', elements: 'FFWW', effects: [{type: actions.DRAIN, value: 3, targetPlayer: true}], targeted: true, copies: 1},
 
     // //tornado strips -1 AP to all opponents... needs fix
     // { name: 'Tornado', text: 'AP +3, AP -1 to all opponents', elements: 'AAAX', effects: [{type: actions.AP_PLUS, value: 3}, {type: actions.AP_MINUS, value: 1}], targeted: false, copies: 1},
