@@ -5,7 +5,14 @@
     border: 1px solid black;
     display: inline-block;
     vertical-align: top;
-    background-color: rgb(32, 4, 4);
+    background-color:black;
+    background-image:
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+        radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 180px 180px, 153px 202px, 150px 105px, 150px 120px, 579px 490px; 
+    background-position: 0 0, 4px 6180px, 130px 1270px, 7410px 2930px, 34px 25px;
     color: white;
     margin: 5px;
 }
