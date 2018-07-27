@@ -1,4 +1,4 @@
-<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' ">
+<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && gameState.mode !== 'GAMEOVER' ">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
@@ -16,20 +16,21 @@
   </div>
 </div>
 <div *ngIf="selected">
-  <h2>That Card is invalid!!</h2>
+   <h2>That Card is invalid!!</h2>
 </div>
 <div *ngIf="spellElems.length > 0">
-  <h1>Select a {{spellElems[0]}}</h1>
+    <h1>Call upon the {{spellElems[0]}} of  your spell's remaining elements: {{spellElems}}</h1>
 </div>
 <div *ngIf="castSuccess">
-  <h1>Spell was cast successfully!!</h1>
+    <h1>Spell was cast successfully!!</h1>
 </div>
 <div *ngIf="castBotched">
-  <h1>Spell cast was botched!!  UH OH!</h1>
+    <h1>Spell cast was botched!!  UH OH!</h1>
 </div>
 <div *ngIf="gameState.mode === 'targetingPlayer' ">
-  <h1>Select an Enemy to Target with Spell!</h1>
+    <h1>Select an Enemy to Target with Spell!</h1>
 </div>
-<div *ngIf="gameState.mode === 'targetingCards'">
-  <h1>Select the card to Target with Spell Effect!</h1>
+
+<div *ngIf="gameState.mode === 'GAMEOVER'">
+    <h1>{{state.winner.player.name}} has won the battle, and is now the Archchancellor!!!</h1>
 </div>

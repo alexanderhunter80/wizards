@@ -1,25 +1,26 @@
-<div *ngFor="let enemy of enemies" class="enemy" (click)="selectEnemy(enemy)">
-  <h3>{{enemy.name}}</h3>
-  <div *ngIf="enemy.shields > 0"class="shield">{{enemy.shields}}
-    <div class="health">{{enemy.health}}</div>
-  </div>
-  <div *ngIf="enemy.shields === 0"class="onlyHealth">{{enemy.health}}</div>
-  <div class="ap" *ngIf="enemy.aptokens >= 0">
-    <div class="apToken" *ngFor="let aptoken of enemy.apTokens">AP</div>
-  </div>
-  <div class="ap" *ngIf="enemy.aptokens < 0">
-    <div class="negApToken" *ngFor="let aptoken of enemy.apTokens">-AP</div>
-  </div>
-  <div class="hp" *ngIf="enemy.hptokens >= 0">
-    <div class="hpToken" *ngFor="let hptoken of enemy.hpTokens">HP</div>
-  </div>
-  <div class="hp" *ngIf="enemy.hptokens < 0">
-    <div class="negHpToken" *ngFor="let hptoken of enemy.hpTokens">-HP</div>
-  </div>
-</div>
+<div *ngIf="enemies && gameState.mode !== 'GAMEOVER'">  
+    <div *ngFor="let enemy of enemies" class="enemy" (click)="selectEnemy(enemy)">
+        <h3>{{enemy.name}}</h3>
+        <div *ngIf="enemy.shields > 0"class="shield">{{enemy.shields}}
+          <div class="health">{{enemy.health}}</div>
+        </div>
+        <div *ngIf="enemy.shields === 0"class="onlyHealth">{{enemy.health}}</div>
+        <div class="ap" *ngIf="enemy.aptokens >= 0">
+          <div class="apToken" *ngFor="let aptoken of enemy.apTokens">AP</div>
+        </div>
+        <div class="ap" *ngIf="enemy.aptokens < 0">
+          <div class="negApToken" *ngFor="let aptoken of enemy.apTokens">-AP</div>
+        </div>
+        <div class="hp" *ngIf="enemy.hptokens >= 0">
+          <div class="hpToken" *ngFor="let hptoken of enemy.hpTokens">HP</div>
+        </div>
+        <div class="hp" *ngIf="enemy.hptokens < 0">
+          <div class="negHpToken" *ngFor="let hptoken of enemy.hpTokens">-HP</div>
+        </div>
+    </div>
 
-<div *ngIf="gameState.value === 14">
-  <h2>You have already targeted that enemy with this spell.</h2>
+    <div *ngIf="gameState.value === 14">
+        <h2>You have already targeted that enemy with this spell.</h2>
+    </div>
 </div>
-
     

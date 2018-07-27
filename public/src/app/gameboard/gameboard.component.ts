@@ -46,6 +46,7 @@ export class GameboardComponent implements OnInit {
       // Checking to see if need to ready check for game start
       if (this.state) {
         this.assignCoord();
+        this.gameEndCheck();
       }
     });
 
@@ -70,6 +71,12 @@ export class GameboardComponent implements OnInit {
           this.showHighlight(card);
         }
       }
+    }
+  }
+
+  gameEndCheck() {
+    if (this.state.gameOver) {
+        this._wss._gameState.next({'mode' : 'GAMEOVER', 'value' : -1});
     }
   }
 

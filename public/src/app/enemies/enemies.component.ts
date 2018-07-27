@@ -18,6 +18,7 @@ export class EnemiesComponent implements OnInit {
   enemies: any = null;
   state: any = null;
   gameState: any = null;
+  targets: any = [];
 
   constructor(private _wss: WebsocketService) { }
 
@@ -75,10 +76,10 @@ export class EnemiesComponent implements OnInit {
 
   selectEnemy(enemy) {
     if (this.gameState.mode === 'targetingPlayer') {
-      if (enemy.target) {
+      if (this.targets.includes(enemy.id) && this.enemies.length > 1) {
         this._wss.enemyTargetFail();
       } else {
-          enemy.target = true;
+          this.targets.push(enemy.id);
           this._wss.sendTarget(enemy);
           if (this._wss.getEffectsCount() === 0) {
               this.clearEnemies();
