@@ -76,7 +76,7 @@ export class EnemiesComponent implements OnInit {
 
   selectEnemy(enemy) {
     if (this.gameState.mode === 'targetingPlayer') {
-      if (this.targets.includes(enemy.id) && this.enemies.length > 1) {
+      if ((this.targets.includes(enemy.id) && this.enemies.length > 1) || enemy.isGhost) {
         this._wss.enemyTargetFail();
       } else {
           this.targets.push(enemy.id);

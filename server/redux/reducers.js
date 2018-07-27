@@ -243,7 +243,7 @@ function reducer(state = initialState, action){
         case actions.HP_MINUS:
             console.log('reducers.js heard HP_MINUS');
             newState = Object.assign({}, state);
-            if(actions.targetPlayer){
+            if(action.targetPlayer){
                 currentPlayer = newState.players.find((player)=>{
                     return player.id == action.target.id;
                 })
@@ -281,7 +281,7 @@ function reducer(state = initialState, action){
         case actions.AP_MINUS:
             console.log('reducers.js heard AP_MINUS');
             newState = Object.assign({}, state);
-            if(actions.targetPlayer){
+            if(action.targetPlayer){
                 currentPlayer = newState.players.find((player)=>{
                     return player.id == action.target.id;
                 })

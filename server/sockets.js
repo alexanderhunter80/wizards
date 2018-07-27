@@ -185,29 +185,6 @@ module.exports = function(io){
             console.log('sockets.js says: heard CAST_SUCCESS: '+payload.spell.name);
             gameStore.dispatch(actions.castSuccess(payload.actor, payload.spell));
             update();
-            // if(payload.spell.targeted == true){
-            //     if(payload.spell.effects[0].targetPlayer == true){
-            //         // send TARGET_PLAYER
-            //         console.log('should send TARGET_PLAYER');
-            //         const furtherEffects = payload.spell.effects;
-            //         socket.emit('TARGET_PLAYER', {furtherEffects})
-            //     } else if (payload.spell.effects[0].targetCards == true){
-            //         // send TARGET_CARDS
-            //         console.log('should send TARGET_CARDS');
-            //         const effectValue = payload.spell.effects[0].value;
-            //         const furtherEffects = payload.spell.effects;
-            //         socket.emit('TARGET_CARDS', {furtherEffects, value: effectValue});
-            //     }
-            // } else {
-            //     console.log('does not need targeting');
-            //     console.log(payload.spell.effects[0].type);
-            //     console.log(payload.spell.effects[0].value);
-            //     console.log(payload.actor);
-            //     console.log('******************************');
-            //     gameStore.dispatch({type: payload.spell.effects[0].type, value: payload.spell.effects[0].value, actor: payload.actor});
-                
-                //endSpell(socket);
-            //} 
         });
 
 

@@ -17,17 +17,23 @@
     <div class="negHpToken" *ngFor="let hptoken of player.hpTokens">-HP</div>
 </div>
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready"><img src="../../assets/ready.png"></button>
+  <h2 *ngIf="!turn && state.gameOn">It is someone else's turn!</h2>
+  <h2 *ngIf="state.gameOn && player.isGhost"> YOU ARE NO LONGER AMONGST THE LIVING!</h2>
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
       <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " ><img src="../../assets/turn2.png"></button>
       <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0"><img src="../../assets/turn1.png"></button>
-      <div *ngIf="gameState.mode === 'actionStepStart' ">
+      <div *ngIf="gameState.mode === 'actionStepStart' && !player.isGhost">
           <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
           <button (click)="actionLearn()"><img src="../../assets/learn.png"></button>
           <button (click)="actionWeave()"><img src="../../assets/weave.png"></button>
           <button (click)="actionScry()"><img src="../../assets/scry.png"></button>
           <button (click)="actionObscure()"><img src="../../assets/obscure.png"></button>
           <button (click)="actionCast()"><img src="../../assets/cast.png"></button>
+      </div>
+      <div *ngIf="gameState.mode === 'actionStepStart' && player.isGhost">
+        <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
+        <button (click)="actionWeave()"><img src="../../assets/weave.png"></button>
       </div>
       <div *ngIf="gameState.mode === 'castAction'">
           <button (click)="castingSpell()"><img src="../../assets/star.png"></button>
