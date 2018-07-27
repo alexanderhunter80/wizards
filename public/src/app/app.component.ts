@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 // import { ActionService } from './action.service';
 import { WebsocketService } from './websocket.service';
-import mojs from 'mo-js'
+import mojs from 'mo-js';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -102,4 +103,4 @@ export class AppComponent implements OnInit {
         .tune({ x: e.pageX, y: e.pageY })
         .replay();
     });
- 
+    
