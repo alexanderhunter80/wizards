@@ -20,7 +20,7 @@
   <div *ngIf="turn">
       <h2>It is your turn, {{player.name}}</h2>
       <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " ><img src="../../assets/turn2.png"></button>
-      <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0"><img src="../../assets/turn1.png"></button>
+      <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0"><img src="../../assets/star.png"></button>
       <div *ngIf="gameState.mode === 'actionStepStart' ">
           <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
           <button (click)="actionLearn()"><img src="../../assets/learn.png"></button>
@@ -30,7 +30,7 @@
           <button (click)="actionCast()"><img src="../../assets/cast.png"></button>
       </div>
       <div *ngIf="gameState.mode === 'castAction'">
-          <button (click)="castingSpell()"><img src="../../assets/star.png"></button>
+          <button (click)="castingSpell()"><img src="../../assets/bolt.png"></button>
       </div>
   </div>
   <div *ngIf="gameState.mode === 'divineStep' || gameState.mode === 'divineAction' ">
