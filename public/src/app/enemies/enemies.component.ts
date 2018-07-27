@@ -89,9 +89,7 @@ export class EnemiesComponent implements OnInit {
   }
 
   clearEnemies() {
-    for (const enemy of this.enemies) {
-      enemy.target = false;
-    }
+    this.targets = [];
   }
 
 }
