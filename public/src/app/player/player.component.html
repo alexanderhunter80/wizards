@@ -1,19 +1,19 @@
 <div class="wrapper" *ngIf="player && gameState.mode !== 'GAMEOVER'">
   <h3 class="name">{{player.name}}</h3>
-  <div *ngIf="player.shields > 0" class="shield">{{player.shields}}
+  <div *ngIf="player.shields > 0  && !player.isGhost" class="shield">{{player.shields}}
       <div class="health">{{player.health}}</div>
   </div>
-  <div *ngIf="player.shields === 0" class="onlyHealth" >{{player.health}}</div>
+  <div *ngIf="player.shields === 0 && !player.isGhost" class="onlyHealth" >{{player.health}}</div>
   <div class="ap" *ngIf="player.aptokens >= 0">
       <div class="apToken" *ngFor="let aptoken of player.apTokens">AP</div>
   </div>
-  <div class="ap" *ngIf="player.aptokens < 0">
+  <div class="ap" *ngIf="player.aptokens < 0  && !player.isGhost">
     <div class="negApToken" *ngFor="let aptoken of player.apTokens">-AP</div>
   </div>
-  <div class="hp" *ngIf="player.hptokens >= 0">
+  <div class="hp" *ngIf="player.hptokens >= 0  && !player.isGhost">
       <div class="hpToken" *ngFor="let hptoken of player.hpTokens">HP</div>
   </div>
-  <div class="hp" *ngIf="player.hptokens < 0">
+  <div class="hp" *ngIf="player.hptokens < 0  && !player.isGhost">
     <div class="negHpToken" *ngFor="let hptoken of player.hpTokens">-HP</div>
 </div>
   <button (click)="ready()" class="ready" *ngIf="!state.gameOn && !player.ready"><img src="../../assets/ready.png"></button>
@@ -23,7 +23,7 @@
       <h2>It is your turn, {{player.name}}</h2>
       <button (click)="turnAck()" *ngIf="this.gameState.mode === 'turnStart' " ><img src="../../assets/turn2.png"></button>
       <button (click)="turnEnd()" *ngIf="this.gameState.mode === 'ActionEnd' && player.adjustActions === 0"><img src="../../assets/star.png"></button>
-      <div *ngIf="gameState.mode === 'actionStepStart' ">
+      <div *ngIf="gameState.mode === 'actionStepStart' && !player.isGhost">
           <button (click)="actionDivine()"><img src="../../assets/divine.png"></button>
           <button (click)="actionLearn()"><img src="../../assets/learn.png"></button>
           <button (click)="actionWeave()"><img src="../../assets/weave.png"></button>
@@ -55,7 +55,7 @@
       <h2>You must choose a Spell!</h2>
   </div>
 
-  <div class="hand">
+  <div class="hand" *ngIf="!player.isGhost">
       <div *ngFor="let spell of player.spells" (click)="selectingSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
             <h3>{{spell.name}}</h3>
             <hr>

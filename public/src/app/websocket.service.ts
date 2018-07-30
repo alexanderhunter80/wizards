@@ -270,13 +270,12 @@ export class WebsocketService {
          this.endActionStepCheck();
     }
 
+    // Execute next effect from spell
     doSpellEffects() {
-        console.log(this.effects);
         if (this.effects.length > 0) {
             if (this.effects[0].targetPlayer) {
                 this._gameState.next({'mode' : 'targetingPlayer' , 'value' : 13});
             } else { // not targeted
-                console.log(this.effects[0]);
                 switch (this.effects[0].type) {
                     case 'DIVINE':
                         this.actionDivine(this.effects[0].value);

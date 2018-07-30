@@ -243,22 +243,36 @@ function reducer(state = initialState, action){
         case actions.HP_MINUS:
             console.log('reducers.js heard HP_MINUS');
             newState = Object.assign({}, state);
-            if(action.targetPlayer){
+            if(action.targetPlayer){ //single target
                 currentPlayer = newState.players.find((player)=>{
                     return player.id == action.target.id;
                 })
-                currentPlayer.hptokens -= action.value;
-                if(action.limited && currentPlayer.hptokens < 0) { // only strip tokens
-                    currentPlayer.hptokens = 0;
+                if (action.limited && currentPlayer.hptokens <= 0) { // skip player if stripping from negative pile. 
+                    null;
+                } else if (action.limited && currentPlayer.hptokens > 0){
+                    let hpSubtract = action.value;
+                    while(currentPlayer.hptokens > 0 && hpSubtract > 0){ // stripping tokens
+                        currentPlayer.hptokens--;
+                        hpSubtract--;
+                    }
+                } else { // regular hp_minus scenario
+                    currentPlayer.hptokens -= action.value;
                 }
-            } else {
+            } else { // AOE
                 for(let target of newState.players){
-                    if(target.id == action.actor.id){
+                    if(target.id == action.actor.id){ // Skip the original castor
                         continue;
                     } else {
-                        target.hptokens -= action.value;
-                        if(action.limited && target.hptokens < 0) { // only strip tokens
-                            target.hptokens = 0;
+                        if (action.limited && target.hptokens <= 0) { // skip player if stripping from negative pile. 
+                            continue;
+                        } else if (action.limited && target.hptokens > 0){
+                            let hpSubtract = action.value;
+                            while(target.hptokens > 0 && hpSubtract > 0){ // stripping tokens
+                                target.hptokens--;
+                                hpSubtract--;
+                            }
+                        } else { //regular hp_minus scenario
+                            target.hptokens -= action.value;
                         }
                     }
                 }
@@ -281,22 +295,36 @@ function reducer(state = initialState, action){
         case actions.AP_MINUS:
             console.log('reducers.js heard AP_MINUS');
             newState = Object.assign({}, state);
-            if(action.targetPlayer){
+            if(action.targetPlayer){ // single target
                 currentPlayer = newState.players.find((player)=>{
                     return player.id == action.target.id;
                 })
-                currentPlayer.aptokens -= action.value;
-                if(action.limited && currentPlayer.aptokens < 0) { // only strip tokens
-                    currentPlayer.aptokens = 0;
+                if (action.limited && currentPlayer.aptokens <= 0) { // skip player if stripping from negative pile. 
+                    null;
+                } else if (action.limited && currentPlayer.aptokens > 0){
+                    let apSubtract = action.value;
+                    while(currentPlayer.aptokens > 0 && apSubtract > 0){ // stripping tokens
+                        currentPlayer.aptokens--;
+                        apSubtract--;
+                    }
+                } else { // regular ap_minus scenario
+                    currentPlayer.aptokens -= action.value;
                 }
-            } else {
+            } else { // AOE
                 for(let target of newState.players){
-                    if(target.id == action.actor.id){
+                    if(target.id == action.actor.id){ // Skip the original castor
                         continue;
                     } else {
-                        target.aptokens -= action.value;
-                        if(action.limited && target.aptokens < 0) { // only strip tokens
-                            target.aptokens = 0;
+                        if (action.limited && target.aptokens <= 0) { // skip player if stripping from negative pile. 
+                            continue;
+                        } else if (action.limited && target.aptokens > 0){
+                            let apSubtract = action.value;
+                            while(target.aptokens > 0 && apSubtract > 0){ // stripping tokens
+                                target.aptokens--;
+                                apSubtract--;
+                            }
+                        } else { // regular ap_minus scenario
+                            target.aptokens -= action.value;
                         }
                     }
                 }
@@ -488,11 +516,16 @@ function reducer(state = initialState, action){
                     if (currentPlayer.health < 5){
                         currentPlayer.health++;
                     }
-                    currentPlayer.hpTokens--;
+                    currentPlayer.hptokens--;
                 }
             } else if (currentPlayer.hptokens < 0){
-                currentPlayer.health--;
-                currentPlayer.hptokens++;
+                if (currentPlayer.shields > 0) {
+                    currentPlayer.shields--;
+                    currentPlayer.hptokens++;
+                } else {
+                    currentPlayer.health--;
+                    currentPlayer.hptokens++;
+                }
                 checkDeath(currentPlayer);
                 isGameOver(newState);
             }

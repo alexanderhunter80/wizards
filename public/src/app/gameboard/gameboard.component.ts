@@ -126,29 +126,54 @@ export class GameboardComponent implements OnInit {
   }
 
   spellCheck(card) {
-      if (this.spellElems.length > 0 && (this.spellElems[0] === card.elem || card.elem === 'aether') && this.gameState.mode === 'spellElemSelect') {
-          this.spellElems.shift();
-          this.discard.push(card.coord);
-          if (this.spellElems.length === 0) {
-              console.log('Spell cast Successful!!');
-              this.castSuccess = true;
+      if (this.spellElems.length > 0 && (this.spellElems[0] === card.elem || card.elem === 'aether') && this.gameState.mode === 'spellElemSelect') { // card chosen is correct
+        // checking if card already selected
+        const bsCoord = JSON.stringify(card.coord);
+        const bsHighlight = JSON.stringify(this.discard);
+        if (bsHighlight.indexOf(bsCoord) === -1) { // fresh card selected
+            this.discard.push(card.coord);
+            this.spellElems.shift();
+            card.highlight = true;
+        } else { // card has been previously selected(notifying user)
+              this.selected = true;
               setTimeout(() => {
-                this.castSuccess = false;
-                // finding selected spell
-                const spellToCast = this.playerComp.getSpellToCast();
-                this._wss.spellSuccess(this.discard, spellToCast[0]);
-              }, 3000);
+                  this.selected = false;
+                }, 3000);
           }
-      } else if (this.spellElems.length > 0 && this.gameState.mode === 'spellElemSelect') {
-            console.log('Spell has been botched!');
-            this.castBotched = true;
+        // Checking if spell selection is completed      
+        if (this.spellElems.length === 0) { //
+            console.log('Spell cast Successful!!');
+            this.castSuccess = true;
             setTimeout(() => {
-                this.castBotched = false;
-                const spellToCast = this.playerComp.getSpellToCast();
-                this._wss.spellFailure(this.discard, spellToCast[0]);
-                this.spellElems = [];
+              this.castSuccess = false;
+              // finding selected spell
+              const spellToCast = this.playerComp.getSpellToCast();
+              this._wss.spellSuccess(this.discard, spellToCast[0]);
+              this.discard = [];
             }, 3000);
         }
+      } else if (this.spellElems.length > 0 && this.gameState.mode === 'spellElemSelect') { // card chosen is wrong
+        // checking if card already selected
+        const bsCoord = JSON.stringify(card.coord);
+        const bsHighlight = JSON.stringify(this.discard);
+        if (bsHighlight.indexOf(bsCoord) === -1) { // fresh card selected
+          console.log('Spell has been botched!');
+          this.castBotched = true;
+          setTimeout(() => {
+              this.castBotched = false;
+              const spellToCast = this.playerComp.getSpellToCast();
+              this._wss.spellFailure(this.discard, spellToCast[0]);
+              this.spellElems = [];
+              this.discard = [];
+          }, 3000);
+        
+        } else { // card has been previously selected(notifying user)
+              this.selected = true;
+              setTimeout(() => {
+                  this.selected = false;
+                }, 3000);
+          }  
+      }
   }
 
     weaveTime(card) {
