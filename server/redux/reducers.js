@@ -149,15 +149,16 @@ function reducer(state = initialState, action){
             }
             // deal damage and check for death
             target.health -= damage;
+            newState.history.push(action.message);
             checkDeath(target);
             isGameOver(newState);
-            newState.history.push(action.message);
             return newState;
 
 
         case actions.ATTACK_ALL:
             console.log('reducers.js heard ATTACK_ALL');
             newState = Object.assign({}, state);
+            newState.history.push(action.message);
             for (let target of newState.players){
                 if(target.id == action.actor.id){
                     continue;
@@ -174,7 +175,6 @@ function reducer(state = initialState, action){
                     isGameOver(newState);
                 }
             }
-            newState.history.push(action.message);
             return newState;
 
 
@@ -200,9 +200,9 @@ function reducer(state = initialState, action){
                 damage--;
                 if(currentPlayer.health < 5){currentPlayer.health++};
             }
+            newState.history.push(action.message);
             checkDeath(target);
             isGameOver(newState);
-            newState.history.push(action.message);
             return newState;
 
 
@@ -353,6 +353,7 @@ function reducer(state = initialState, action){
             temp = newState.gameboard.grid[action.yx1[0]][action.yx1[1]];
             newState.gameboard.grid[action.yx1[0]][action.yx1[1]] = newState.gameboard.grid[action.yx2[0]][action.yx2[1]];
             newState.gameboard.grid[action.yx2[0]][action.yx2[1]] = temp;
+            newState.history.push(action.message);
             return newState;
 
 
@@ -362,6 +363,7 @@ function reducer(state = initialState, action){
             for (yx of action.yx){
                 newState.gameboard.grid[yx[0]][yx[1]].faceUp = true;
             }
+            newState.history.push(action.message);
             return newState;
 
 
@@ -371,6 +373,7 @@ function reducer(state = initialState, action){
             for (yx of action.yx){
                 newState.gameboard.grid[yx[0]][yx[1]].faceUp = false;
             }
+            newState.history.push(action.message);
             return newState;
 
 
@@ -461,6 +464,7 @@ function reducer(state = initialState, action){
             currentPlayer.spells.splice(Math.floor(Math.random()*currentPlayer.spells.length), 1);
             // 1 damage
             currentPlayer.health--;
+            newState.history.push(action.message);
             checkDeath(currentPlayer);
             isGameOver(newState);
             return newState;

@@ -15,6 +15,11 @@
     </div>
   </div>
 </div>
+
+<!-- Combat log -->
+<div class="combatLog">
+  <p *ngFor="let message of state.history">{{message}}</p>
+</div>
 <div *ngIf="selected">
    <h2>That Card is invalid!!</h2>
 </div>

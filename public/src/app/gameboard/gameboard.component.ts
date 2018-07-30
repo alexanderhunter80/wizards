@@ -183,6 +183,7 @@ export class GameboardComponent implements OnInit {
       if (this.gameState.mode === 'weaveAction' && this._wss.getCounter() === 0) {
           this._wss.doWeave(this.cardsToSend[0], this.cardsToSend[1]);
           this.cardsToSend = [];
+          this.counter = 0;
       }
     }
 
@@ -193,6 +194,7 @@ export class GameboardComponent implements OnInit {
       if (this.gameState.mode === 'scryAction' && this._wss.getCounter() === 0) {
           this._wss.doScry(this.counter, this.cardsToSend);
           this.cardsToSend = [];
+          this.counter = 0;
       }
     }
 
@@ -203,6 +205,7 @@ export class GameboardComponent implements OnInit {
       if (this.gameState.mode === 'obscureAction' && this._wss.getCounter() === 0) {
           this._wss.doObscure(this.counter, this.cardsToSend);
           this.cardsToSend = [];
+          this.counter = 0;
       }
     }
 
@@ -213,6 +216,7 @@ export class GameboardComponent implements OnInit {
           if (bsHighlight.indexOf(bsCoord) === -1 && ((fd) ? !card.faceUp : card.faceUp)) { // fresh card selected
               this.cardsToSend.push(card.coord);
               this._wss.reduceCounter();
+              this.counter++;
               card.highlight = true;
           } else { // card has been previously selected(notifying user)
                 this.selected = true;
