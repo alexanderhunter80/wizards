@@ -34,7 +34,6 @@ export class EnemiesComponent implements OnInit {
 
     const gsObs = this._wss.getGameState();
     gsObs.subscribe((gs) => {
-      console.log('game state updated');
       this.gameState = gs;
     });
   }
@@ -44,7 +43,6 @@ export class EnemiesComponent implements OnInit {
     this.enemies = this.state.players.filter((enemy) => {
       return this._wss.playerid !== enemy.socketid;
     });
-    console.log(this.enemies);
   }
 
   convertTokens() {

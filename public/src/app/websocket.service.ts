@@ -16,6 +16,8 @@ export class WebsocketService {
     spell = null;
     effects = [];
     actor = null;
+    cardsFaceUp = 0;
+    cardsFaceDown = 0;
 
     _state: BehaviorSubject<any> = new BehaviorSubject(null);
 
@@ -36,7 +38,7 @@ export class WebsocketService {
         });
 
         this.socket.on('INIT', (state) => {
-            console.log('websocket.service says: state INIT');
+            // console.log('websocket.service says: state INIT');
             this._state.next(state);
             if (state) {
                 this.getActor(state);
@@ -44,17 +46,25 @@ export class WebsocketService {
         });
 
         this.socket.on('UPDATE', (state) => {
-            console.log('websocket.service says: state UPDATE');
+            // console.log('websocket.service says: state UPDATE');
             this._state.next(state);
             if (state) {
+                this.cardCounterReset();
                 this.getActor(state);
+                this.cardCounters(state);
             }
         });
 
         this.socket.on('DIVINE_STEP_START', payload => {
-            console.log('websocket.service says: state DIVINE STEP');
-            this.counter = payload.value;
-            this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
+            if(this.cardsFaceDown === 0){ //No cards to divine so skip
+                this.doDivineStepEnd();
+            } else if (payload.value > this.cardsFaceDown){ // less cards available to divine then divine step assigned, so swapping to the avaiable amount
+                this.counter = this.cardsFaceDown;
+                this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
+            } else { // else continue as normal
+                this.counter = payload.value;
+                this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
+            }
         });
 
         this.socket.on('ACTION_STEP_START', () => {
@@ -71,7 +81,6 @@ export class WebsocketService {
         });
 
         this.socket.on('TURN_FINISHED', () => {
-            console.log('websocket.service says: Turn is finished');
             this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
         });
     }
@@ -95,6 +104,20 @@ export class WebsocketService {
 
     getPlayer() {
         return this.actor;
+    }
+
+    cardCounters(state) {
+        for (const row of state.gameboard.grid) {
+            for (const card of row) {
+                if(card.faceUp) { this.cardsFaceUp++ };
+                if(!card.faceUp) { this.cardsFaceDown++ };
+            }
+        }
+    }
+
+    cardCounterReset(){
+        this.cardsFaceUp = 0;
+        this.cardsFaceDown = 0;
     }
 
     addPlayer(name) {
@@ -214,30 +237,62 @@ export class WebsocketService {
     }
 
     sendTarget(target) {
-        this.socket.emit('CAST_EFFECT', {actor: this.actor, target, furtherEffects: [this.effects[0]]});
-        this.effects.shift();
+        if(this.spell.targeted) { // multiple cast for same target
+            while(this.effects.length > 0 && this.effects[0].targetPlayer){
+                this.socket.emit('CAST_EFFECT', {actor: this.actor, target, furtherEffects: [this.effects[0]]});
+                this.effects.shift(); 
+            }
+        } else { // normal targeting
+            this.socket.emit('CAST_EFFECT', {actor: this.actor, target, furtherEffects: [this.effects[0]]});
+            this.effects.shift();
+        }
         // Further Effects?
         this.endActionStepCheck();
     }
 
     actionDivine(num = 2) {
-        this.counter = num;
-        this._gameState.next({'mode' : 'divineAction', 'value' : 7});
+        if(this.cardsFaceDown === 0){ //No cards to divine so skip
+            this.endActionStepCheck();
+        } else if (num > this.cardsFaceDown){ // less cards available to divine then effect assigned, so swapping to the avaiable amount
+            this.counter = this.cardsFaceDown;
+            this._gameState.next({'mode' : 'divineAction', 'value' : 7});
+        } else { // else continue as normal
+            this.counter = num; 
+            this._gameState.next({'mode' : 'divineAction', 'value' : 7});
+        }
     }
 
     actionScry(num = 1) {
-        this.counter = num;
-        this._gameState.next({'mode' : 'scryAction', 'value' : 17});
+        if(this.cardsFaceDown === 0){ //No cards to scry so skip
+            this.endActionStepCheck();
+        } else if (num > this.cardsFaceDown){ // less cards available to scry then effect assigned, so swapping to the avaiable amount
+            this.counter = this.cardsFaceDown;
+            this._gameState.next({'mode' : 'scryAction', 'value' : 17});
+        } else { // else continue as normal
+            this.counter = num;
+            this._gameState.next({'mode' : 'scryAction', 'value' : 17}); 
+        }
     }
 
     actionObscure(num = 1) {
-        this.counter = num;
-        this._gameState.next({'mode' : 'obscureAction', 'value' : 18});
+        if(this.cardsFaceUp === 0){ //No cards to obscure so skip
+            this.endActionStepCheck();
+        } else if (num > this.cardsFaceUp){ // less cards available to obscure then effect assigned, so swapping to the avaiable amount
+            this.counter = this.cardsFaceUp;
+            this._gameState.next({'mode' : 'obscureAction', 'value' : 18});
+        } else { // else continue as normal
+            this.counter = num;
+            this._gameState.next({'mode' : 'obscureAction', 'value' : 18});
+        }
     }
 
     actionWeave() {
-        this.counter = 2;
-        this._gameState.next({'mode' : 'weaveAction', 'value' : 15});
+        if(this.cardsFaceDown < 2){
+            this.endActionStepCheck();
+        } else{
+            this.counter = 2;
+            this._gameState.next({'mode' : 'weaveAction', 'value' : 15});
+        }
     }
 
     actionCast() {
@@ -263,6 +318,10 @@ export class WebsocketService {
 
     getCounter() {
         return this.counter;
+    }
+    
+    setCounter(num) {
+        this.counter = num;
     }
 
     learn(cardIndices) {

@@ -270,6 +270,12 @@ function reducer(state = initialState, action){
                             while(target.hptokens > 0 && hpSubtract > 0){ // stripping tokens
                                 target.hptokens--;
                                 hpSubtract--;
+                                if(action.magnitize){
+                                    player = newState.players.find((player)=>{
+                                        return player.id == action.actor.id;
+                                    })
+                                    player.hptokens++;
+                                }
                             }
                         } else { //regular hp_minus scenario
                             target.hptokens -= action.value;

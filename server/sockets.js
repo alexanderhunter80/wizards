@@ -238,7 +238,7 @@ module.exports = function(io){
 
                     case actions.HP_MINUS: 
                         console.log('case HP_MINUS');
-                        gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value, payload.furtherEffects[fx].targetPlayer, payload.furtherEffects[fx].limited));
+                        gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value, payload.furtherEffects[fx].targetPlayer, payload.furtherEffects[fx].limited, payload.furtherEffects[fx].magnitize));
                         break;
 
                     case actions. OBSCURE: 

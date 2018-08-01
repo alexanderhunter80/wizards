@@ -17,7 +17,7 @@
 </div>
 
 <!-- Combat log -->
-<div class="combatLog" *ngIf="state.gameOn && gameState !== 'GAMEOVER'">
+<div class="combatLog" *ngIf="state && state.gameOn && gameState !== 'GAMEOVER'">
   <p *ngFor="let message of state.history">{{message}}</p>
 </div>
 <div *ngIf="selected">

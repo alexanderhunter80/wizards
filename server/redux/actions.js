@@ -99,7 +99,7 @@ function hpPlus(actor, value){
     }
 };
 
-function hpMinus(actor, target, value, targetPlayer, limited){
+function hpMinus(actor, target, value, targetPlayer = false, limited = false, magnitize = false){
     let memo = '', player = '';
     (targetPlayer) ? player = target.name : player = 'everyone';
     if(limited){
@@ -114,6 +114,7 @@ function hpMinus(actor, target, value, targetPlayer, limited){
         targetPlayer: targetPlayer,
         limited: limited,
         value: value,
+        magnitize: magnitize,
         message: memo
     }
 };

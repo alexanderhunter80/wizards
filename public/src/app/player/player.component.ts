@@ -26,7 +26,6 @@ export class PlayerComponent implements OnInit {
   ngOnInit() {
     const obs = this._wss.getObservable();
     obs.subscribe((state) => {
-      console.log('state observable was updated');
       this.state = state;
       if (this.state) {
         this.getPlayer();
@@ -37,7 +36,6 @@ export class PlayerComponent implements OnInit {
 
     const gsObs = this._wss.getGameState();
     gsObs.subscribe((gs) => {
-      console.log('game state updated');
       this.gameState = gs;
     });
   }
@@ -132,7 +130,6 @@ export class PlayerComponent implements OnInit {
 
   castingSpell() {
     const spellToCast =  this.getSpellToCast();
-    console.log(spellToCast);
     if (spellToCast.length === 0) {
       this._wss.spellSelectFail();
     } else {

@@ -52,7 +52,6 @@ export class GameboardComponent implements OnInit {
 
     const gsObs = this._wss.getGameState();
     gsObs.subscribe((gs) => {
-      console.log('game state updated');
       this.gameState = gs;
     });
   }
@@ -142,7 +141,6 @@ export class GameboardComponent implements OnInit {
           }
         // Checking if spell selection is completed      
         if (this.spellElems.length === 0) { //
-            console.log('Spell cast Successful!!');
             this.castSuccess = true;
             setTimeout(() => {
               this.castSuccess = false;
@@ -157,7 +155,6 @@ export class GameboardComponent implements OnInit {
         const bsCoord = JSON.stringify(card.coord);
         const bsHighlight = JSON.stringify(this.discard);
         if (bsHighlight.indexOf(bsCoord) === -1) { // fresh card selected
-          console.log('Spell has been botched!');
           this.castBotched = true;
           setTimeout(() => {
               this.castBotched = false;

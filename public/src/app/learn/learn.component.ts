@@ -19,13 +19,11 @@ export class LearnComponent implements OnInit {
   ngOnInit() {
     const obs = this._wss.getObservable();
     obs.subscribe((state) => {
-      console.log('state observable was updated');
       this.state = state;
     });
 
     const gsObs = this._wss.getGameState();
     gsObs.subscribe((gs) => {
-      console.log('game state updated');
       this.gameState = gs;
     });
   }
