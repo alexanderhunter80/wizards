@@ -241,9 +241,14 @@ module.exports = function(io){
                         gameStore.dispatch(actions.hpMinus(payload.actor, payload.target, payload.furtherEffects[fx].value, payload.furtherEffects[fx].targetPlayer, payload.furtherEffects[fx].limited, payload.furtherEffects[fx].magnitize));
                         break;
 
-                    case actions. OBSCURE: 
+                    case actions.OBSCURE: 
                         console.log('case OBSCURE');
                         gameStore.dispatch(actions.obscure(payload.actor, payload.yx));
+                        break;
+
+                    case actions.PASSIVE:
+                        console.log('case PASSIVE');
+                        gameStore.dispatch(actions.passive(payload.actor, payload.furtherEffects[fx].value));
                         break;
 
                     // more things

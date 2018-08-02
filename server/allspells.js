@@ -16,8 +16,6 @@ module.exports = [
     { name: 'Placebo', text: 'Regen 1', elements: 'EW', effects: [{type: actions.HP_PLUS, value: 1}], targeted: false, copies: 3 },
     { name: 'Energy Drain', text: 'Attack 1, Cure = damage dealt', elements: 'FW', effects: [{type: actions.DRAIN, value: 1, targetPlayer: true}], targeted: false, copies: 3 },
 
-
-
     { name: 'Haste', text: 'AP +3', elements: 'AAA', effects: [{type: actions.AP_PLUS, value: 3}], targeted: false, copies: 2},
     { name: 'Slow', text: 'Target AP -2', elements: 'AAE', effects: [{type: actions.AP_MINUS, value: 2, targetPlayer: true}], targeted: false, copies: 2},
     { name: 'Glittering Cloud', text: 'Attack 1 against all opponents', elements: 'AAF', effects: [{type: actions.ATTACK_ALL, value: 1}], targeted: false, copies: 2},
@@ -50,14 +48,14 @@ module.exports = [
 
 
     { name: 'Tornado', text: 'AP +3, AP -1 to all opponents', elements: 'AAAX', effects: [{type: actions.AP_PLUS, value: 3}, {type: actions.AP_MINUS, value: 1}], targeted: false, copies: 1},
-    { name: 'Magnetize', text: 'Shield 3, Regen 2, strip up to 1 +HP token from all opponents and take them for yourself', elements: 'EEEX', effects: [{type: actions.SHIELD, value: 2}, {type: actions.HP_PLUS, value: 2}, {type: actions.HP_MINUS, value: 1, limited: true, magnitize: true}], targeted: false, copies: 1},
+    { name: 'Magnetize', text: 'Shield 3, Regen 2, strip up to 1 +HP token from all opponents and take them for yourself', elements: 'EEEX', effects: [{type: actions.SHIELD, value: 3}, {type: actions.HP_PLUS, value: 2}, {type: actions.HP_MINUS, value: 1, limited: true, magnitize: true}], targeted: false, copies: 1},
     { name: 'Firestorm', text: 'Attack 1, Burn 2 to all opponents', elements: 'FFFX', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.HP_MINUS, value: 2}], targeted: false, copies: 1},
     { name: 'Upwelling', text: 'Cure 2, Regen 4, and Obscure 2 cards', elements: 'WWWX', effects: [{type: actions.CURE, value: 2}, {type: actions.HP_PLUS, value: 4}, {type: actions.OBSCURE, value: 2}], targeted: false, copies: 1},
     { name: 'Apotheosis', text: 'Attack 1 and AP -1 to all opponents, Cure 1, AP +1, Regen 1, Shield 1', elements: 'AEFWX', effects: [{type: actions.ATTACK, value: 1, targetPlayer: true}, {type: actions.AP_MINUS, value: 1}, {type: actions.CURE, value: 1}, {type: actions.AP_PLUS, value: 1}, {type: actions.HP_PLUS, value: 1}, {type: actions.SHIELD, value: 1}], targeted: false, copies: 1}, 
 
     //PASSIVE CARDS
-    // { name: 'Overdrive', text: 'Passive: Limit 1 per player. At the start of each turn, you must use and discard a second +AP token, if such a token is available.', elements: 'AEF', effects: [{type: actions.}], targeted: false, copies: 3},
-    // { name: 'Hypermetabolism', text: 'Passive: Limit 1 per player. At the end of each turn, you must use and discard a second +HP token, if such a token is available.', elements: 'AEW', effects: [{type: actions.}], targeted: false, copies: 3},
-    // { name: 'Telepathy', text: 'Passive: Limit 1 per player. When you Divine, peek at 1 additional card.', elements: 'AFW', effects: [{type: actions.DIVINE, }], targeted: false, copies: 3},
-    // { name: 'Brilliance', text: 'Passive: Limit 1 per player. At the start of each turn, draw the top spell card.', elements: 'EFW', effects: [{type: actions.}], targeted: false, copies: 3}
+    { name: 'Overdrive', text: 'Passive: Limit 1 per player. At the start of each turn, you must use and discard a second +AP token, if such a token is available.', elements: 'AEF', effects: [{type: actions.PASSIVE, value: 1}], targeted: false, copies: 3},
+    { name: 'Hypermetabolism', text: 'Passive: Limit 1 per player. At the end of each turn, you must use and discard a second +HP token, if such a token is available.', elements: 'AEW', effects: [{type: actions.PASSIVE, value: 2}], targeted: false, copies: 3},
+    { name: 'Telepathy', text: 'Passive: Limit 1 per player. When you Divine, peek at 1 additional card.', elements: 'AFW', effects: [{type: actions.PASSIVE, value: 3}], targeted: false, copies: 3},
+    { name: 'Brilliance', text: 'Passive: Limit 1 per player. At the start of each turn, draw the top spell card.', elements: 'EFW', effects: [{type: actions.PASSIVE, value: 4}], targeted: false, copies: 3}
 ]

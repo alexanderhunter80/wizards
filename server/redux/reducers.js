@@ -23,7 +23,6 @@ function checkDeath(player){
     if(player.health <= 0){
         player.isGhost = true;
         console.log('HE DED');
-        console.log('(death not yet fully implemented)');
         return true;
     }
     return false;
@@ -116,19 +115,28 @@ function reducer(state = initialState, action){
             console.log('reducers.js heard TURN_START');
             newState = Object.assign({}, state);
             currentPlayer = newState.players[newState.currentTurn];
+            newState.history.push(currentPlayer.name+' started their turn');
             // ap +- tokens
             if (currentPlayer.aptokens > 0){
                 currentPlayer.adjustActions++;
                 currentPlayer.aptokens--;
+                
                 if (currentPlayer.aptokens > 0 && currentPlayer.passives.overdrive) {
                     currentPlayer.adjustActions++;
                     currentPlayer.aptokens--;
+                    newState.history.push(currentPlayer.name+' has 3 actions due to overdrive passive.');
+                } else {
+                    newState.history.push(currentPlayer.name+' has 2 actions due to extra action token.');
                 }
             } else if (currentPlayer.aptokens < 0){
                 currentPlayer.adjustActions--;
                 currentPlayer.aptokens++;
             }
-            newState.history.push(currentPlayer.name+' started their turn');
+            // brilliance free spellcard
+            if(currentPlayer.passives.brilliance){
+                currentPlayer.spells.push(newState.gameboard.spellDeck.topCard());
+                newState.history.push(currentPlayer.name + ' has earned a free spell card due to Brillance passive');
+            }
             return newState;
 
 
@@ -443,8 +451,27 @@ function reducer(state = initialState, action){
             newState.history.push(action.message);
             return newState;
 
-
-
+        case actions.PASSIVE:
+            console.log('reducers.js heard PASSIVE');
+            newState = Object.assign({}, state);
+            currentPlayer = newState.players.find((player)=>{
+                return player.id == action.actor.id;
+            })
+            switch(action.value){
+                case 1:
+                    currentPlayer.passives.overdrive = true;
+                    break;
+                case 2:
+                    currentPlayer.passives.hypermetabolism = true;
+                    break;
+                case 3:
+                    currentPlayer.passives.telepathy = true;
+                    break;
+                case 4:
+                    currentPlayer.passives.brilliance = true;
+                    break;
+            }
+            return newState;
 
         case actions.CAST_SUCCESS:
             console.log('reducers.js heard CAST_SUCCESS');
