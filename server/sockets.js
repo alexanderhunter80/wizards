@@ -252,7 +252,7 @@ module.exports = function(io){
                     // more things
 
             }}
-            endSpell(socket);
+            update();
 
 
                 // THIS IS CRAP, DON'T ACTUALLY USE THIS
@@ -271,7 +271,7 @@ module.exports = function(io){
         socket.on(actions.CAST_FAIL, (payload)=>{
             console.log('sockets.js says: heard CAST_FAIL: '+payload.spell.name);
             gameStore.dispatch(actions.castFail(payload.actor, payload.spell));
-            update();
+            endSpell(socket);
             // send some kinda event
         });
 

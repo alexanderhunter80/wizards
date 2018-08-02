@@ -1,4 +1,4 @@
-<div class="wrapper" *ngIf="player && gameState.mode !== 'GAMEOVER'">
+<div class="wrapper" *ngIf="player && !state.gameOver">
   <h3 class="name">{{player.name}}</h3>
   <div *ngIf="player.shields > 0  && !player.isGhost" class="shield">{{player.shields}}
       <div class="health">{{player.health}}</div>

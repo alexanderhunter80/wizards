@@ -1,4 +1,4 @@
-<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && gameState.mode !== 'GAMEOVER' ">
+<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && !state.gameOver ">
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Combat log -->
-<div class="combatLog" *ngIf="state && state.gameOn && gameState !== 'GAMEOVER'">
+<div class="combatLog" *ngIf="state && state.gameOn && !state.gameOver">
   <p *ngFor="let message of state.history">{{message}}</p>
 </div>
 <div *ngIf="selected">
@@ -36,6 +36,6 @@
     <h1>Select an Enemy to Target with Spell!</h1>
 </div>
 
-<div *ngIf="gameState.mode === 'GAMEOVER'">
+<div *ngIf="state.gameOver">
     <h1>{{state.winner.name}} has won the battle, and is now the Archchancellor!!!</h1>
 </div>

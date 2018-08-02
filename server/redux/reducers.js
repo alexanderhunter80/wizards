@@ -130,18 +130,18 @@ function reducer(state = initialState, action){
                 if (currentPlayer.aptokens > 0 && currentPlayer.passives.overdrive) {
                     currentPlayer.adjustActions++;
                     currentPlayer.aptokens--;
-                    newState.history.push(currentPlayer.name+' has 3 actions due to overdrive passive.');
+                    newState.history.push(currentPlayer.name+' consumes 2 haste tokens(Overdrive) and has been awarded 2 extra actions!');
                 } else {
-                    newState.history.push(currentPlayer.name+' has 2 actions due to extra action token.');
+                    newState.history.push(currentPlayer.name+' consumes 1 haste token and has been awarded an extra action!');
                 }
             } else if (currentPlayer.aptokens < 0){
                 currentPlayer.adjustActions--;
                 currentPlayer.aptokens++;
             }
-            // brilliance free spellcard
+            // brilliance free spellcard awarded
             if(currentPlayer.passives.brilliance){
                 currentPlayer.spells.push(newState.gameboard.spellDeck.topCard());
-                newState.history.push(currentPlayer.name + ' has earned a free spell card due to Brillance passive');
+                newState.history.push(currentPlayer.name + ' has earned a free spell card(Brillance)!');
             }
             return newState;
 
@@ -551,15 +551,21 @@ function reducer(state = initialState, action){
             currentPlayer = newState.players[newState.currentTurn];
             // hp +- tokens
             if (currentPlayer.hptokens > 0){
+                let counter = 0;
                 if (currentPlayer.health < 5){
                     currentPlayer.health++;
+                    counter++;
                 }
                 currentPlayer.hptokens--;
-                if (currentPlayer.hptokens > 0 && currentPlayer.passives.hypermetabolism) {
+                if (currentPlayer.passives.hypermetabolism && currentPlayer.hptokens > 0) {
                     if (currentPlayer.health < 5){
                         currentPlayer.health++;
+                        counter++;
                     }
                     currentPlayer.hptokens--;
+                    newState.history.push(currentPlayer.name + ' consumed 2 Regen Tokens(Hypermetabolism) and heals for' + counter + 'health');
+                } else {
+                    newState.history.push(currentPlayer.name + ' consumed 1 Regen Tokens and heals for' + counter + 'health');
                 }
             } else if (currentPlayer.hptokens < 0){
                 if (currentPlayer.shields > 0) {
@@ -569,6 +575,7 @@ function reducer(state = initialState, action){
                     currentPlayer.health--;
                     currentPlayer.hptokens++;
                 }
+                newState.history.push(currentPlayer.name + ' Burns for 1 damage');
                 checkDeath(currentPlayer);
                 isGameOver(newState);
             }
@@ -600,7 +607,11 @@ function reducer(state = initialState, action){
             currentPlayer = newState.players.find((player)=>{
                 return player.id == action.actor.id;
             })
-            currentPlayer.adjustActions = 0;
+            if (currentPlayer.adjustActions > 0) {
+                currentPlayer.adjustActions--;    
+            } else {
+                currentPlayer.adjustActions = 0;
+            }
             return newState;
 
 
@@ -617,11 +628,6 @@ function reducer(state = initialState, action){
                 }
             }
             return newState;
-
-
-
-
-
 
         default:
             console.log('reducers.js is confused!')

@@ -56,9 +56,9 @@ export class WebsocketService {
         });
 
         this.socket.on('DIVINE_STEP_START', payload => {
-            if(this.cardsFaceDown === 0){ //No cards to divine so skip
+            if (this.cardsFaceDown === 0) { //No cards to divine so skip
                 this.doDivineStepEnd();
-            } else if (payload.value > this.cardsFaceDown){ // less cards available to divine then divine step assigned, so swapping to the avaiable amount
+            } else if (payload.value > this.cardsFaceDown) { // less cards available to divine then divine step assigned, so swapping to the avaiable amount
                 this.counter = this.cardsFaceDown;
                 this._gameState.next({'mode' : 'divineStep' , 'value' : 4});
             } else { // else continue as normal
@@ -82,6 +82,10 @@ export class WebsocketService {
 
         this.socket.on('TURN_FINISHED', () => {
             this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
+        });
+
+        this.socket.on('CAST_END', () => {
+            this.endActionStepCheck();
         });
     }
 
@@ -319,7 +323,7 @@ export class WebsocketService {
     getCounter() {
         return this.counter;
     }
-    
+
     setCounter(num) {
         this.counter = num;
     }

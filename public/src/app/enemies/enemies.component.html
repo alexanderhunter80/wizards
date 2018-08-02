@@ -1,4 +1,4 @@
-<div *ngIf="enemies && gameState.mode !== 'GAMEOVER'">  
+<div *ngIf="enemies && !state.gameOver">  
     <div *ngFor="let enemy of enemies" class="enemy" (click)="selectEnemy(enemy)">
         <h3>{{enemy.name}}</h3>
         <div *ngIf="enemy.shields > 0 && !enemy.isGhost"class="shield">{{enemy.shields}}
