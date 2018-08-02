@@ -96,9 +96,7 @@ module.exports = function(io){
             currentPlayer = gameStore.getState().players.find((player)=>{
                 return player.id == payload.actor.id;
             })
-            if(currentPlayer.adjustActions < 0){
-                // currentPlayer.adjustActions = 0;
-                // nope, create Redux action for this
+            if(!currentPlayer.isGhost && currentPlayer.adjustActions < 0){
                 socket.emit('ACTION_STEP_START');
             } else {
                 let divinePayload = 2;

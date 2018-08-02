@@ -22,6 +22,12 @@ let newState, idx, temp, yx, currentPlayer, target, damage, endItAll;
 function checkDeath(player){
     if(player.health <= 0){
         player.isGhost = true;
+        player.passives.brilliance = false;
+        player.passives.overdrive = false;
+        player.passives.telepathy = false;
+        player.passives.hypermetabolism = false;
+        player.aptokens = 0;
+        player.hptokens = 0;
         console.log('HE DED');
         return true;
     }
