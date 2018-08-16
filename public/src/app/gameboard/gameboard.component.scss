@@ -6,7 +6,7 @@
     backface-visibility: hidden;
     transform: rotateY(-180deg);
     text-align: center;
-    line-height:125px;
+    line-height:100px;
     font-family: Helvetica;
 }
 .front img {
@@ -20,7 +20,7 @@
   backface-visibility: hidden;
   color: #fff;
   text-align: center;
-  line-height: 125px;
+  line-height: 100px;
   font-family: Helvetica;
 }
 .backHighlight {
@@ -31,13 +31,13 @@
     backface-visibility: hidden;
     color: #fff;
     text-align: center;
-    line-height: 125px;
+    line-height: 100px;
     font-family: Helvetica;
   }
 .card {
     // position:relative;
-    width:225px;
-    height:125px;
+    width:175px;
+    height:100px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     transform-style:preserve-3d;
     border: 2px solid darkgrey;
@@ -45,8 +45,8 @@
    
 }
 .card-wrapper {
-    height: 125px;
-	width: 225px;
+    height: 100px;
+	width: 175px;
     perspective:800px;
     display: inline-block;
     margin:  -2px 0px;
@@ -63,6 +63,15 @@
     overflow: scroll;
     overflow-x: hidden;
     overflow-y: visible;
-    height: 200px;
-    width: 350px;
+    height: 401px;
+    width: 280px;
+    display: inline-block;
+    vertical-align: top;
+}
+.board{
+    width: 710px;
+    height: 410px;
+    padding-top: 2px;
+    display: inline-block;
+    vertical-align: top;
 }
