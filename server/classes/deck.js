@@ -42,14 +42,10 @@ module.exports = class Deck {
         return tempCard;
     };
 
-    push(card){
-        this.cards.push(card);
-    }
-
     shuffle(){ 
         // pass in cards from discard
         while(this.discard[0] != null){
-            this.push(this.discard.pop());
+            this.cards.push(this.discard.pop());
         };
 
         // shuffle everything together

@@ -1,14 +1,14 @@
-<div *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && !state.gameOver ">
+<div class="board" *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && !state.gameOver " >
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
       <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
         <!-- front of the card-->
         <div class="front">
-          <img src="../../assets/{{card.elem}}.png" alt="" width="100px" height="100px">
+          <img src="../../assets/{{card.elem}}.png" alt="" width="75px" height="75px">
         </div>
         <!-- back of the card-->
         <div [ngClass]="{'backReg': !card.highlight, 'backHighlight': card.highlight}">
-          <img src="../../assets/magic_hat.png" alt="" width="100px" height="100px">
+          <img src="../../assets/magic_hat.png" alt="" width="75px" height="75px">
         </div>
         
       </div>

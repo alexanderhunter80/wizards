@@ -137,6 +137,8 @@ function reducer(state = initialState, action){
             } else if (currentPlayer.aptokens < 0){
                 currentPlayer.adjustActions--;
                 currentPlayer.aptokens++;
+                newState.history.push(currentPlayer.name+'  is slowed by a slow token and loses the ability to divine!');
+
             }
             // brilliance free spellcard awarded
             if(currentPlayer.passives.brilliance){
@@ -618,7 +620,6 @@ function reducer(state = initialState, action){
 
         case actions.REPLACE_ELEMENTS:
             console.log('reducers.js heard REPLACE_ELEMENTS');
-            console.log(action);
             newState = Object.assign({}, state);
             for(idx of action.yx){
                 newState.gameboard.deck.discard.push(newState.gameboard.grid[idx[0]][idx[1]]);
