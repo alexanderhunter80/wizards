@@ -55,6 +55,7 @@ export class GameboardComponent implements OnInit {
     });
   }
 
+  // Flips face down cards up
   toggleState(card) {
     card.faceUp = (card.faceUp === false ) ? true : true;
   }
