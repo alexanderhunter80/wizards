@@ -1,7 +1,7 @@
 <div class="board" *ngIf="gameState.value > 1 && gameState.mode !== 'learnAction' && !state.gameOver" >
   <div *ngFor="let row of state.gameboard.grid">
     <div class="card-wrapper" *ngFor="let card of row"> 
-      <div class="card" (click)="divineTime(card); spellCheck(card); toggleState(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
+      <div class="card" (click)="divineTime(card); spellCheck(card); weaveTime(card); scryTime(card); obscureTime(card);" [@cardState]="card.faceUp"> 
         <!-- front of the card-->
         <div class="front">
           <img src="../../assets/{{card.elem}}.png" alt="" width="75px" height="75px">
@@ -17,7 +17,7 @@
 </div>
 
 <!-- Combat log -->
-<div class="combatLog" *ngIf="state && state.gameOn && !state.gameOver && gameState.mode !== 'learnAction' ">
+<div #combatLog class="combatLog" *ngIf="state && state.gameOn && !state.gameOver && gameState.mode !== 'learnAction'"  [scrollTop]="combatLog.scrollHeight">
   <p *ngFor="let message of state.history">{{message}}</p>
 </div>
 <div *ngIf="selected">

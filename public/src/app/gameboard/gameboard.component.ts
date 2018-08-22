@@ -56,9 +56,7 @@ export class GameboardComponent implements OnInit {
   }
 
   toggleState(card) {
-    if (this.gameState.mode === 'spellElemSelect') {
-        card.faceUp = (card.faceUp === false ) ? true : true;
-    }
+    card.faceUp = (card.faceUp === false ) ? true : true;
   }
 
   assignCoord() {
@@ -126,6 +124,7 @@ export class GameboardComponent implements OnInit {
             this.discard.push(card.coord);
             this.spellElems.shift();
             card.highlight = true;
+            this.toggleState(card);
         } else { // card has been previously selected(notifying user)
               this.selected = true;
               setTimeout(() => {
