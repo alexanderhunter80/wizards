@@ -59,11 +59,10 @@
       <div *ngFor="let spell of player.spells" (click)="selectingSpell(spell)" [ngClass]="{'highlight': spell.highlight, 'card' : true}">
             <h3>{{spell.name}}</h3>
             <hr>
-            <h5>Effect:</h5>
-            {{spell.text}}
-            <br>
-            <h5>Cost Elements:</h5>
-            {{spell.elements}}
+            <p>Effect:</p>
+            <p>{{spell.text}}</p>
+            <p>Elements: {{spell.elements}}</p>
+            
       </div>
   </div>
 </div>
