@@ -56,9 +56,7 @@ export class GameboardComponent implements OnInit {
   }
 
   toggleState(card) {
-    if (this.gameState.mode === 'spellElemSelect') {
-        card.faceUp = (card.faceUp === false ) ? true : true;
-    }
+    card.faceUp = (card.faceUp === false ) ? true : true;
   }
 
   assignCoord() {
@@ -126,6 +124,7 @@ export class GameboardComponent implements OnInit {
             this.discard.push(card.coord);
             this.spellElems.shift();
             card.highlight = true;
+            this.toggleState(card);
         } else { // card has been previously selected(notifying user)
               this.selected = true;
               setTimeout(() => {
@@ -135,6 +134,7 @@ export class GameboardComponent implements OnInit {
         // Checking if spell selection is completed      
         if (this.spellElems.length === 0) { //
             this.castSuccess = true;
+            this._wss.setAwait();
             setTimeout(() => {
               this.castSuccess = false;
               // finding selected spell
@@ -149,6 +149,7 @@ export class GameboardComponent implements OnInit {
         const bsHighlight = JSON.stringify(this.discard);
         if (bsHighlight.indexOf(bsCoord) === -1) { // fresh card selected
           this.castBotched = true;
+          this._wss.setAwait();
           setTimeout(() => {
               this.castBotched = false;
               const spellToCast = this.playerComp.getSpellToCast();
@@ -156,13 +157,13 @@ export class GameboardComponent implements OnInit {
               this.spellElems = [];
               this.discard = [];
           }, 3000);
-        
+
         } else { // card has been previously selected(notifying user)
               this.selected = true;
               setTimeout(() => {
                   this.selected = false;
                 }, 3000);
-          }  
+          }
       }
   }
 

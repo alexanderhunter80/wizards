@@ -16,7 +16,7 @@ platformBrowserDynamic().bootstrapModule(AppModule)
     fill:           'none',
     radius:         25,
     strokeWidth:    { 50: 0 },
-    scale:          { 0: 1 },
+    scale:          { 0: 0.5 },
     angle:          { 'rand(-35, -70)': 0 },
     duration:       500,
     left: 0,        top: 0,
