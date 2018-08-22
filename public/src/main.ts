@@ -63,7 +63,7 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   const redSparks = new mojs.Burst({
     left: 0, top: 0,
     count: 8,
-    radius: { 150: 350 },
+    radius: { 150: 250 },
     angle: {0: 90 , easing: 'cubic.out'},
     children: {
       shape: 'line',
@@ -71,7 +71,7 @@ platformBrowserDynamic().bootstrapModule(AppModule)
       strokeWidth: 5,
       scaleX: {0.5: 0},
       degreeShift: 'rand(-90, 90)',
-      radius: 'rand(20, 300)',
+      radius: 'rand(20, 200)',
       duration: 500,
       delay: 'rand(0, 150)',
     }
