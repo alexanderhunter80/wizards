@@ -119,7 +119,7 @@ export class WebsocketService {
         }
     }
 
-    cardCounterReset(){
+    cardCounterReset() {
         this.cardsFaceUp = 0;
         this.cardsFaceDown = 0;
     }
@@ -381,6 +381,10 @@ export class WebsocketService {
             this._gameState.next({'mode' : 'ActionEnd' , 'value' : 8});
             this.socket.emit('ACTION_STEP_END', {actor : this.actor});
         }
+    }
+
+    setAwait() {
+        this._gameState.next({'mode' : 'awaiting' , 'value' : 99});
     }
 
   }
