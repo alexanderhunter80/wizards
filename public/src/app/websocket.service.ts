@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, Subject, BehaviorSubject } from 'rxjs'; // rxjs/observable doesn't work with Angular 6
+import { Observable, Subject, BehaviorSubject } from 'rxjs'; // rxjs/observable (Angular 4) doesn't work with Angular 6, so we just need to use rxjs
 
 @Injectable({
   providedIn: 'root'
