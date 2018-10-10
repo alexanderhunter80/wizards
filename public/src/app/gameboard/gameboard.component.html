@@ -38,4 +38,8 @@
 
 <div *ngIf="state.gameOver">
     <h1>{{state.winner.name}} has won the battle, and is now the Archchancellor!!!</h1>
+    <div>
+      <h2>Start a New Game!</h2>
+      <button (click)="reset();"><img src="../../assets/ready.png"></button>
+    </div>
 </div>

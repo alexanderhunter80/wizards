@@ -30,6 +30,7 @@ const REMOVE_PLAYER = 'REMOVE_PLAYER';
 const GAME_SETUP = 'GAME_SETUP';
 const GAME_START = 'GAME_START';
 const GAME_END = 'GAME_END';
+const GAME_RESET = 'GAME_RESET';
 const TURN_ACK = 'TURN_ACK';
 const TURN_START = 'TURN_START';
 const TURN_END = 'TURN_END';
@@ -346,17 +347,23 @@ function replaceElements(actor, yx){
     }
 }
 
+function gameReset(){
+    return {
+        type: GAME_RESET
+    }
+};
+
 module.exports = {
     // card effects
     ATTACK, ATTACK_ALL, DRAIN, CURE, SHIELD, HP_PLUS, HP_MINUS, AP_PLUS, AP_MINUS,
     // card manipulators
     DIVINE, DIVINE_END, UNHIGHLIGHT, WEAVE, SCRY, OBSCURE, REFRESH, LEARN, LEARN_DISCARD, EXHAUST, CAST_SUCCESS, CAST_EFFECT, CAST_FAIL, PASSIVE,
     // meta events
-    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, TURN_ACK, TURN_START, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY, RESET_ADJUST, REPLACE_ELEMENTS, 
+    ADD_PLAYER, REMOVE_PLAYER, GAME_SETUP, GAME_START, GAME_END, GAME_RESET, TURN_ACK, TURN_START, TURN_END, DIVINE_STEP, DIVINE_STEP_END, ACTION_STEP_END, READY, RESET_ADJUST, REPLACE_ELEMENTS,
     // creator functions for effects
     attack, attackAll, drain, cure, shield, hpPlus, hpMinus, apPlus, apMinus, 
     // creator functions for manipulators
     divine, divineEnd, unhighlight, weave, scry, obscure, refresh, learn, learnDiscard, exhaust, castSuccess, castEffect, castFail, passive,
     // creator functions for meta events
-    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, turnStart, turnEnd, divineStepEnd, actionStepEnd, ready, resetAdjust, replaceElements,
+    addPlayer, removePlayer, gameSetup, gameStart, gameEnd, gameReset, turnStart, turnEnd, divineStepEnd, actionStepEnd, ready, resetAdjust, replaceElements
 }
