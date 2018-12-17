@@ -357,7 +357,6 @@ function reducer(state = initialState, action){
 
         case actions.DIVINE:  // actor, value, [yx]
             console.log('reducers.js heard DIVINE');
-            // console.log('... but the future refused to change.  (Action not yet implemented.)')
             newState = Object.assign({}, state);
             newState.highlight = action.yx;
             newState.history.push(action.message);
@@ -536,7 +535,32 @@ function reducer(state = initialState, action){
 
 
 
-
+        case actions.GAME_RESET:
+            console.log('reducers.js heard GAME_RESET');
+            newState = Object.assign({}, initialState);
+            // reinitializing the gameboard
+            let eleDeck = new Deck();
+            eleDeck.initializeAsElementDeck();
+            let splDeck = new Deck();
+            splDeck.initializeAsSpellDeck();
+            let gmb = new Gameboard(eleDeck, splDeck);
+            newState.gameboard = gmb;
+            // same players from previous game
+            newState.players = state.players;
+            // reset each player in the game
+            for(let player of newState.players) {
+                player.spells = [];
+                player.health = 5;
+                player.shields = 0;
+                player.adjustActions = 0;
+                player.aptokens = 0;
+                player.hptokens = 0;
+                player.isGhost = false;
+                player.passives = {overdrive: false, hypermetabolism: false, telepathy: false, brilliance: false}
+            }
+            newState.nextPlayer = state.nextPlayer;
+            newState.history = [... state.history, "Game has been reset!"];
+            return newState;
 
 
         
@@ -565,9 +589,9 @@ function reducer(state = initialState, action){
                         counter++;
                     }
                     currentPlayer.hptokens--;
-                    newState.history.push(currentPlayer.name + ' consumed 2 Regen Tokens(Hypermetabolism) and heals for' + counter + 'health');
+                    newState.history.push(currentPlayer.name + ' consumed 2 Regen Tokens(Hypermetabolism) and heals for ' + counter + ' health');
                 } else {
-                    newState.history.push(currentPlayer.name + ' consumed 1 Regen Tokens and heals for' + counter + 'health');
+                    newState.history.push(currentPlayer.name + ' consumed 1 Regen Tokens and heals for ' + counter + ' health');
                 }
             } else if (currentPlayer.hptokens < 0){
                 if (currentPlayer.shields > 0) {

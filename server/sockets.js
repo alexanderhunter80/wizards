@@ -398,7 +398,15 @@ module.exports = function(io){
             update();
         }); 
 
-        
+        // reset the game
+        socket.on(actions.GAME_RESET, (payload)=>{
+            console.log('sockets.js says: heard GAME_RESET');
+            gameStore.dispatch(actions.gameReset());
+            io.emit('GAME_STARTED');
+            gameStore.dispatch(actions.gameStart());
+            update();
+            io.emit('TURN_START');
+        })
     
 
         

@@ -132,7 +132,7 @@ export class GameboardComponent implements OnInit {
                   this.selected = false;
                 }, 3000);
           }
-        // Checking if spell selection is completed      
+        // Checking if spell selection is completed
         if (this.spellElems.length === 0) { //
             this.castSuccess = true;
             this._wss.setAwait();
@@ -216,5 +216,9 @@ export class GameboardComponent implements OnInit {
                     this.selected = false;
                   }, 3000);
             }
+    }
+
+    reset() {
+        this._wss.reset();
     }
 }

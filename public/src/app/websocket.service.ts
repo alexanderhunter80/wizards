@@ -388,4 +388,8 @@ export class WebsocketService {
         this._gameState.next({'mode' : 'awaiting' , 'value' : 99});
     }
 
+    reset() {
+        this.socket.emit('GAME_RESET', {});
+    }
+
   }
