@@ -18,7 +18,7 @@
   "homepage": "https://github.com/alexanderhunter80/wizards#readme",
   "dependencies": {
     "@angular-redux/store": "^9.0.0",
-    "@angular/core": "^6.0.6",
+    "@angular/core": "^11.0.5",
     "@types/socket.io-client": "^1.4.32",
     "body-parser": "^1.18.3",
     "cloner": "^0.4.0",
